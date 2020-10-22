@@ -13,6 +13,13 @@ enableTags: true
 tagarray: []
 
 # collections:
+#   my_collection:
+#     output: true
+#     permalink: /:collection/:name
+
+permalink: /:title
+
+# collections:
 #   project:
 #     output: true
 #     permalink: /project/:path/
@@ -42,7 +49,7 @@ paginate_path: "/page/:num/"
 markdown: kramdown
 highlighter: rouge
 
-gems:
+plugins:
   - jekyll-paginate
   - jekyll-gist
 
