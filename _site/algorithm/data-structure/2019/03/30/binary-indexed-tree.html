@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>Binary Indexed Tree (Fenwick Tree) - Problems and Algorithms</title>
+    <meta name="author" content="Nima Aghdaii" />
+    <meta name="description" content="Binary Indexed Tree (Fenwick Tree)" />
+    <meta name="keywords" content="Binary Indexed Tree (Fenwick Tree), Problems and Algorithms, algorithm, data-structure" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="Problems and Algorithms" property="og:site_name">
+
+    
+
+    
+      <meta content="Binary Indexed Tree (Fenwick Tree)" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="Problems and Algorithms" property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/algorithm/data-structure/2019/03/30/binary-indexed-tree.html" property="og:url">
+    
+
+    
+      <meta content="2019-03-30T10:03:01-07:00" property="article:published_time">
+      <meta content="http://localhost:4000/about/" property="article:author">
+    
+
+    
+      <meta content="http://localhost:4000/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="algorithm" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="Binary Indexed Tree (Fenwick Tree)">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/algorithm/data-structure/2019/03/30/binary-indexed-tree.html">
+    
+
+    
+      <meta name="twitter:description" content="Problems and Algorithms">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="75px" width="75px" /></a>
+          <h1 class="author-name">Nima Aghdaii</h1>
+          
+            <div class="profile-about">
+              I like algorithms and problem solving.
+            </div>
+          
+          <div class="social">
+            <ul>
+              
+                <li><a href="https://www.linkedin.com/in/nima-aghdaii-074b7536/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+              
+                <li><a href="https://github.com/nima101" target="_blank"><i class="fa fa-github"></i></a></li>
+              
+            </ul>
+          </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="(sitemap)~$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+              <li><a class="about" href="/feed.xml">XML Feed</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">Binary Indexed Tree (Fenwick Tree)</h1>
+</header>
+
+<span class="time">30 Mar 2019</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/algorithm">algorithm</a>, <a href="/category/data-structure">data-structure</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><h2 id="introduction">Introduction</h2>
+
+<p>Given an array <code class="highlighter-rouge">a</code> of <code class="highlighter-rouge">n</code> integers, we want to answer queries for sum of a range efficiently. For exmaple, for <code class="highlighter-rouge">a = [2, -1, 4, 3, -5, 9]</code>, <code class="highlighter-rouge">sum[2, 5) = 4 + 3 + (-5) = 2</code>.</p>
+
+<p>In order to solve this, we can compute the <a href="https://en.wikipedia.org/wiki/Prefix_sum">Prefix Sum</a> of the array. Then any range becomes the difference between two prefix sums. Code:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># calculate prefix sum</span>
+<span class="c"># sum[i] = a[1] + ... + a[i]</span>
+<span class="nb">sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="c"># inclusive x, y</span>
+<span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>Preprocessing takes <code class="highlighter-rouge">O(n)</code> time and we answer every query in <code class="highlighter-rouge">O(1)</code>. Pretty good!</p>
+
+<p>Now we want to be able to support update queries as well! let’s assume updates are done in terms of increments and <code class="highlighter-rouge">add(i, k)</code> adds value <code class="highlighter-rouge">k</code> to <code class="highlighter-rouge">a[i]</code>. Two possible approaches:</p>
+
+<ol>
+  <li>
+    <p>Update the i-th element (<code class="highlighter-rouge">a[i] += k</code>) and for each query, iterate over elements in the range in <code class="highlighter-rouge">O(n)</code>. Let’s call this: <code class="highlighter-rouge">&lt;O(1), O(n)&gt;</code>.</p>
+  </li>
+  <li>
+    <p>Add value <code class="highlighter-rouge">k</code> to all the prefix sums that contain <code class="highlighter-rouge">a[i]</code>. This would take <code class="highlighter-rouge">O(n)</code> time to update but still <code class="highlighter-rouge">O(1)</code> to query, hence <code class="highlighter-rouge">&lt;O(n), O(1)&gt;</code>.</p>
+  </li>
+</ol>
+
+<p>Would it be possible to have a solution in between? Maybe <code class="highlighter-rouge">&lt;O(log(n)), O(log(n))&gt;</code>?</p>
+
+<p><br /></p>
+
+<h2 id="binary-indexed-tree-bit">Binary Indexed Tree (BIT)</h2>
+
+<p>Binary Indexed Tree (BIT), also known as Fenwick Tree, is a data structure that provides both updates and queries in <code class="highlighter-rouge">O(log(n))</code> time. The idea is similar to storing prefix sums. However, we store smarter ranges such that each <code class="highlighter-rouge">a[i]</code> falls into <code class="highlighter-rouge">O(log(n))</code> ranges. Also, in order to compute <code class="highlighter-rouge">pre_sum[i]</code> we would need to sum up <code class="highlighter-rouge">O(log(n))</code> ranges.</p>
+
+<p>Note that we only solve the problem of finding <code class="highlighter-rouge">sum(i) = a[1] + ... + a[i]</code>. Using <code class="highlighter-rouge">sum(i)</code>, we can answer any arbitrary <code class="highlighter-rouge">sum(i, j)</code> using the trick mentioned in the introduction section.</p>
+
+<p><br /></p>
+
+<h3 id="structure">Structure</h3>
+
+<p>Although Binary Indexed Tree is a tree in concept, they are typically stored as an array. The image below shows how the tree maps to an array. On the left, you see the nodes of the tree corresponding to a bar representing the range of the array they are responsible for. On the right, is the actual array <code class="highlighter-rouge">c</code> we store in our code.</p>
+
+<p><img src="http://localhost:4000/static/img/BIT.png" alt="BIT" height="40%" width="40%" class="center-image" /></p>
+
+<p>A BIT is understood by considering a 1-based array. Each element whose index <code class="highlighter-rouge">i</code> is a power of 2 contains the sum of the first <code class="highlighter-rouge">i</code> elements. Each element whose index is not a power of 2 contains the sum of the values since its parent in the tree, and that parent is found by <strong>clearing the least-significant bit</strong> in the index. (note that the <code class="highlighter-rouge">x</code>-th column from right in the image above corresponds to all indices in the array where the index of the lowest significant bit is <code class="highlighter-rouge">x</code>)</p>
+
+<p>In the following sections, we look at each operation separately with an example to clarify how BIT works.</p>
+
+<p><br /></p>
+
+<h3 id="query">Query</h3>
+
+<div style="float:right; margin-right:-5%; margin-left:5%">
+  <img src="http://localhost:4000/static/img/BIT-query.png" style="width: 90%; height: 90%" />
+</div>
+
+<p>Example: query for sum of all the elements up to <code class="highlighter-rouge">11</code>.</p>
+
+<p><code class="highlighter-rouge">11</code> in binary is <code class="highlighter-rouge">1011</code> which is <code class="highlighter-rouge">8 + 2 + 1</code>. If we compute the cumulative sum of these 3 numbers, we get the indices we need to sum up, that is: <code class="highlighter-rouge">[8, 8 + 2, 8 + 2 + 1] = [8, 10, 11]</code>. So, <code class="highlighter-rouge">query(11) = c[8] + c[10] + c[11]</code>. In binary, we start with <code class="highlighter-rouge">1011</code> and each time we clear the least significant bit (lsb) until we reach <code class="highlighter-rouge">0</code>.</p>
+
+<ul>
+  <li>start <code class="highlighter-rouge">1011</code></li>
+  <li>next <code class="highlighter-rouge">1011 - 0001 = 1010</code></li>
+  <li>next <code class="highlighter-rouge">1010 - 0010 = 1000</code></li>
+</ul>
+
+<p><br /> <br /></p>
+
+<h3 id="update">Update</h3>
+
+<div style="float:right; margin-right:-5%; margin-left:5%">
+  <img src="http://localhost:4000/static/img/BIT-update.png" style="width: 90%; height: 90%" />
+</div>
+
+<p>Example: increment element at <code class="highlighter-rouge">11</code> by some amount.</p>
+
+<p>We need to update any range that contains <code class="highlighter-rouge">11</code>. We start with <code class="highlighter-rouge">11</code> itself, which is <code class="highlighter-rouge">01011</code> in binary. In order to find the next range to the left of the current range (in the image below), we need to add <code class="highlighter-rouge">1</code> to the least significant bit (lsb). This gives us the smallest number greater than the current number with a higher lsb. In binary, we start with <code class="highlighter-rouge">01011</code> and each time we add the lsb of the number to it, until it is larger than the size of array.</p>
+
+<ul>
+  <li>start <code class="highlighter-rouge">01011</code></li>
+  <li>next <code class="highlighter-rouge">01011 + 00001 = 01100</code></li>
+  <li>next <code class="highlighter-rouge">01100 + 00100 = 10000</code></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="code">Code</h3>
+
+<p>And with these few lines of code you can solve the problem of update/query in <code class="highlighter-rouge">&lt;O(log(n)), O(log(n))&gt;</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># get the least significant bit (ex: 1010 -&gt; 0010)</span>
+<span class="k">def</span> <span class="nf">lsb</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c"># get sum from 1 to i</span>
+<span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">-=</span> <span class="n">lsb</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="c"># add k to i-th element</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">inc</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+        <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">inc</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="n">lsb</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></code></pre></figure>
+
+<p><br /></p>
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="http://localhost:4000/algorithm/data-structure/2019/03/30/binary-indexed-tree.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/algorithm/strings/dp/2019/04/14/suffix-arrays.html">Suffix Arrays</a>
+                  
+                    (Categories: <a href="/category/algorithm">algorithm</a>, <a href="/category/strings">strings</a>, <a href="/category/dp">dp</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/prime/algorithm/2019/03/27/find-prime-numbers.html">Find all prime numbers up to N</a>
+                  
+                    (Categories: <a href="/category/prime">prime</a>, <a href="/category/algorithm">algorithm</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/prime/algorithm/2019/03/27/find-prime-numbers.html">&laquo; Find all prime numbers up to N</a>
+  
+  
+    <a class="next" href="/graph-theory/sort/problems/2019/04/01/hamil-path-over-cities.html">Hamiltonian Path (Special Case) &raquo;</a>
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "nima101algoblog";
+    var disqus_identifier = "http://localhost:4000_Binary Indexed Tree (Fenwick Tree)";
+    var disqus_title = "Binary Indexed Tree (Fenwick Tree)";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; Nima Aghdaii
+          
+            - <a href="https://github.com/nima101">https://github.com/nima101</a> - Powered by Jekyll.
+          
+          <div class="btn-github" style="float:right;">
+            <iframe src="https://ghbtns.com/github-btn.html?user=nima101&repo=nima101.github.io&type=star&count=true" frameborder="0" scrolling="0" width="85" height="20px"></iframe>
+            <iframe src="https://ghbtns.com/github-btn.html?user=nima101&repo=nima101.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="85" height="20px"></iframe>
+          </div>
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+

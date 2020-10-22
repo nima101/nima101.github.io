@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>Rooks on Chessboard - Problems and Algorithms</title>
+    <meta name="author" content="Nima Aghdaii" />
+    <meta name="description" content="Rooks on Chessboard" />
+    <meta name="keywords" content="Rooks on Chessboard, Problems and Algorithms, recursion, heuristic, problems, divide-and-conquer" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="Problems and Algorithms" property="og:site_name">
+
+    
+
+    
+      <meta content="Rooks on Chessboard" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="Problems and Algorithms" property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/recursion/heuristic/problems/divide-and-conquer/2019/06/10/rooks-on-chess-board.html" property="og:url">
+    
+
+    
+      <meta content="2019-06-10T10:33:47-07:00" property="article:published_time">
+      <meta content="http://localhost:4000/about/" property="article:author">
+    
+
+    
+      <meta content="http://localhost:4000/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="recursion" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="Rooks on Chessboard">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/recursion/heuristic/problems/divide-and-conquer/2019/06/10/rooks-on-chess-board.html">
+    
+
+    
+      <meta name="twitter:description" content="Problems and Algorithms">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="75px" width="75px" /></a>
+          <h1 class="author-name">Nima Aghdaii</h1>
+          
+            <div class="profile-about">
+              I like algorithms and problem solving.
+            </div>
+          
+          <div class="social">
+            <ul>
+              
+                <li><a href="https://www.linkedin.com/in/nima-aghdaii-074b7536/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+              
+                <li><a href="https://github.com/nima101" target="_blank"><i class="fa fa-github"></i></a></li>
+              
+            </ul>
+          </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="(sitemap)~$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+              <li><a class="about" href="/feed.xml">XML Feed</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">Rooks on Chessboard</h1>
+</header>
+
+<span class="time">10 Jun 2019</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/recursion">recursion</a>, <a href="/category/heuristic">heuristic</a>, <a href="/category/problems">problems</a>, <a href="/category/divide-and-conquer">divide-and-conquer</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><h3 id="problem-adaroks2">Problem <a href="https://www.codechef.com/MAY19A/problems/ADAROKS2"><strong>ADAROKS2</strong></a></h3>
+
+<p>How many rooks can you place on a <code class="highlighter-rouge">N x N</code> chessboard such that no four of them form a rectangle? To be more precise, <code class="highlighter-rouge">100 &lt;= N &lt;= 1000</code> and we need to place <code class="highlighter-rouge">8 * N</code> rooks on the board. Below is an example of rooks forming a rectangle.</p>
+
+<p><img src="http://localhost:4000/static/img/chess-rooks.png" alt="prev" height="30%" width="30%" class="center-image" /></p>
+
+<h3 id="thought-process">Thought Process</h3>
+
+<p><br /></p>
+<h4 id="step-1-pen--paper">Step 1: pen &amp; paper</h4>
+<p>I couldn’t come up with anything better than <code class="highlighter-rouge">3 * N</code> using the pattern below. Still far away from <code class="highlighter-rouge">8 * N</code>!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">OOOOOOO</span><span class="o">.</span>
+<span class="n">O</span><span class="o">......</span><span class="n">O</span>
+<span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span>
+<span class="o">..</span><span class="n">O</span><span class="o">....</span><span class="n">O</span>
+<span class="o">...</span><span class="n">O</span><span class="o">...</span><span class="n">O</span>
+<span class="o">....</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
+<span class="o">.....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
+<span class="o">......</span><span class="n">OO</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="step-2-brute-force">Step 2: brute force</h4>
+<p>Then I decided to write some brute-force solution to get the most optimal answer for small values of <code class="highlighter-rouge">N</code>. I was hoping I can see a pattern there. This is what I got (for more than 6, it would take a very long time):</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="mi">2</span>
+<span class="o">.</span><span class="n">O</span>
+<span class="n">OO</span>
+
+<span class="mi">3</span>
+<span class="o">.</span><span class="n">OO</span>
+<span class="n">O</span><span class="o">.</span><span class="n">O</span>
+<span class="n">OO</span><span class="o">.</span>
+
+<span class="mi">4</span>
+<span class="o">..</span><span class="n">OO</span>
+<span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
+<span class="n">O</span><span class="o">..</span><span class="n">O</span>
+<span class="n">OOO</span><span class="o">.</span>
+
+<span class="mi">5</span>
+<span class="o">...</span><span class="n">OO</span>
+<span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
+<span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
+<span class="n">O</span><span class="o">...</span><span class="n">O</span>
+<span class="n">OOOO</span><span class="o">.</span>
+
+<span class="mi">6</span>
+<span class="o">....</span><span class="n">OO</span>
+<span class="o">..</span><span class="n">OO</span><span class="o">..</span>
+<span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
+<span class="o">.</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.</span>
+<span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.</span>
+<span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span></code></pre></figure>
+
+<p>Code:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">solve</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">j</span><span class="o">,</span> <span class="kt">int</span> <span class="n">cnt</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">solve</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">cnt</span><span class="o">);</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span> <span class="o">&gt;</span> <span class="n">bestCnt</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">bestCnt</span> <span class="o">=</span> <span class="n">cnt</span><span class="o">;</span>
+            <span class="n">deepCopy</span><span class="o">(</span><span class="n">b</span><span class="o">,</span> <span class="n">best</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">b</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">good</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">b</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">])</span> <span class="o">{</span>
+        <span class="n">b</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="n">solve</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">cnt</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">b</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="n">solve</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">cnt</span><span class="o">);</span>
+        <span class="n">b</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="n">solve</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">good</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">;</span> <span class="n">k</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">j</span><span class="o">;</span> <span class="n">l</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">b</span><span class="o">[</span><span class="n">k</span><span class="o">][</span><span class="n">l</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">b</span><span class="o">[</span><span class="n">k</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">b</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">l</span><span class="o">])</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="step-3-greedy">Step 3: greedy</h4>
+<p>Unfortunately doing greedy performs really poorly since it will fill up the first row and then you can’t place more than one rook on any other row, otherwise they’ll create a rectangle. However, it seems like if we can somehow fill some of the board more intelligently and then fill the rest using greedy, it would not be too bad.</p>
+
+<p><br /></p>
+<h4 id="step-4-divide--conquer">Step 4: Divide &amp; Conquer</h4>
+<p>What if we have a good solution for <code class="highlighter-rouge">N</code>, can we build a decent solution for <code class="highlighter-rouge">2*N</code>? For example, given the solution for <code class="highlighter-rouge">N = 5</code>, we can build the solution below for <code class="highlighter-rouge">N = 10</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">...</span><span class="n">OO</span><span class="o">.....</span>
+<span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span>
+<span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.....</span>
+<span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.....</span>
+<span class="n">OOOO</span><span class="o">......</span>
+<span class="o">........</span><span class="n">OO</span>
+<span class="o">.......</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
+<span class="o">......</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
+<span class="o">.....</span><span class="n">O</span><span class="o">...</span><span class="n">O</span>
+<span class="o">.....</span><span class="n">OOOO</span><span class="o">.</span></code></pre></figure>
+
+<p>This is actually great, because if we have a <code class="highlighter-rouge">8*N</code> solution for some <code class="highlighter-rouge">N</code>, this method gives us the solution for <code class="highlighter-rouge">N*2 x N*2</code> board!
+But can we do better? For example we can simply improve it by also filling one diagonal on one of the small squares:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">...</span><span class="n">OOO</span><span class="o">....</span>
+<span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...</span>
+<span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span>
+<span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.</span>
+<span class="n">OOOO</span><span class="o">.....</span><span class="n">O</span>
+<span class="o">........</span><span class="n">OO</span>
+<span class="o">.......</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
+<span class="o">......</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
+<span class="o">.....</span><span class="n">O</span><span class="o">...</span><span class="n">O</span>
+<span class="o">.....</span><span class="n">OOOO</span><span class="o">.</span></code></pre></figure>
+
+<p>However, it is not good enough to achieve <code class="highlighter-rouge">8*N</code> for <code class="highlighter-rouge">N = 100</code>. Now, what if instead of filling the small diagonal, we let the greedy algorithm run on both small empty squares? However, filling greedy-ly using the code below, actually ends up filling the same diagonal, which is not great.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">possibleToFill</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="n">filled</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">filled</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">point</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="step-5-divide--conquer--guided-greedy">Step 5: Divide &amp; Conquer + Guided Greedy</h4>
+<p>The trick to solve this problem was the realization that if you start filling squares where we have more degrees of freedom (sparse areas), you tend to achieve worse results compared to if you try to fit rooks in denser areas. So, I simply changed the order in which we check cells by looking at the main diagonal first, then the two smaller semi-diagonals next to it and slowly walking away in both directions. Something like this:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">i</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">ii</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">jj</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">j</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">ii</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">jj</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="n">ii</span> <span class="o">&lt;</span> <span class="n">n1</span> <span class="o">&amp;&amp;</span> <span class="n">jj</span> <span class="o">&lt;</span> <span class="n">n1</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">ii</span> <span class="o">&gt;=</span> <span class="n">n1</span> <span class="o">&amp;&amp;</span> <span class="n">jj</span> <span class="o">&gt;=</span> <span class="n">n1</span><span class="o">)))</span> <span class="k">continue</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">ans</span><span class="o">[</span><span class="n">ii</span><span class="o">][</span><span class="n">jj</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">possibleToFill</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">ii</span><span class="o">,</span> <span class="n">jj</span><span class="o">,</span> <span class="n">filled</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">ii</span><span class="o">][</span><span class="n">jj</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">filled</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">point</span><span class="o">(</span><span class="n">ii</span><span class="o">,</span> <span class="n">jj</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">ans</span><span class="o">[</span><span class="n">jj</span><span class="o">][</span><span class="n">ii</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">possibleToFill</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">jj</span><span class="o">,</span> <span class="n">ii</span><span class="o">,</span> <span class="n">filled</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">ans</span><span class="o">[</span><span class="n">jj</span><span class="o">][</span><span class="n">ii</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">filled</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">point</span><span class="o">(</span><span class="n">jj</span><span class="o">,</span> <span class="n">ii</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>With this simple change, for <code class="highlighter-rouge">N = 10</code>, we get this board:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">...</span><span class="n">OO</span><span class="o">.....</span>
+<span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span>
+<span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span>
+<span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...</span>
+<span class="n">OOOO</span><span class="o">.</span><span class="n">O</span><span class="o">....</span>
+<span class="o">....</span><span class="n">O</span><span class="o">...</span><span class="n">OO</span>
+<span class="o">...</span><span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
+<span class="o">..</span><span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
+<span class="o">.....</span><span class="n">O</span><span class="o">...</span><span class="n">O</span>
+<span class="o">.....</span><span class="n">OOOO</span><span class="o">.</span></code></pre></figure>
+
+<p>You may think just one more rook? But as <code class="highlighter-rouge">N</code> grows the difference becomes more significant. For example, for <code class="highlighter-rouge">N = 50</code>, we get this board:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">....</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">...................</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">...........</span>
+<span class="o">..</span><span class="n">OO</span><span class="o">.......</span><span class="n">O</span><span class="o">..............</span><span class="n">O</span><span class="o">.......................</span>
+<span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">............................</span><span class="n">O</span><span class="o">...</span>
+<span class="o">.</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">....................</span>
+<span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..................</span><span class="n">O</span><span class="o">..........</span>
+<span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">....................</span><span class="n">O</span><span class="o">.............</span>
+<span class="o">.....</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">...................</span><span class="n">O</span><span class="o">...............</span><span class="n">O</span><span class="o">..</span>
+<span class="o">.....</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.........</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">.....</span>
+<span class="o">....</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...............</span><span class="n">O</span><span class="o">......................</span>
+<span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..................</span><span class="n">O</span><span class="o">............</span>
+<span class="o">...</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">....................</span><span class="n">O</span><span class="o">....</span>
+<span class="o">.</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">...........................</span><span class="n">O</span>
+<span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">.......................</span><span class="n">O</span><span class="o">.</span>
+<span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.......</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">........</span>
+<span class="o">..........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.......</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">......</span>
+<span class="o">.....</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.....................</span>
+<span class="o">.........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">.........</span>
+<span class="o">..</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">...................</span><span class="n">O</span><span class="o">..........</span>
+<span class="o">.........</span><span class="n">O</span><span class="o">.......</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">.............</span><span class="n">O</span><span class="o">............</span>
+<span class="o">.......</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.................</span>
+<span class="o">....</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">...</span>
+<span class="o">...........</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.......</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">......</span>
+<span class="o">...</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">....</span><span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">...........</span>
+<span class="o">.............</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">.....</span>
+<span class="o">.......</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">...............</span>
+<span class="o">.....</span><span class="n">O</span><span class="o">...............</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">............</span>
+<span class="o">.</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.......</span><span class="n">O</span><span class="o">.............</span>
+<span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">.......</span>
+<span class="o">..............</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.....</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span>
+<span class="o">...........</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">....</span>
+<span class="o">..</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">................</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">.........</span>
+<span class="o">.........</span><span class="n">O</span><span class="o">........</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">.............</span>
+<span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.........</span><span class="n">O</span><span class="o">.....</span>
+<span class="o">...</span><span class="n">O</span><span class="o">...................</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.............</span>
+<span class="o">........................</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">......</span>
+<span class="o">...............</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span>
+<span class="o">..........................</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">...</span>
+<span class="o">....................</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span>
+<span class="o">......................</span><span class="n">O</span><span class="o">.............</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.......</span><span class="n">O</span><span class="o">.</span>
+<span class="o">.................</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.......</span>
+<span class="o">.</span><span class="n">O</span><span class="o">..............</span><span class="n">O</span><span class="o">.............</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">..</span>
+<span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">..............</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">....</span>
+<span class="o">...........................</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.....</span>
+<span class="o">..</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">.......</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">.</span>
+<span class="o">......................</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span>
+<span class="o">............</span><span class="n">O</span><span class="o">................</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span>
+<span class="o">....................................</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">..</span>
+<span class="o">......</span><span class="n">O</span><span class="o">.....................</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">..</span>
+<span class="o">.......</span><span class="n">O</span><span class="o">...............</span><span class="n">O</span><span class="o">..............</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span>
+<span class="o">................................</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.</span><span class="n">O</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="final-solution">Final Solution</h3>
+<p>Eventually, the divide &amp; conquer + guided greedy did a pretty good job and for up to ~200, runs pretty quickly. Beyond that, we can just do the trick from “Step 4” and achieve a quick <code class="highlighter-rouge">8*N</code> solution. Extra optimizations I did to make it work:</p>
+<ol>
+  <li>memoize the output for each <code class="highlighter-rouge">N &lt; 200</code></li>
+  <li>compress a pair of integers (each less than <code class="highlighter-rouge">1000</code>) into one integer and use a <code class="highlighter-rouge">Set&lt;Integer&gt;</code> to avoid creating pairs.</li>
+</ol>
+
+<p>Here is <a href="https://www.codechef.com/viewsolution/24224964">my code</a> that passed all the tests. The answer for <code class="highlighter-rouge">N = 200</code> looks like this:</p>
+
+<p><img src="http://localhost:4000/static/img/rooks200.png" alt="N200" height="70%" width="70%" /></p>
+
+<p><br /></p>
+<h3 id="learning">Learning</h3>
+<p>Greedy solutions are often not ideal since they fall into a very simple local minima. However, combining with divide and conquer can sometimes avoid falling into those local minimas. The key point here is the hierarchical structure in which the greedy approach is applied. Also, in certain cases like this case, it makes more sense to fill greedily from denser areas first.</p>
+
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="http://localhost:4000/recursion/heuristic/problems/divide-and-conquer/2019/06/10/rooks-on-chess-board.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/problems/graph-theory/bipartite-matching/game-theory/grundy-numbers/2019/06/15/minimum-pawn-captures.html">Minimum Pawn Captures</a>
+                  
+                    (Categories: <a href="/category/problems">problems</a>, <a href="/category/graph-theory">graph-theory</a>, <a href="/category/bipartite-matching">bipartite-matching</a>, <a href="/category/game-theory">game-theory</a>, <a href="/category/grundy-numbers">grundy-numbers</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/graph-theory/sort/problems/2019/04/01/hamil-path-over-cities.html">Hamiltonian Path (Special Case)</a>
+                  
+                    (Categories: <a href="/category/graph-theory">graph-theory</a>, <a href="/category/sort">sort</a>, <a href="/category/problems">problems</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/problems/dp/knapsack/codechef/2019/03/21/01-Knabsack-groups.html">0/1 Knapsack (with groups)</a>
+                  
+                    (Categories: <a href="/category/problems">problems</a>, <a href="/category/dp">dp</a>, <a href="/category/knapsack">knapsack</a>, <a href="/category/codechef">codechef</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/algorithm/strings/dp/2019/04/14/suffix-arrays.html">&laquo; Suffix Arrays</a>
+  
+  
+    <a class="next" href="/problems/graph-theory/bipartite-matching/game-theory/grundy-numbers/2019/06/15/minimum-pawn-captures.html">Minimum Pawn Captures &raquo;</a>
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "nima101algoblog";
+    var disqus_identifier = "http://localhost:4000_Rooks on Chessboard";
+    var disqus_title = "Rooks on Chessboard";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; Nima Aghdaii
+          
+            - <a href="https://github.com/nima101">https://github.com/nima101</a> - Powered by Jekyll.
+          
+          <div class="btn-github" style="float:right;">
+            <iframe src="https://ghbtns.com/github-btn.html?user=nima101&repo=nima101.github.io&type=star&count=true" frameborder="0" scrolling="0" width="85" height="20px"></iframe>
+            <iframe src="https://ghbtns.com/github-btn.html?user=nima101&repo=nima101.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="85" height="20px"></iframe>
+          </div>
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,54 @@
+title: Problems and Algorithms
+description: Problems and Algorithms
+author: Nima Aghdaii
+github: https://github.com/nima101
+about: I like algorithms and problem solving.
+disqus_shortname: nima101algoblog
+
+# google_analytics: UA-49182060-2
+
+avatar_url: /static/img/avatar.jpg
+
+enableTags: true
+tagarray: []
+
+# collections:
+#   project:
+#     output: true
+#     permalink: /project/:path/
+
+social:
+    - icon: fa-linkedin
+      link: "https://www.linkedin.com/in/nima-aghdaii-074b7536/"
+    - icon: fa-github
+      link: "https://github.com/nima101"
+
+# share:
+#   twitter_username: github.io
+#   fb_appid: 1749788565247320
+
+urls:
+    - text: About Me
+      url: /about/
+    - text: XML Feed
+      url: /feed.xml
+
+url: "https://nima101.github.io"
+baseurl: ""
+paginate: 20
+per_page: 20
+paginate_path: "/page/:num/"
+
+markdown: kramdown
+highlighter: rouge
+
+gems:
+  - jekyll-paginate
+  - jekyll-gist
+
+compress_html:
+  clippings: all
+  comments: ["<!-- ", " -->"]
+  endings: all
+  ignore:
+    envs: ['development']
