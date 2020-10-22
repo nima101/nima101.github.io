@@ -133,54 +133,54 @@
 <div class="content">
   <div class="post"><h2 id="introduction">Introduction</h2>
 
-<p>Given an array <code class="highlighter-rouge">a</code> of <code class="highlighter-rouge">n</code> integers, we want to answer queries for sum of a range efficiently. For exmaple, for <code class="highlighter-rouge">a = [2, -1, 4, 3, -5, 9]</code>, <code class="highlighter-rouge">sum[2, 5) = 4 + 3 + (-5) = 2</code>.</p>
+<p>Given an array <code class="language-plaintext highlighter-rouge">a</code> of <code class="language-plaintext highlighter-rouge">n</code> integers, we want to answer queries for sum of a range efficiently. For exmaple, for <code class="language-plaintext highlighter-rouge">a = [2, -1, 4, 3, -5, 9]</code>, <code class="language-plaintext highlighter-rouge">sum[2, 5) = 4 + 3 + (-5) = 2</code>.</p>
 
 <p>In order to solve this, we can compute the <a href="https://en.wikipedia.org/wiki/Prefix_sum">Prefix Sum</a> of the array. Then any range becomes the difference between two prefix sums. Code:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># calculate prefix sum</span>
-<span class="c"># sum[i] = a[1] + ... + a[i]</span>
-<span class="nb">sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># calculate prefix sum
+# sum[i] = a[1] + ... + a[i]
+</span><span class="nb">sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
     <span class="nb">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-<span class="c"># inclusive x, y</span>
-<span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="c1"># inclusive x, y
+</span><span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span></code></pre></figure>
 
 <p><br /></p>
 
-<p>Preprocessing takes <code class="highlighter-rouge">O(n)</code> time and we answer every query in <code class="highlighter-rouge">O(1)</code>. Pretty good!</p>
+<p>Preprocessing takes <code class="language-plaintext highlighter-rouge">O(n)</code> time and we answer every query in <code class="language-plaintext highlighter-rouge">O(1)</code>. Pretty good!</p>
 
-<p>Now we want to be able to support update queries as well! let’s assume updates are done in terms of increments and <code class="highlighter-rouge">add(i, k)</code> adds value <code class="highlighter-rouge">k</code> to <code class="highlighter-rouge">a[i]</code>. Two possible approaches:</p>
+<p>Now we want to be able to support update queries as well! let’s assume updates are done in terms of increments and <code class="language-plaintext highlighter-rouge">add(i, k)</code> adds value <code class="language-plaintext highlighter-rouge">k</code> to <code class="language-plaintext highlighter-rouge">a[i]</code>. Two possible approaches:</p>
 
 <ol>
   <li>
-    <p>Update the i-th element (<code class="highlighter-rouge">a[i] += k</code>) and for each query, iterate over elements in the range in <code class="highlighter-rouge">O(n)</code>. Let’s call this: <code class="highlighter-rouge">&lt;O(1), O(n)&gt;</code>.</p>
+    <p>Update the i-th element (<code class="language-plaintext highlighter-rouge">a[i] += k</code>) and for each query, iterate over elements in the range in <code class="language-plaintext highlighter-rouge">O(n)</code>. Let’s call this: <code class="language-plaintext highlighter-rouge">&lt;O(1), O(n)&gt;</code>.</p>
   </li>
   <li>
-    <p>Add value <code class="highlighter-rouge">k</code> to all the prefix sums that contain <code class="highlighter-rouge">a[i]</code>. This would take <code class="highlighter-rouge">O(n)</code> time to update but still <code class="highlighter-rouge">O(1)</code> to query, hence <code class="highlighter-rouge">&lt;O(n), O(1)&gt;</code>.</p>
+    <p>Add value <code class="language-plaintext highlighter-rouge">k</code> to all the prefix sums that contain <code class="language-plaintext highlighter-rouge">a[i]</code>. This would take <code class="language-plaintext highlighter-rouge">O(n)</code> time to update but still <code class="language-plaintext highlighter-rouge">O(1)</code> to query, hence <code class="language-plaintext highlighter-rouge">&lt;O(n), O(1)&gt;</code>.</p>
   </li>
 </ol>
 
-<p>Would it be possible to have a solution in between? Maybe <code class="highlighter-rouge">&lt;O(log(n)), O(log(n))&gt;</code>?</p>
+<p>Would it be possible to have a solution in between? Maybe <code class="language-plaintext highlighter-rouge">&lt;O(log(n)), O(log(n))&gt;</code>?</p>
 
 <p><br /></p>
 
 <h2 id="binary-indexed-tree-bit">Binary Indexed Tree (BIT)</h2>
 
-<p>Binary Indexed Tree (BIT), also known as Fenwick Tree, is a data structure that provides both updates and queries in <code class="highlighter-rouge">O(log(n))</code> time. The idea is similar to storing prefix sums. However, we store smarter ranges such that each <code class="highlighter-rouge">a[i]</code> falls into <code class="highlighter-rouge">O(log(n))</code> ranges. Also, in order to compute <code class="highlighter-rouge">pre_sum[i]</code> we would need to sum up <code class="highlighter-rouge">O(log(n))</code> ranges.</p>
+<p>Binary Indexed Tree (BIT), also known as Fenwick Tree, is a data structure that provides both updates and queries in <code class="language-plaintext highlighter-rouge">O(log(n))</code> time. The idea is similar to storing prefix sums. However, we store smarter ranges such that each <code class="language-plaintext highlighter-rouge">a[i]</code> falls into <code class="language-plaintext highlighter-rouge">O(log(n))</code> ranges. Also, in order to compute <code class="language-plaintext highlighter-rouge">pre_sum[i]</code> we would need to sum up <code class="language-plaintext highlighter-rouge">O(log(n))</code> ranges.</p>
 
-<p>Note that we only solve the problem of finding <code class="highlighter-rouge">sum(i) = a[1] + ... + a[i]</code>. Using <code class="highlighter-rouge">sum(i)</code>, we can answer any arbitrary <code class="highlighter-rouge">sum(i, j)</code> using the trick mentioned in the introduction section.</p>
+<p>Note that we only solve the problem of finding <code class="language-plaintext highlighter-rouge">sum(i) = a[1] + ... + a[i]</code>. Using <code class="language-plaintext highlighter-rouge">sum(i)</code>, we can answer any arbitrary <code class="language-plaintext highlighter-rouge">sum(i, j)</code> using the trick mentioned in the introduction section.</p>
 
 <p><br /></p>
 
 <h3 id="structure">Structure</h3>
 
-<p>Although Binary Indexed Tree is a tree in concept, they are typically stored as an array. The image below shows how the tree maps to an array. On the left, you see the nodes of the tree corresponding to a bar representing the range of the array they are responsible for. On the right, is the actual array <code class="highlighter-rouge">c</code> we store in our code.</p>
+<p>Although Binary Indexed Tree is a tree in concept, they are typically stored as an array. The image below shows how the tree maps to an array. On the left, you see the nodes of the tree corresponding to a bar representing the range of the array they are responsible for. On the right, is the actual array <code class="language-plaintext highlighter-rouge">c</code> we store in our code.</p>
 
 <p><img src="http://localhost:4000/static/img/BIT.png" alt="BIT" height="40%" width="40%" class="center-image" /></p>
 
-<p>A BIT is understood by considering a 1-based array. Each element whose index <code class="highlighter-rouge">i</code> is a power of 2 contains the sum of the first <code class="highlighter-rouge">i</code> elements. Each element whose index is not a power of 2 contains the sum of the values since its parent in the tree, and that parent is found by <strong>clearing the least-significant bit</strong> in the index. (note that the <code class="highlighter-rouge">x</code>-th column from right in the image above corresponds to all indices in the array where the index of the lowest significant bit is <code class="highlighter-rouge">x</code>)</p>
+<p>A BIT is understood by considering a 1-based array. Each element whose index <code class="language-plaintext highlighter-rouge">i</code> is a power of 2 contains the sum of the first <code class="language-plaintext highlighter-rouge">i</code> elements. Each element whose index is not a power of 2 contains the sum of the values since its parent in the tree, and that parent is found by <strong>clearing the least-significant bit</strong> in the index. (note that the <code class="language-plaintext highlighter-rouge">x</code>-th column from right in the image above corresponds to all indices in the array where the index of the lowest significant bit is <code class="language-plaintext highlighter-rouge">x</code>)</p>
 
 <p>In the following sections, we look at each operation separately with an example to clarify how BIT works.</p>
 
@@ -192,14 +192,14 @@
   <img src="http://localhost:4000/static/img/BIT-query.png" style="width: 90%; height: 90%" />
 </div>
 
-<p>Example: query for sum of all the elements up to <code class="highlighter-rouge">11</code>.</p>
+<p>Example: query for sum of all the elements up to <code class="language-plaintext highlighter-rouge">11</code>.</p>
 
-<p><code class="highlighter-rouge">11</code> in binary is <code class="highlighter-rouge">1011</code> which is <code class="highlighter-rouge">8 + 2 + 1</code>. If we compute the cumulative sum of these 3 numbers, we get the indices we need to sum up, that is: <code class="highlighter-rouge">[8, 8 + 2, 8 + 2 + 1] = [8, 10, 11]</code>. So, <code class="highlighter-rouge">query(11) = c[8] + c[10] + c[11]</code>. In binary, we start with <code class="highlighter-rouge">1011</code> and each time we clear the least significant bit (lsb) until we reach <code class="highlighter-rouge">0</code>.</p>
+<p><code class="language-plaintext highlighter-rouge">11</code> in binary is <code class="language-plaintext highlighter-rouge">1011</code> which is <code class="language-plaintext highlighter-rouge">8 + 2 + 1</code>. If we compute the cumulative sum of these 3 numbers, we get the indices we need to sum up, that is: <code class="language-plaintext highlighter-rouge">[8, 8 + 2, 8 + 2 + 1] = [8, 10, 11]</code>. So, <code class="language-plaintext highlighter-rouge">query(11) = c[8] + c[10] + c[11]</code>. In binary, we start with <code class="language-plaintext highlighter-rouge">1011</code> and each time we clear the least significant bit (lsb) until we reach <code class="language-plaintext highlighter-rouge">0</code>.</p>
 
 <ul>
-  <li>start <code class="highlighter-rouge">1011</code></li>
-  <li>next <code class="highlighter-rouge">1011 - 0001 = 1010</code></li>
-  <li>next <code class="highlighter-rouge">1010 - 0010 = 1000</code></li>
+  <li>start <code class="language-plaintext highlighter-rouge">1011</code></li>
+  <li>next <code class="language-plaintext highlighter-rouge">1011 - 0001 = 1010</code></li>
+  <li>next <code class="language-plaintext highlighter-rouge">1010 - 0010 = 1000</code></li>
 </ul>
 
 <p><br /> <br /></p>
@@ -210,38 +210,38 @@
   <img src="http://localhost:4000/static/img/BIT-update.png" style="width: 90%; height: 90%" />
 </div>
 
-<p>Example: increment element at <code class="highlighter-rouge">11</code> by some amount.</p>
+<p>Example: increment element at <code class="language-plaintext highlighter-rouge">11</code> by some amount.</p>
 
-<p>We need to update any range that contains <code class="highlighter-rouge">11</code>. We start with <code class="highlighter-rouge">11</code> itself, which is <code class="highlighter-rouge">01011</code> in binary. In order to find the next range to the left of the current range (in the image below), we need to add <code class="highlighter-rouge">1</code> to the least significant bit (lsb). This gives us the smallest number greater than the current number with a higher lsb. In binary, we start with <code class="highlighter-rouge">01011</code> and each time we add the lsb of the number to it, until it is larger than the size of array.</p>
+<p>We need to update any range that contains <code class="language-plaintext highlighter-rouge">11</code>. We start with <code class="language-plaintext highlighter-rouge">11</code> itself, which is <code class="language-plaintext highlighter-rouge">01011</code> in binary. In order to find the next range to the left of the current range (in the image below), we need to add <code class="language-plaintext highlighter-rouge">1</code> to the least significant bit (lsb). This gives us the smallest number greater than the current number with a higher lsb. In binary, we start with <code class="language-plaintext highlighter-rouge">01011</code> and each time we add the lsb of the number to it, until it is larger than the size of array.</p>
 
 <ul>
-  <li>start <code class="highlighter-rouge">01011</code></li>
-  <li>next <code class="highlighter-rouge">01011 + 00001 = 01100</code></li>
-  <li>next <code class="highlighter-rouge">01100 + 00100 = 10000</code></li>
+  <li>start <code class="language-plaintext highlighter-rouge">01011</code></li>
+  <li>next <code class="language-plaintext highlighter-rouge">01011 + 00001 = 01100</code></li>
+  <li>next <code class="language-plaintext highlighter-rouge">01100 + 00100 = 10000</code></li>
 </ul>
 
 <p><br /></p>
 
 <h3 id="code">Code</h3>
 
-<p>And with these few lines of code you can solve the problem of update/query in <code class="highlighter-rouge">&lt;O(log(n)), O(log(n))&gt;</code></p>
+<p>And with these few lines of code you can solve the problem of update/query in <code class="language-plaintext highlighter-rouge">&lt;O(log(n)), O(log(n))&gt;</code></p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
-<span class="c"># get the least significant bit (ex: 1010 -&gt; 0010)</span>
-<span class="k">def</span> <span class="nf">lsb</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="c1"># get the least significant bit (ex: 1010 -&gt; 0010)
+</span><span class="k">def</span> <span class="nf">lsb</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
 
-<span class="c"># get sum from 1 to i</span>
-<span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+<span class="c1"># get sum from 1 to i
+</span><span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">i</span> <span class="o">-=</span> <span class="n">lsb</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">s</span>
 
-<span class="c"># add k to i-th element</span>
-<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">inc</span><span class="p">):</span>
+<span class="c1"># add k to i-th element
+</span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">inc</span><span class="p">):</span>
     <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
         <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">inc</span>
         <span class="n">i</span> <span class="o">+=</span> <span class="n">lsb</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></code></pre></figure>

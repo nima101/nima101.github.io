@@ -133,17 +133,17 @@
 <div class="content">
   <div class="post"><h3 id="problem">Problem</h3>
 
-<p>Given <code class="highlighter-rouge">n</code>, find all prime numbers less than <code class="highlighter-rouge">n</code>.</p>
+<p>Given <code class="language-plaintext highlighter-rouge">n</code>, find all prime numbers less than <code class="language-plaintext highlighter-rouge">n</code>.</p>
 
 <p><br /></p>
 <h3 id="approaches">Approaches</h3>
 
 <ol>
   <li>
-    <p>We can simply iterate over numbers and test if they are prime. A simple primality test would run in <code class="highlighter-rouge">O(sqrt(n))</code> and the fastest primality test algorithms run slower than <code class="highlighter-rouge">O(log(n))</code> <sup>1</sup>. This approach at best would result in an overall <code class="highlighter-rouge">O(nlog(n))</code> runtime complexity.</p>
+    <p>We can simply iterate over numbers and test if they are prime. A simple primality test would run in <code class="language-plaintext highlighter-rouge">O(sqrt(n))</code> and the fastest primality test algorithms run slower than <code class="language-plaintext highlighter-rouge">O(log(n))</code> <sup>1</sup>. This approach at best would result in an overall <code class="language-plaintext highlighter-rouge">O(nlog(n))</code> runtime complexity.</p>
   </li>
   <li>
-    <p>We can use the famous <a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a> and using <code class="highlighter-rouge">O(n)</code> memory, we can find all prime numbers in <code class="highlighter-rouge">O(nlog(log(n)))</code>. (the image is taken from Wikipedia)</p>
+    <p>We can use the famous <a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a> and using <code class="language-plaintext highlighter-rouge">O(n)</code> memory, we can find all prime numbers in <code class="language-plaintext highlighter-rouge">O(nlog(log(n)))</code>. (the image is taken from Wikipedia)</p>
   </li>
 </ol>
 
@@ -172,33 +172,33 @@
 <p><br /></p>
 <h3 id="why-is-sieve-of-eratosthenes-slow">Why is “Sieve of Eratosthenes” slow?</h3>
 
-<p>The main issue with Sieve of Eratosthenes is that it marks each composite number from all of its prime factors. For example, number <code class="highlighter-rouge">60</code> is marked from <code class="highlighter-rouge">2</code>, <code class="highlighter-rouge">3</code> and <code class="highlighter-rouge">5</code> (<code class="highlighter-rouge">60 = 2*2*3*5</code>), while it would have been enough to just mark it from one of the prime factors, say <code class="highlighter-rouge">2</code>.</p>
+<p>The main issue with Sieve of Eratosthenes is that it marks each composite number from all of its prime factors. For example, number <code class="language-plaintext highlighter-rouge">60</code> is marked from <code class="language-plaintext highlighter-rouge">2</code>, <code class="language-plaintext highlighter-rouge">3</code> and <code class="language-plaintext highlighter-rouge">5</code> (<code class="language-plaintext highlighter-rouge">60 = 2*2*3*5</code>), while it would have been enough to just mark it from one of the prime factors, say <code class="language-plaintext highlighter-rouge">2</code>.</p>
 
 <p>If we find a way to mark each composite number only from one of its prime factors, we will have a linear time solution.</p>
 
 <p><br /></p>
 <h3 id="linear-time-solution">Linear-time solution</h3>
 
-<p>In order to find all prime numbers up to <code class="highlighter-rouge">n</code>, we keep track of two arrays:</p>
+<p>In order to find all prime numbers up to <code class="language-plaintext highlighter-rouge">n</code>, we keep track of two arrays:</p>
 <ul>
-  <li><code class="highlighter-rouge">primes</code>: list of all prime numbers we have found so far.</li>
-  <li><code class="highlighter-rouge">lp[x]</code>: the smallest prime factor for integer <code class="highlighter-rouge">x</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">primes</code>: list of all prime numbers we have found so far.</li>
+  <li><code class="language-plaintext highlighter-rouge">lp[x]</code>: the smallest prime factor for integer <code class="language-plaintext highlighter-rouge">x</code>.</li>
 </ul>
 
-<p>Now, imagine a composite number such as <code class="highlighter-rouge">3 * 5 * 7</code>. We need to mark such a number from its lowest prime factor <code class="highlighter-rouge">3</code> by setting <code class="highlighter-rouge">lp[3 * 5 * 7] = 3</code>. However, instead of marking it from <code class="highlighter-rouge">3</code>, we mark it from <code class="highlighter-rouge">5 * 7</code>.</p>
+<p>Now, imagine a composite number such as <code class="language-plaintext highlighter-rouge">3 * 5 * 7</code>. We need to mark such a number from its lowest prime factor <code class="language-plaintext highlighter-rouge">3</code> by setting <code class="language-plaintext highlighter-rouge">lp[3 * 5 * 7] = 3</code>. However, instead of marking it from <code class="language-plaintext highlighter-rouge">3</code>, we mark it from <code class="language-plaintext highlighter-rouge">5 * 7</code>.</p>
 
-<p>In order to do so, when we are at <code class="highlighter-rouge">i = 5 * 7</code>, for each prime <code class="highlighter-rouge">p &lt;= 5</code>, we mark <code class="highlighter-rouge">p * i</code>. Basically, we do:</p>
+<p>In order to do so, when we are at <code class="language-plaintext highlighter-rouge">i = 5 * 7</code>, for each prime <code class="language-plaintext highlighter-rouge">p &lt;= 5</code>, we mark <code class="language-plaintext highlighter-rouge">p * i</code>. Basically, we do:</p>
 <ul>
-  <li><code class="highlighter-rouge">lp[2 * 5*7] = 2</code></li>
-  <li><code class="highlighter-rouge">lp[3 * 5*7] = 3</code></li>
-  <li><code class="highlighter-rouge">lp[5 * 5*7] = 5</code></li>
+  <li><code class="language-plaintext highlighter-rouge">lp[2 * 5*7] = 2</code></li>
+  <li><code class="language-plaintext highlighter-rouge">lp[3 * 5*7] = 3</code></li>
+  <li><code class="language-plaintext highlighter-rouge">lp[5 * 5*7] = 5</code></li>
 </ul>
 
-<p>More formally, for each <code class="highlighter-rouge">i</code>, we look at <code class="highlighter-rouge">lp[i]</code> and for all primes <code class="highlighter-rouge">p</code> less than or equal to <code class="highlighter-rouge">lp[i]</code>, we set <code class="highlighter-rouge">lp[p * i] = p</code>.</p>
+<p>More formally, for each <code class="language-plaintext highlighter-rouge">i</code>, we look at <code class="language-plaintext highlighter-rouge">lp[i]</code> and for all primes <code class="language-plaintext highlighter-rouge">p</code> less than or equal to <code class="language-plaintext highlighter-rouge">lp[i]</code>, we set <code class="language-plaintext highlighter-rouge">lp[p * i] = p</code>.</p>
 
-<p>So, we start with <code class="highlighter-rouge">lp</code> initialized with <code class="highlighter-rouge">0</code>. We iterate over all numbers from <code class="highlighter-rouge">2</code> to <code class="highlighter-rouge">n</code>. If <code class="highlighter-rouge">lp[i] == 0</code>, it means <code class="highlighter-rouge">i</code> is prime, so we set <code class="highlighter-rouge">lp[i] = i</code>. Otherwise, <code class="highlighter-rouge">i</code> is a composite number and we have already stored its smallest prime factor in <code class="highlighter-rouge">lp[i]</code>.</p>
+<p>So, we start with <code class="language-plaintext highlighter-rouge">lp</code> initialized with <code class="language-plaintext highlighter-rouge">0</code>. We iterate over all numbers from <code class="language-plaintext highlighter-rouge">2</code> to <code class="language-plaintext highlighter-rouge">n</code>. If <code class="language-plaintext highlighter-rouge">lp[i] == 0</code>, it means <code class="language-plaintext highlighter-rouge">i</code> is prime, so we set <code class="language-plaintext highlighter-rouge">lp[i] = i</code>. Otherwise, <code class="language-plaintext highlighter-rouge">i</code> is a composite number and we have already stored its smallest prime factor in <code class="language-plaintext highlighter-rouge">lp[i]</code>.</p>
 
-<p>Now, using all prime numbers less than or equal to <code class="highlighter-rouge">lp[i]</code> we set some future composite numbers. (note that we do this where <code class="highlighter-rouge">i</code> is prime or composite)</p>
+<p>Now, using all prime numbers less than or equal to <code class="language-plaintext highlighter-rouge">lp[i]</code> we set some future composite numbers. (note that we do this where <code class="language-plaintext highlighter-rouge">i</code> is prime or composite)</p>
 
 <h4 id="implementation">Implementation</h4>
 
@@ -210,7 +210,7 @@
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">lp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">lp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
-        <span class="n">primes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">primes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">primes</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">lp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">or</span> <span class="n">primes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
@@ -221,32 +221,32 @@
 
 <h4 id="correctness">Correctness</h4>
 
-<p>Suppose we arrive at a composite number <code class="highlighter-rouge">C</code> and <code class="highlighter-rouge">p</code> is the smallest prime factor in <code class="highlighter-rouge">C</code>. <code class="highlighter-rouge">C</code> is uniquely represented as: <code class="highlighter-rouge">C = p * X</code> for some number <code class="highlighter-rouge">X &gt; 1</code>. Since <code class="highlighter-rouge">p</code> is the smallest prime factor in <code class="highlighter-rouge">C</code>, <code class="highlighter-rouge">p</code> is also smaller or equal to the smallest prime factor in <code class="highlighter-rouge">X</code>. This means we should have marked <code class="highlighter-rouge">C</code> when we arrived at <code class="highlighter-rouge">X</code> **<sup><strong>1</strong></sup>.</p>
+<p>Suppose we arrive at a composite number <code class="language-plaintext highlighter-rouge">C</code> and <code class="language-plaintext highlighter-rouge">p</code> is the smallest prime factor in <code class="language-plaintext highlighter-rouge">C</code>. <code class="language-plaintext highlighter-rouge">C</code> is uniquely represented as: <code class="language-plaintext highlighter-rouge">C = p * X</code> for some number <code class="language-plaintext highlighter-rouge">X &gt; 1</code>. Since <code class="language-plaintext highlighter-rouge">p</code> is the smallest prime factor in <code class="language-plaintext highlighter-rouge">C</code>, <code class="language-plaintext highlighter-rouge">p</code> is also smaller or equal to the smallest prime factor in <code class="language-plaintext highlighter-rouge">X</code>. This means we should have marked <code class="language-plaintext highlighter-rouge">C</code> when we arrived at <code class="language-plaintext highlighter-rouge">X</code> **<sup><strong>1</strong></sup>.</p>
 
-<p><sup><strong>1</strong></sup> Remember that for each number <code class="highlighter-rouge">X</code> we mark all composites <code class="highlighter-rouge">p * X</code> for primes <code class="highlighter-rouge">p</code> smaller than or equal to the smallest prime factor in <code class="highlighter-rouge">X</code>.</p>
+<p><sup><strong>1</strong></sup> Remember that for each number <code class="language-plaintext highlighter-rouge">X</code> we mark all composites <code class="language-plaintext highlighter-rouge">p * X</code> for primes <code class="language-plaintext highlighter-rouge">p</code> smaller than or equal to the smallest prime factor in <code class="language-plaintext highlighter-rouge">X</code>.</p>
 
 <h4 id="complexity">Complexity</h4>
 
-<p>Every composite number <code class="highlighter-rouge">x</code> is uniquely represented as <code class="highlighter-rouge">x = lp[x] * y</code>. So, it will be visited from only one number <code class="highlighter-rouge">y</code>. And prime numbers will not be visited from any other number. So, in total we have <code class="highlighter-rouge">|composites|</code> visits + <code class="highlighter-rouge">n</code> for iterating over all numbers. In total: <code class="highlighter-rouge">O(n)</code>.</p>
+<p>Every composite number <code class="language-plaintext highlighter-rouge">x</code> is uniquely represented as <code class="language-plaintext highlighter-rouge">x = lp[x] * y</code>. So, it will be visited from only one number <code class="language-plaintext highlighter-rouge">y</code>. And prime numbers will not be visited from any other number. So, in total we have <code class="language-plaintext highlighter-rouge">|composites|</code> visits + <code class="language-plaintext highlighter-rouge">n</code> for iterating over all numbers. In total: <code class="language-plaintext highlighter-rouge">O(n)</code>.</p>
 
-<p><strong>Base Case:</strong> For <code class="highlighter-rouge">i = 2</code>, <code class="highlighter-rouge">lp[i]</code> is zero, so we figure <code class="highlighter-rouge">2</code> is a prime and we set <code class="highlighter-rouge">lp[2] = 2</code>.</p>
+<p><strong>Base Case:</strong> For <code class="language-plaintext highlighter-rouge">i = 2</code>, <code class="language-plaintext highlighter-rouge">lp[i]</code> is zero, so we figure <code class="language-plaintext highlighter-rouge">2</code> is a prime and we set <code class="language-plaintext highlighter-rouge">lp[2] = 2</code>.</p>
 
-<p><strong>Invariant:</strong> For all numbers <code class="highlighter-rouge">i</code> up to <code class="highlighter-rouge">k</code>,</p>
+<p><strong>Invariant:</strong> For all numbers <code class="language-plaintext highlighter-rouge">i</code> up to <code class="language-plaintext highlighter-rouge">k</code>,</p>
 
 <h4 id="correctness-old">Correctness (OLD</h4>
 
 <p>We can use proof by contradiction to prove we will always mark a composite number before arriving at it.</p>
 
-<p>Suppose not. Assume a <strong>composite</strong> number <code class="highlighter-rouge">C</code> is not marked when we arrive at it. we know that <code class="highlighter-rouge">C = lp[C] * X</code> for some <code class="highlighter-rouge">1 &lt; X &lt; C</code> and <code class="highlighter-rouge">lp[C]</code> is always prime. We also know that <code class="highlighter-rouge">lp[C]</code> is the smallest prime factor in <code class="highlighter-rouge">C</code>, so we know as well: <code class="highlighter-rouge">lp[C] &lt;= lp[X]</code>. But this contradicts with the assumption of our algorithm since when we visited <code class="highlighter-rouge">X</code>, we should have marked <code class="highlighter-rouge">lp[C] * X</code> since <code class="highlighter-rouge">lp[C]</code> is a prime number less than or equal to the smallest prime factor of <code class="highlighter-rouge">X</code>.</p>
+<p>Suppose not. Assume a <strong>composite</strong> number <code class="language-plaintext highlighter-rouge">C</code> is not marked when we arrive at it. we know that <code class="language-plaintext highlighter-rouge">C = lp[C] * X</code> for some <code class="language-plaintext highlighter-rouge">1 &lt; X &lt; C</code> and <code class="language-plaintext highlighter-rouge">lp[C]</code> is always prime. We also know that <code class="language-plaintext highlighter-rouge">lp[C]</code> is the smallest prime factor in <code class="language-plaintext highlighter-rouge">C</code>, so we know as well: <code class="language-plaintext highlighter-rouge">lp[C] &lt;= lp[X]</code>. But this contradicts with the assumption of our algorithm since when we visited <code class="language-plaintext highlighter-rouge">X</code>, we should have marked <code class="language-plaintext highlighter-rouge">lp[C] * X</code> since <code class="language-plaintext highlighter-rouge">lp[C]</code> is a prime number less than or equal to the smallest prime factor of <code class="language-plaintext highlighter-rouge">X</code>.</p>
 
 <h4 id="prime-factorization">Prime factorization</h4>
 
-<p>This linear-time algorithm not only gives us all the prime numbers up to <code class="highlighter-rouge">n</code> but also gives us the <strong>prime factorization</strong> for all numbers up to <code class="highlighter-rouge">n</code>! Using <code class="highlighter-rouge">lp</code>, we can recursively extract the lowest prime until no more primes left.</p>
+<p>This linear-time algorithm not only gives us all the prime numbers up to <code class="language-plaintext highlighter-rouge">n</code> but also gives us the <strong>prime factorization</strong> for all numbers up to <code class="language-plaintext highlighter-rouge">n</code>! Using <code class="language-plaintext highlighter-rouge">lp</code>, we can recursively extract the lowest prime until no more primes left.</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">prime_factors</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">while</span> <span class="n">lp</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lp</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+        <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">lp</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
         <span class="n">x</span> <span class="o">/=</span> <span class="n">lp</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">res</span></code></pre></figure>
 

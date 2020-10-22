@@ -140,7 +140,7 @@
 <h3 id="design">Design</h3>
 
 <ol>
-  <li>The server starts up on port <code class="highlighter-rouge">8080</code></li>
+  <li>The server starts up on port <code class="language-plaintext highlighter-rouge">8080</code></li>
   <li>Enters the event loop where we handle:
     <ul>
       <li>New connections</li>
@@ -156,7 +156,7 @@
 <p>In order to start the server we need to:</p>
 <ol>
   <li><strong>Create</strong> a socket</li>
-  <li><strong>Bind</strong> it to an address (<code class="highlighter-rouge">&lt;localhost, port 8080&gt;</code>)</li>
+  <li><strong>Bind</strong> it to an address (<code class="language-plaintext highlighter-rouge">&lt;localhost, port 8080&gt;</code>)</li>
   <li><strong>Listen</strong> on the socket for incoming connections</li>
 </ol>
 
@@ -181,7 +181,7 @@
   <li>add evSet to the kqueue</li>
 </ol>
 
-<p>Note: for (2), refer to the man page for <a href="https://man.openbsd.org/kqueue">kevent</a> (<code class="highlighter-rouge">EVFILT_READ</code> section):</p>
+<p>Note: for (2), refer to the man page for <a href="https://man.openbsd.org/kqueue">kevent</a> (<code class="language-plaintext highlighter-rouge">EVFILT_READ</code> section):</p>
 <blockquote>
   <p>Sockets which have previously been passed to listen() return when there is an incoming connection pending.</p>
 </blockquote>
@@ -203,13 +203,13 @@
 
 <h4 id="accepting-connections">Accepting Connections</h4>
 
-<p>Each time we receive a new connection from a client, we <a href="http://man7.org/linux/man-pages/man2/accept.2.html">accept</a> the connection. The <code class="highlighter-rouge">accept(..)</code> system call basically does the tcp 3-way handshake and creates a socket for further communication with that client and returns the file descriptor of that socket. We need to store these file descriptors for each client so we can communicate with them.</p>
+<p>Each time we receive a new connection from a client, we <a href="http://man7.org/linux/man-pages/man2/accept.2.html">accept</a> the connection. The <code class="language-plaintext highlighter-rouge">accept(..)</code> system call basically does the tcp 3-way handshake and creates a socket for further communication with that client and returns the file descriptor of that socket. We need to store these file descriptors for each client so we can communicate with them.</p>
 
 <p><br /></p>
 
 <h4 id="connection-pooling">Connection Pooling</h4>
 
-<p>Let’s store an array of <code class="highlighter-rouge">client_data</code> (which contains the socket’s fd), and initially all of them have <code class="highlighter-rouge">fd = 0</code>, which means “unused”.</p>
+<p>Let’s store an array of <code class="language-plaintext highlighter-rouge">client_data</code> (which contains the socket’s fd), and initially all of them have <code class="language-plaintext highlighter-rouge">fd = 0</code>, which means “unused”.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">client_data</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
@@ -217,9 +217,9 @@
 
 <p>Operations:</p>
 <ol>
-  <li><strong>Lookup:</strong> Given a fd, we can find the corresponding <code class="highlighter-rouge">client_data</code> by simply iterating over the array</li>
-  <li><strong>Add:</strong> For new connections, we find the first free item (<code class="highlighter-rouge">fd = 0</code>) in the array to store the client’s fd</li>
-  <li><strong>Delete:</strong> When the connection is lost, we free that item in the array by setting it’s fd to <code class="highlighter-rouge">0</code></li>
+  <li><strong>Lookup:</strong> Given a fd, we can find the corresponding <code class="language-plaintext highlighter-rouge">client_data</code> by simply iterating over the array</li>
+  <li><strong>Add:</strong> For new connections, we find the first free item (<code class="language-plaintext highlighter-rouge">fd = 0</code>) in the array to store the client’s fd</li>
+  <li><strong>Delete:</strong> When the connection is lost, we free that item in the array by setting it’s fd to <code class="language-plaintext highlighter-rouge">0</code></li>
 </ol>
 
 <p>Below is the code for these three operations:</p>
@@ -251,7 +251,7 @@
 
 <h4 id="event-loop">Event Loop</h4>
 
-<p>Now, we create an infinite loop where we call <code class="highlighter-rouge">kevent(..)</code> to receive incoming events and process them.</p>
+<p>Now, we create an infinite loop where we call <code class="language-plaintext highlighter-rouge">kevent(..)</code> to receive incoming events and process them.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">num_events</span> <span class="o">=</span> <span class="n">kevent</span><span class="p">(</span><span class="n">kq</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">evList</span><span class="p">,</span> <span class="n">MAX_EVENTS</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
@@ -262,15 +262,15 @@
 
 <p>So far, we have registered to receive incoming connections on the main socket. When we receive such event, we <a href="http://man7.org/linux/man-pages/man2/accept.2.html">accept()</a> the connection and store the new socket’s fd in our connection pool. We also register for the incoming messages from that client (on the same kqueue). We also send them a welcome message on this new socket!</p>
 
-<p>When a client disconnects, we receive an event where the <code class="highlighter-rouge">EOF</code> flag is set on the socket. We simply free up that connection in the pool and remove the event from kqueue (via <code class="highlighter-rouge">EV_DELETE</code>).</p>
+<p>When a client disconnects, we receive an event where the <code class="language-plaintext highlighter-rouge">EOF</code> flag is set on the socket. We simply free up that connection in the pool and remove the event from kqueue (via <code class="language-plaintext highlighter-rouge">EV_DELETE</code>).</p>
 
 <p>Finally, we handle incoming data from clients and receive their message.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">num_events</span> <span class="o">=</span> <span class="n">kevent</span><span class="p">(</span><span class="n">kq</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">evList</span><span class="p">,</span> <span class="n">MAX_EVENTS</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_events</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// receive new connection
-</span>        <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span> <span class="o">==</span> <span class="n">local_s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// receive new connection</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span> <span class="o">==</span> <span class="n">local_s</span><span class="p">)</span> <span class="p">{</span>
             <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">accept</span><span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">socklen</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">conn_add</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
                 <span class="n">EV_SET</span><span class="p">(</span><span class="o">&amp;</span><span class="n">evSet</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">EVFILT_READ</span><span class="p">,</span> <span class="n">EV_ADD</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
@@ -280,15 +280,15 @@
                 <span class="n">printf</span><span class="p">(</span><span class="s">"connection refused.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
                 <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
             <span class="p">}</span>
-        <span class="p">}</span> <span class="c1">// client disconnected
-</span>        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">EV_EOF</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">}</span> <span class="c1">// client disconnected</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">EV_EOF</span><span class="p">)</span> <span class="p">{</span>
             <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span><span class="p">;</span>
             <span class="n">printf</span><span class="p">(</span><span class="s">"client #%d disconnected.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">get_conn</span><span class="p">(</span><span class="n">fd</span><span class="p">));</span>
             <span class="n">EV_SET</span><span class="p">(</span><span class="o">&amp;</span><span class="n">evSet</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">EVFILT_READ</span><span class="p">,</span> <span class="n">EV_DELETE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
             <span class="n">kevent</span><span class="p">(</span><span class="n">kq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">evSet</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
             <span class="n">conn_del</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-        <span class="p">}</span> <span class="c1">// read message from client
-</span>        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">filter</span> <span class="o">==</span> <span class="n">EVFILT_READ</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">}</span> <span class="c1">// read message from client</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">filter</span> <span class="o">==</span> <span class="n">EVFILT_READ</span><span class="p">)</span> <span class="p">{</span>
             <span class="n">recv_msg</span><span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -361,8 +361,8 @@
     <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">int</span> <span class="n">num_events</span> <span class="o">=</span> <span class="n">kevent</span><span class="p">(</span><span class="n">kq</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">evList</span><span class="p">,</span> <span class="n">MAX_EVENTS</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
         <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_events</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// receive new connection
-</span>            <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span> <span class="o">==</span> <span class="n">local_s</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// receive new connection</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span> <span class="o">==</span> <span class="n">local_s</span><span class="p">)</span> <span class="p">{</span>
                 <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">accept</span><span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">socklen</span><span class="p">);</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">conn_add</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
                     <span class="n">EV_SET</span><span class="p">(</span><span class="o">&amp;</span><span class="n">evSet</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">EVFILT_READ</span><span class="p">,</span> <span class="n">EV_ADD</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
@@ -372,15 +372,15 @@
                     <span class="n">printf</span><span class="p">(</span><span class="s">"connection refused.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
                     <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
                 <span class="p">}</span>
-            <span class="p">}</span> <span class="c1">// client disconnected
-</span>            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">EV_EOF</span><span class="p">)</span> <span class="p">{</span>
+            <span class="p">}</span> <span class="c1">// client disconnected</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">EV_EOF</span><span class="p">)</span> <span class="p">{</span>
                 <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span><span class="p">;</span>
                 <span class="n">printf</span><span class="p">(</span><span class="s">"client #%d disconnected.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">get_conn</span><span class="p">(</span><span class="n">fd</span><span class="p">));</span>
                 <span class="n">EV_SET</span><span class="p">(</span><span class="o">&amp;</span><span class="n">evSet</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">EVFILT_READ</span><span class="p">,</span> <span class="n">EV_DELETE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
                 <span class="n">kevent</span><span class="p">(</span><span class="n">kq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">evSet</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
                 <span class="n">conn_del</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-            <span class="p">}</span> <span class="c1">// read message from client
-</span>            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">filter</span> <span class="o">==</span> <span class="n">EVFILT_READ</span><span class="p">)</span> <span class="p">{</span>
+            <span class="p">}</span> <span class="c1">// read message from client</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">filter</span> <span class="o">==</span> <span class="n">EVFILT_READ</span><span class="p">)</span> <span class="p">{</span>
                 <span class="n">recv_msg</span><span class="p">(</span><span class="n">evList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ident</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -416,15 +416,15 @@
 <h3 id="all-done">All Done!</h3>
 <ol>
   <li>This is a simple implementation just to demonstrate how kqueue works. It lacks many things including handling sys call failures, handling large messages correctly, etc.</li>
-  <li>As an exercise, add a feature where server can also read messages from <code class="highlighter-rouge">stdin</code> and broadcast them to all clients.</li>
-  <li>Everything seems rather efficient except the fact that the call to <code class="highlighter-rouge">accept</code> does a tcp 3-way handshake, which incurs an extra roundtrip. You may wonder if that’s necessary and can we avoid that round trip fully or partially. While the 3-way handshake is necessary for tcp connections, <a href="https://pcarleton.com/2018/06/06/why-does-tcp-need-a-3-way-handshake-anyway/">this external post</a> explains some alternatives such as TCP Fast Open (TFO) or QUIC (TLS over UDP).</li>
+  <li>As an exercise, add a feature where server can also read messages from <code class="language-plaintext highlighter-rouge">stdin</code> and broadcast them to all clients.</li>
+  <li>Everything seems rather efficient except the fact that the call to <code class="language-plaintext highlighter-rouge">accept</code> does a tcp 3-way handshake, which incurs an extra roundtrip. You may wonder if that’s necessary and can we avoid that round trip fully or partially. While the 3-way handshake is necessary for tcp connections, <a href="https://pcarleton.com/2018/06/06/why-does-tcp-need-a-3-way-handshake-anyway/">this external post</a> explains some alternatives such as TCP Fast Open (TFO) or QUIC (TLS over UDP).</li>
 </ol>
 
 <p><br /></p>
 
 <p>Below is a demo where I run the server on the lift and 4 clients on the right.</p>
 
-<p><strong>Note:</strong> For the client side, I use the linux utility <a href="https://man.openbsd.org/nc.1">nc(netcat)</a>. You can run <code class="highlighter-rouge">nc -l PORT</code> to listen on a port or run <code class="highlighter-rouge">nc HOST PORT</code> to connect to a server and send data (once connected, type your msg and press enter to send).</p>
+<p><strong>Note:</strong> For the client side, I use the linux utility <a href="https://man.openbsd.org/nc.1">nc(netcat)</a>. You can run <code class="language-plaintext highlighter-rouge">nc -l PORT</code> to listen on a port or run <code class="language-plaintext highlighter-rouge">nc HOST PORT</code> to connect to a server and send data (once connected, type your msg and press enter to send).</p>
 
 <p><img src="http://localhost:4000/static/img/tcp_server.gif" alt="gif" height="100%" width="100%" /></p>
 

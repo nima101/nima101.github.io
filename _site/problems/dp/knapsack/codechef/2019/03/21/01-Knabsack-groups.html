@@ -133,60 +133,60 @@
 <div class="content">
   <div class="post"><h3 id="problem-songshop">Problem: <a href="https://www.codechef.com/COOK104A/problems/SONGSHOP"><strong>SONGSHOP</strong></a></h3>
 
-<p>There are N songs. The <code class="highlighter-rouge">i</code>-th song costs <code class="highlighter-rouge">p[i]</code> to purchase and brings <code class="highlighter-rouge">v[i]</code> satisfaction to you if you buy it. Also, each song belongs to one album <code class="highlighter-rouge">album[i]</code> and you can buy all the songs in an album for <code class="highlighter-rouge">album_price[i]</code> (or you can buy all the songs individually). Given budget <code class="highlighter-rouge">B</code>, what is the maximum satisfaction you can buy?</p>
+<p>There are N songs. The <code class="language-plaintext highlighter-rouge">i</code>-th song costs <code class="language-plaintext highlighter-rouge">p[i]</code> to purchase and brings <code class="language-plaintext highlighter-rouge">v[i]</code> satisfaction to you if you buy it. Also, each song belongs to one album <code class="language-plaintext highlighter-rouge">album[i]</code> and you can buy all the songs in an album for <code class="language-plaintext highlighter-rouge">album_price[i]</code> (or you can buy all the songs individually). Given budget <code class="language-plaintext highlighter-rouge">B</code>, what is the maximum satisfaction you can buy?</p>
 
 <h3 id="observations">Observations</h3>
 <ol>
-  <li>Without albums, this would be the classical 0/1 knapsack problem solvable with dynamic programming (<code class="highlighter-rouge">dp[index][budget]</code>).</li>
-  <li>When we consider paying <code class="highlighter-rouge">album_price[i]</code>, we have to make sure we don’t pay for any individual song in that album.</li>
+  <li>Without albums, this would be the classical 0/1 knapsack problem solvable with dynamic programming (<code class="language-plaintext highlighter-rouge">dp[index][budget]</code>).</li>
+  <li>When we consider paying <code class="language-plaintext highlighter-rouge">album_price[i]</code>, we have to make sure we don’t pay for any individual song in that album.</li>
   <li>The dp solution to knapsack problem works independent of the order of songs. This is an important degree of freedom we can benefit from!</li>
 </ol>
 
 <h3 id="solution">Solution</h3>
-<p>First we sort songs by their album. Now, <code class="highlighter-rouge">dp[i][b]</code> stores the maximum satisfaction we can get by using budget <code class="highlighter-rouge">b</code> on items <code class="highlighter-rouge">1..i</code>. Now, there are 3 cases:</p>
+<p>First we sort songs by their album. Now, <code class="language-plaintext highlighter-rouge">dp[i][b]</code> stores the maximum satisfaction we can get by using budget <code class="language-plaintext highlighter-rouge">b</code> on items <code class="language-plaintext highlighter-rouge">1..i</code>. Now, there are 3 cases:</p>
 <ul>
-  <li>we don’t take the song: <code class="highlighter-rouge">dp[i - 1][b]</code></li>
-  <li>we take the song: <code class="highlighter-rouge">dp[i - 1][b - p[i]] + v[i]</code></li>
-  <li>we take the whole album (we should consider this only on the last song of the album): <code class="highlighter-rouge">dp[ prev[i] ][ b - album_price[a] ] + album_v[a]</code><strong><sup>1</sup></strong>.</li>
+  <li>we don’t take the song: <code class="language-plaintext highlighter-rouge">dp[i - 1][b]</code></li>
+  <li>we take the song: <code class="language-plaintext highlighter-rouge">dp[i - 1][b - p[i]] + v[i]</code></li>
+  <li>we take the whole album (we should consider this only on the last song of the album): <code class="language-plaintext highlighter-rouge">dp[ prev[i] ][ b - album_price[a] ] + album_v[a]</code><strong><sup>1</sup></strong>.</li>
 </ul>
 
-<p><strong><sup>1</sup></strong> <code class="highlighter-rouge">prev[i]</code> returns the index of the last song from the previous album. In the image below, songs from the same album are colored with the same color.</p>
+<p><strong><sup>1</sup></strong> <code class="language-plaintext highlighter-rouge">prev[i]</code> returns the index of the last song from the previous album. In the image below, songs from the same album are colored with the same color.</p>
 
 <p><img src="http://localhost:4000/static/img/01knapsack-prev.png" alt="prev" height="80%" width="80%" /></p>
 
 <p>The code would look like this:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># assume songs are already sorted by album</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># assume songs are already sorted by album
+</span>
+<span class="c1"># for base case we need: dp[0][*] = 0, dp[*][0] = 0 
+# but for simplicity we initialize everything with zero
+</span><span class="n">dp</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">B</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
 
-<span class="c"># for base case we need: dp[0][*] = 0, dp[*][0] = 0 </span>
-<span class="c"># but for simplicity we initialize everything with zero</span>
-<span class="n">dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">B</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
-
-<span class="c"># fill prev</span>
-<span class="n">prev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1"># fill prev
+</span><span class="n">prev</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
     <span class="n">prev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">prev</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">album</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">album</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
 
-<span class="c"># recursion formula</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<span class="c1"># recursion formula
+</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">B</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
 
-        <span class="c"># skip song</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">b</span><span class="p">]</span>
+        <span class="c1"># skip song
+</span>        <span class="n">res</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">b</span><span class="p">]</span>
 
-        <span class="c"># buy song</span>
-        <span class="k">if</span> <span class="n">b</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># buy song
+</span>        <span class="k">if</span> <span class="n">b</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">b</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
-        <span class="c"># buy album</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">album</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="c1"># buy album
+</span>        <span class="n">a</span> <span class="o">=</span> <span class="n">album</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">N</span> <span class="ow">or</span> <span class="n">album</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">album</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span> <span class="n">prev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">][</span> <span class="n">b</span> <span class="o">-</span> <span class="n">album_price</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="p">]</span> <span class="o">+</span> <span class="n">album_v</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>
             
         <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span>
 
-<span class="c"># print answer</span>
-<span class="k">print</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">B</span><span class="p">]</span></code></pre></figure>
+<span class="c1"># print answer
+</span><span class="k">print</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">B</span><span class="p">]</span></code></pre></figure>
 
 </div>
   <div class="share-page">

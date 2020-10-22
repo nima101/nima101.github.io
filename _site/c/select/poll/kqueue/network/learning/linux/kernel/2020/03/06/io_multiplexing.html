@@ -136,34 +136,34 @@
 </blockquote>
 
 <h3 id="introduction">Introduction</h3>
-<p><a href="https://man.openbsd.org/kqueue">kqueue</a>(on MacOS) and <a href="http://man7.org/linux/man-pages/man7/epoll.7.html">epoll</a>(on Linux) are kernel system calls for scalable I/O event notification mechanisms in an efficient manner. In simple words, you subscribe to certain kernel events and you get notified when any of those events occur. These system calls are desigend for scalable situations such as a webserver where <code class="highlighter-rouge">10,000</code> concurrent connections are being handled by one server.</p>
+<p><a href="https://man.openbsd.org/kqueue">kqueue</a>(on MacOS) and <a href="http://man7.org/linux/man-pages/man7/epoll.7.html">epoll</a>(on Linux) are kernel system calls for scalable I/O event notification mechanisms in an efficient manner. In simple words, you subscribe to certain kernel events and you get notified when any of those events occur. These system calls are desigend for scalable situations such as a webserver where <code class="language-plaintext highlighter-rouge">10,000</code> concurrent connections are being handled by one server.</p>
 
 <p>epoll/kqueue are replacements for their deprecated counterparts <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll</a> and <a href="http://man7.org/linux/man-pages/man2/select.2.html">select</a>. Let’s take a look at those two and see why they are not suitable for today’s use cases.</p>
 
 <p><br /></p>
 
 <h3 id="select">select</h3>
-<p>In order to watch one file descriptor, say <code class="highlighter-rouge">777</code>, you need to write something like this in C:</p>
+<p>In order to watch one file descriptor, say <code class="language-plaintext highlighter-rouge">777</code>, you need to write something like this in C:</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">fd_set</span> <span class="n">fds</span><span class="p">;</span>
 <span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
 <span class="n">FD_SET</span><span class="p">(</span><span class="mi">777</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
 <span class="n">select</span><span class="p">(</span><span class="mi">778</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span></code></pre></figure>
 
-<p>When you call <code class="highlighter-rouge">select</code>, you pass <code class="highlighter-rouge">nfds = 778</code> which is the “number of file descriptors”. What <code class="highlighter-rouge">select</code> does under the hood is, it simply loops through all the file descriptors from <code class="highlighter-rouge">0</code> to <code class="highlighter-rouge">nfds - 1</code>. It checks if you have set them and if the desired event occured. So, the runtime is <code class="highlighter-rouge">O(n)</code> where <code class="highlighter-rouge">n</code> is the largest file descriptor you’re watching!</p>
+<p>When you call <code class="language-plaintext highlighter-rouge">select</code>, you pass <code class="language-plaintext highlighter-rouge">nfds = 778</code> which is the “number of file descriptors”. What <code class="language-plaintext highlighter-rouge">select</code> does under the hood is, it simply loops through all the file descriptors from <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">nfds - 1</code>. It checks if you have set them and if the desired event occured. So, the runtime is <code class="language-plaintext highlighter-rouge">O(n)</code> where <code class="language-plaintext highlighter-rouge">n</code> is the largest file descriptor you’re watching!</p>
 
 <p>This line of the man page, explains it well:</p>
 <blockquote>
   <p>The first nfds descriptors are checked in each set; i.e., the descriptors from 0 through nfds-1 in the descriptor sets are examined. (Example: If you have set two file descriptors “4” and “17”, nfds should not be “2”, but rather “17 + 1” or “18”.)</p>
 </blockquote>
 
-<p>Aside from performance, a bigger problem is, using <code class="highlighter-rouge">select</code> you may destroy your call stack and crash your process! Let’s again look at how we set our desired file descriptor:</p>
+<p>Aside from performance, a bigger problem is, using <code class="language-plaintext highlighter-rouge">select</code> you may destroy your call stack and crash your process! Let’s again look at how we set our desired file descriptor:</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">fd_set</span> <span class="n">fds</span><span class="p">;</span>
 <span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
 <span class="n">FD_SET</span><span class="p">(</span><span class="mi">777</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span></code></pre></figure>
 
-<p><code class="highlighter-rouge">fds</code> is the set of file descriptors we want to watch, and according to the man page:</p>
+<p><code class="language-plaintext highlighter-rouge">fds</code> is the set of file descriptors we want to watch, and according to the man page:</p>
 <blockquote>
   <p>The descriptor sets are stored as bit fields in arrays of integers.</p>
 </blockquote>
@@ -173,18 +173,18 @@
   <p>The default size FD_SETSIZE (currently 1024) is somewhat smaller than the current kernel limit to the number of open files.</p>
 </blockquote>
 
-<p>Now, if you try to watch file descriptor <code class="highlighter-rouge">2000</code>, <code class="highlighter-rouge">select</code> will loop over fds from <code class="highlighter-rouge">0</code> to <code class="highlighter-rouge">1999</code> and will read garbage. The bigger issue is when it tries to set results for a file descriptor past <code class="highlighter-rouge">1024</code> and tries to set that bit field in say <code class="highlighter-rouge">readfds</code>, <code class="highlighter-rouge">writefds</code> or <code class="highlighter-rouge">errorfds</code> field. At this point it will write something random on the stack eventually crashing the process and making it very hard to debug what happened since your stack is randomized.</p>
+<p>Now, if you try to watch file descriptor <code class="language-plaintext highlighter-rouge">2000</code>, <code class="language-plaintext highlighter-rouge">select</code> will loop over fds from <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">1999</code> and will read garbage. The bigger issue is when it tries to set results for a file descriptor past <code class="language-plaintext highlighter-rouge">1024</code> and tries to set that bit field in say <code class="language-plaintext highlighter-rouge">readfds</code>, <code class="language-plaintext highlighter-rouge">writefds</code> or <code class="language-plaintext highlighter-rouge">errorfds</code> field. At this point it will write something random on the stack eventually crashing the process and making it very hard to debug what happened since your stack is randomized.</p>
 
 <p><br /></p>
 
 <h3 id="poll">poll</h3>
 <p>After the introduction of <a href="http://man7.org/linux/man-pages/man2/select.2.html">select</a> in 1983, <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll</a> was released in 1986 (and came to libc in linux in 1997) to address the shortcomings of select. poll solved the fd limit of 1024, introduced more flavours of events to watch and slight changes to the timeout in the api, such as using milliseconds instead of microseconds.</p>
 
-<p>You can see that <code class="highlighter-rouge">poll</code>’s api makes a lot more sense:</p>
+<p>You can see that <code class="language-plaintext highlighter-rouge">poll</code>’s api makes a lot more sense:</p>
 
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">poll</span><span class="p">(</span><span class="k">struct</span> <span class="n">pollfd</span> <span class="n">fds</span><span class="p">[],</span> <span class="n">nfds_t</span> <span class="n">nfds</span><span class="p">,</span> <span class="kt">int</span> <span class="n">timeout</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">poll</span><span class="p">(</span><span class="k">struct</span> <span class="n">pollfd</span> <span class="n">fds</span><span class="p">[],</span> <span class="n">nfds_t</span> <span class="n">nfds</span><span class="p">,</span> <span class="kt">int</span> <span class="n">timeout</span><span class="p">);</span></code></pre></figure>
 
-<p>You pass in the list of fds you’re interested in, in a sparse format, and <code class="highlighter-rouge">ndfs</code> is actually the number of fds you are interested in. Here’s the structure of <code class="highlighter-rouge">pollfd</code>:</p>
+<p>You pass in the list of fds you’re interested in, in a sparse format, and <code class="language-plaintext highlighter-rouge">ndfs</code> is actually the number of fds you are interested in. Here’s the structure of <code class="language-plaintext highlighter-rouge">pollfd</code>:</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">pollfd</span> <span class="p">{</span>
     <span class="kt">int</span>    <span class="n">fd</span><span class="p">;</span>       <span class="cm">/* file descriptor */</span>
@@ -192,7 +192,7 @@
     <span class="kt">short</span>  <span class="n">revents</span><span class="p">;</span>  <span class="cm">/* events returned */</span>
 <span class="p">};</span></code></pre></figure>
 
-<p>In order to watch fds <code class="highlighter-rouge">777</code> for read, you can simply do:</p>
+<p>In order to watch fds <code class="language-plaintext highlighter-rouge">777</code> for read, you can simply do:</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">pollfd</span> <span class="n">pfd</span><span class="p">;</span>
 <span class="n">pfd</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="mi">777</span><span class="p">;</span>
@@ -201,7 +201,7 @@
     <span class="k">if</span> <span class="p">(</span><span class="n">pfd</span><span class="p">.</span><span class="n">revents</span> <span class="o">&amp;</span> <span class="n">POLLIN</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Although <code class="highlighter-rouge">poll</code> is an improvement to <code class="highlighter-rouge">select</code>, it still loops over the all the provided file descriptors hence runs in <code class="highlighter-rouge">O(n)</code> where <code class="highlighter-rouge">n</code> is the number of file descriptors we are watching.</p>
+<p>Although <code class="language-plaintext highlighter-rouge">poll</code> is an improvement to <code class="language-plaintext highlighter-rouge">select</code>, it still loops over the all the provided file descriptors hence runs in <code class="language-plaintext highlighter-rouge">O(n)</code> where <code class="language-plaintext highlighter-rouge">n</code> is the number of file descriptors we are watching.</p>
 
 <p><br /></p>
 
@@ -214,9 +214,9 @@
 <p><br /></p>
 
 <h4 id="kevent-structure">kevent structure</h4>
-<p>A <strong>kevent</strong> is identified by an <code class="highlighter-rouge">&lt;ident, filter&gt;</code> pair, where <strong>ident</strong> can be a file/socket descriptor and <strong>filter</strong> is the kernel filter used to process the respective event. There are some pre-defined system filters, such as <code class="highlighter-rouge">EVFILT_READ</code> or <code class="highlighter-rouge">EVFILT_WRITE</code>, that are triggered when data exists for read or write.</p>
+<p>A <strong>kevent</strong> is identified by an <code class="language-plaintext highlighter-rouge">&lt;ident, filter&gt;</code> pair, where <strong>ident</strong> can be a file/socket descriptor and <strong>filter</strong> is the kernel filter used to process the respective event. There are some pre-defined system filters, such as <code class="language-plaintext highlighter-rouge">EVFILT_READ</code> or <code class="language-plaintext highlighter-rouge">EVFILT_WRITE</code>, that are triggered when data exists for read or write.</p>
 
-<p>For exmaple, if we want to be notified when there is data available for reading in a socket, we need to specify a kevent in the form of <code class="highlighter-rouge">&lt;sckfd, EVFILT_READ&gt;</code>.</p>
+<p>For exmaple, if we want to be notified when there is data available for reading in a socket, we need to specify a kevent in the form of <code class="language-plaintext highlighter-rouge">&lt;sckfd, EVFILT_READ&gt;</code>.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">kevent</span> <span class="n">ev</span><span class="p">;</span>
 <span class="n">EV_SET</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">,</span> <span class="n">sckfd</span><span class="p">,</span> <span class="n">EVFILT_READ</span><span class="p">,</span> <span class="n">EV_ADD</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></code></pre></figure>
@@ -224,7 +224,7 @@
 <p><br /></p>
 
 <h4 id="flags">flags</h4>
-<p>We use flags to add, delete, enable or disable a kevent from the queue (<code class="highlighter-rouge">EV_ADD</code>, <code class="highlighter-rouge">EV_DELETE</code>, <code class="highlighter-rouge">EV_ENABLE</code>, <code class="highlighter-rouge">EV_DISABLE</code>).</p>
+<p>We use flags to add, delete, enable or disable a kevent from the queue (<code class="language-plaintext highlighter-rouge">EV_ADD</code>, <code class="language-plaintext highlighter-rouge">EV_DELETE</code>, <code class="language-plaintext highlighter-rouge">EV_ENABLE</code>, <code class="language-plaintext highlighter-rouge">EV_DISABLE</code>).</p>
 
 <p><br /></p>
 
@@ -240,13 +240,13 @@
 <p><br /></p>
 
 <h4 id="kevent-system-call">kevent system call</h4>
-<p>We can use the <code class="highlighter-rouge">kevent(...)</code> system call to:</p>
+<p>We can use the <code class="language-plaintext highlighter-rouge">kevent(...)</code> system call to:</p>
 <ol>
   <li>add/modify/delete events on the queue</li>
   <li>wait/read occured events</li>
 </ol>
 
-<p>It also allows for setting a timeout but for now we put in <code class="highlighter-rouge">NULL</code> which means no timeout (wait indefinitely).</p>
+<p>It also allows for setting a timeout but for now we put in <code class="language-plaintext highlighter-rouge">NULL</code> which means no timeout (wait indefinitely).</p>
 
 <p>Example usage:</p>
 
@@ -258,7 +258,7 @@
 <p><br /></p>
 
 <h4 id="event-loop">event loop</h4>
-<p>After creating the queue and registering our events, we wait for the events in an infinite loop. Once they occur, the call to <code class="highlighter-rouge">kevent(...)</code> unblocks and we receive these events in <code class="highlighter-rouge">evList</code>. We can iterate over these events and handle them however we wish. For example, if we receive a new connection from a client, we can accept the connection or if we receive new data, we can read it from the socket.</p>
+<p>After creating the queue and registering our events, we wait for the events in an infinite loop. Once they occur, the call to <code class="language-plaintext highlighter-rouge">kevent(...)</code> unblocks and we receive these events in <code class="language-plaintext highlighter-rouge">evList</code>. We can iterate over these events and handle them however we wish. For example, if we receive a new connection from a client, we can accept the connection or if we receive new data, we can read it from the socket.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">num_events</span> <span class="o">=</span> <span class="n">kevent</span><span class="p">(</span><span class="n">kq</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">evList</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="nb">NULL</span> <span class="cm">/* no timeout */</span><span class="p">);</span>

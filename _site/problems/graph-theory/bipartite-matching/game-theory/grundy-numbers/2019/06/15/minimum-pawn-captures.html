@@ -133,7 +133,7 @@
 <div class="content">
   <div class="post"><h3 id="problem-adapwn">Problem <a href="https://www.codechef.com/MAY19A/problems/ADAPWN"><strong>ADAPWN</strong></a></h3>
 
-<p>We are given a <code class="highlighter-rouge">NxN</code> chess board and some number of pawns on the board. Every pawn on <code class="highlighter-rouge">(i, j)</code> threatens cells <code class="highlighter-rouge">(i-1, j-1)</code> and <code class="highlighter-rouge">(i-1, j+1)</code> and if there is a pawn on either of these cells, it can capture one of them. The goal is to declare a sequence of captures (note that ordering matters!) such that after captures are performed, no pawn is under a threat by another pawn anymore.</p>
+<p>We are given a <code class="language-plaintext highlighter-rouge">NxN</code> chess board and some number of pawns on the board. Every pawn on <code class="language-plaintext highlighter-rouge">(i, j)</code> threatens cells <code class="language-plaintext highlighter-rouge">(i-1, j-1)</code> and <code class="language-plaintext highlighter-rouge">(i-1, j+1)</code> and if there is a pawn on either of these cells, it can capture one of them. The goal is to declare a sequence of captures (note that ordering matters!) such that after captures are performed, no pawn is under a threat by another pawn anymore.</p>
 
 <p>For example, given this starting position:<br />
 <img src="http://localhost:4000/static/img/chess-pawn-1.png" alt="chessboard1" height="30%" width="30%" /></p>
@@ -145,7 +145,7 @@
 <img src="http://localhost:4000/static/img/chess-pawn-3.png" alt="chessboard3" height="30%" width="30%" /></p>
 
 <p>Example input:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1
 8
 ....O...
 .....O..
@@ -157,7 +157,7 @@
 ....O...
 </code></pre></div></div>
 <p>Example output:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>6
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>6
 7 6 L
 4 6 L
 2 6 L
@@ -166,11 +166,11 @@
 6 5 R
 </code></pre></div></div>
 
-<p>Note that captures <code class="highlighter-rouge">7 6 L</code> and <code class="highlighter-rouge">6 5 R</code> cannot be reordered!</p>
+<p>Note that captures <code class="language-plaintext highlighter-rouge">7 6 L</code> and <code class="language-plaintext highlighter-rouge">6 5 R</code> cannot be reordered!</p>
 
 <p><br /></p>
 <h3 id="ideas">Ideas</h3>
-<p>First observation is to think of a capture as removal of a pawn. when pawn <code class="highlighter-rouge">p1</code> captures, pawn <code class="highlighter-rouge">p2</code>, it is equivalent of just removing pawn <code class="highlighter-rouge">p1</code>. However, if a pawn is not attacking another pawn, it cannot be removed (this made things a bit tricky at the end).</p>
+<p>First observation is to think of a capture as removal of a pawn. when pawn <code class="language-plaintext highlighter-rouge">p1</code> captures, pawn <code class="language-plaintext highlighter-rouge">p2</code>, it is equivalent of just removing pawn <code class="language-plaintext highlighter-rouge">p1</code>. However, if a pawn is not attacking another pawn, it cannot be removed (this made things a bit tricky at the end).</p>
 
 <p>I tried a lot of heuristics, such as eliminating in certain order or going with the highest degree nodes first. But none worked and an example like this made me realize why picking the highest degree pawn is not the best choice: <br />
 <img src="http://localhost:4000/static/img/chess-pawn-4.png" alt="chessboard4" height="30%" width="30%" /></p>
@@ -183,7 +183,7 @@
 
 <p><br /></p>
 <h3 id="graph-theory">Graph Theory</h3>
-<p>Imagine a graph where each pawn is a vertex and any pawn threatening another pawn is an edge between those two. The objective of this problem is to not have any threats left. Which means, for each edge <code class="highlighter-rouge">e = (p1, p2)</code> either <code class="highlighter-rouge">p1</code> or <code class="highlighter-rouge">p2</code> (or both) should be eliminated in such a way that minimum pawns are eliminated in total. This is basically minimum vertex cover, where we need to pick minimum number of vertices such that every edge is adjacent to least one picked vertex. While the <a href="https://en.wikipedia.org/wiki/Vertex_cover">vertex cover</a> problem in general is <code class="highlighter-rouge">NP-Complete</code>, it can be solved fairly efficiently on a bipartite graph using <a href="https://en.wikipedia.org/wiki/K%C5%91nig%27s_theorem_(graph_theory)">Kőnig’s Theorem</a>. This <a href="http://tryalgo.org/en/matching/2016/08/05/konig/">page</a> has a pretty good visual explanation of the theorem. Basically, the problem becomes finding the maximum matching on a bipartite graph.</p>
+<p>Imagine a graph where each pawn is a vertex and any pawn threatening another pawn is an edge between those two. The objective of this problem is to not have any threats left. Which means, for each edge <code class="language-plaintext highlighter-rouge">e = (p1, p2)</code> either <code class="language-plaintext highlighter-rouge">p1</code> or <code class="language-plaintext highlighter-rouge">p2</code> (or both) should be eliminated in such a way that minimum pawns are eliminated in total. This is basically minimum vertex cover, where we need to pick minimum number of vertices such that every edge is adjacent to least one picked vertex. While the <a href="https://en.wikipedia.org/wiki/Vertex_cover">vertex cover</a> problem in general is <code class="language-plaintext highlighter-rouge">NP-Complete</code>, it can be solved fairly efficiently on a bipartite graph using <a href="https://en.wikipedia.org/wiki/K%C5%91nig%27s_theorem_(graph_theory)">Kőnig’s Theorem</a>. This <a href="http://tryalgo.org/en/matching/2016/08/05/konig/">page</a> has a pretty good visual explanation of the theorem. Basically, the problem becomes finding the maximum matching on a bipartite graph.</p>
 
 <p><br /></p>
 <h4 id="bi-partite-graph">Bi-partite Graph</h4>
@@ -191,20 +191,20 @@
 
 <p><br /></p>
 <h4 id="handling-final-pawns">Handling Final Pawns</h4>
-<p>Notice that for even a simple case where there are two pawns and <code class="highlighter-rouge">p1</code> is threatening <code class="highlighter-rouge">p2</code>, you can either eliminate <code class="highlighter-rouge">p1</code> or <code class="highlighter-rouge">p2</code> to eliminate the threat. However, since the problem asks for a “pawn capture”, <code class="highlighter-rouge">p2</code> can’t capture any pawn and we can only eliminate <code class="highlighter-rouge">p1</code>. So, a simple bipartite vertex cover problem wouldn’t be enough since it may pick <code class="highlighter-rouge">p2</code> as the pawn to be removed. In order to cover these cases, imagine a pawn <code class="highlighter-rouge">c</code> that doesn’t threaten any other pawn but is threatened by pawns <code class="highlighter-rouge">p1</code>, <code class="highlighter-rouge">p2</code>, <code class="highlighter-rouge">p3</code>. Since <code class="highlighter-rouge">c</code> cannot be eliminated, in order to remove the threat, we have to eliminate all <code class="highlighter-rouge">p1</code>, <code class="highlighter-rouge">p2</code> and <code class="highlighter-rouge">p3</code>. So, we can remove these pawns and all the edges connected to them, to find the vertex cover on the remaining graph. At the end we can add the removed pawns to the final solution.</p>
+<p>Notice that for even a simple case where there are two pawns and <code class="language-plaintext highlighter-rouge">p1</code> is threatening <code class="language-plaintext highlighter-rouge">p2</code>, you can either eliminate <code class="language-plaintext highlighter-rouge">p1</code> or <code class="language-plaintext highlighter-rouge">p2</code> to eliminate the threat. However, since the problem asks for a “pawn capture”, <code class="language-plaintext highlighter-rouge">p2</code> can’t capture any pawn and we can only eliminate <code class="language-plaintext highlighter-rouge">p1</code>. So, a simple bipartite vertex cover problem wouldn’t be enough since it may pick <code class="language-plaintext highlighter-rouge">p2</code> as the pawn to be removed. In order to cover these cases, imagine a pawn <code class="language-plaintext highlighter-rouge">c</code> that doesn’t threaten any other pawn but is threatened by pawns <code class="language-plaintext highlighter-rouge">p1</code>, <code class="language-plaintext highlighter-rouge">p2</code>, <code class="language-plaintext highlighter-rouge">p3</code>. Since <code class="language-plaintext highlighter-rouge">c</code> cannot be eliminated, in order to remove the threat, we have to eliminate all <code class="language-plaintext highlighter-rouge">p1</code>, <code class="language-plaintext highlighter-rouge">p2</code> and <code class="language-plaintext highlighter-rouge">p3</code>. So, we can remove these pawns and all the edges connected to them, to find the vertex cover on the remaining graph. At the end we can add the removed pawns to the final solution.</p>
 
 <p><br /></p>
 <h4 id="solution-overview">Solution Overview</h4>
 <ol>
   <li>read input and store the grid</li>
-  <li>create a parent/child graph where <code class="highlighter-rouge">p1</code> is parent of <code class="highlighter-rouge">p2</code> if <code class="highlighter-rouge">p1</code> attacks <code class="highlighter-rouge">p2</code></li>
-  <li>mark any node that has a childless child (and add them to the <code class="highlighter-rouge">must_takes</code> list)</li>
+  <li>create a parent/child graph where <code class="language-plaintext highlighter-rouge">p1</code> is parent of <code class="language-plaintext highlighter-rouge">p2</code> if <code class="language-plaintext highlighter-rouge">p1</code> attacks <code class="language-plaintext highlighter-rouge">p2</code></li>
+  <li>mark any node that has a childless child (and add them to the <code class="language-plaintext highlighter-rouge">must_takes</code> list)</li>
   <li>mark any node that doesn’t have a child</li>
   <li>remove all marked nodes</li>
   <li>use dfs to create a graph of the remaining pawns</li>
   <li>create the bipartite graph</li>
-  <li>run bipartite vertex cover and get <code class="highlighter-rouge">cover</code> as minimum pawns chosen</li>
-  <li>print the list of <code class="highlighter-rouge">cover</code> + <code class="highlighter-rouge">must_takes</code> as the final answer</li>
+  <li>run bipartite vertex cover and get <code class="language-plaintext highlighter-rouge">cover</code> as minimum pawns chosen</li>
+  <li>print the list of <code class="language-plaintext highlighter-rouge">cover</code> + <code class="language-plaintext highlighter-rouge">must_takes</code> as the final answer</li>
 </ol>
 
 <p><br /></p>
@@ -262,17 +262,17 @@
     <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">G</span><span class="p">:</span>
         <span class="n">G</span><span class="p">[(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">)]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">G</span><span class="p">[(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">))</span>
+        <span class="n">G</span><span class="p">[(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">)].</span><span class="n">append</span><span class="p">((</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">dfs</span><span class="p">((</span><span class="n">rr</span><span class="p">,</span> <span class="n">cc</span><span class="p">),</span> <span class="n">b</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">vis</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">):</span>
     <span class="n">stack</span> <span class="o">=</span> <span class="p">[(</span><span class="n">rr</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="bp">False</span><span class="p">)]</span>
     <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">parity</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">parity</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">parity</span><span class="p">:</span>
-            <span class="n">U</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+            <span class="n">U</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">V</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+            <span class="n">V</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
             <span class="n">newr</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">dr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -280,8 +280,8 @@
             <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">newr</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">newc</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">b</span><span class="p">[</span><span class="n">newr</span><span class="p">][</span><span class="n">newc</span><span class="p">]:</span>
                 <span class="n">add_edge</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="p">(</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">))</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vis</span><span class="p">:</span>
-                    <span class="n">vis</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">))</span>
-                    <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">,</span> <span class="ow">not</span> <span class="n">parity</span><span class="p">))</span>
+                    <span class="n">vis</span><span class="p">.</span><span class="n">add</span><span class="p">((</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">))</span>
+                    <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">newr</span><span class="p">,</span> <span class="n">newc</span><span class="p">,</span> <span class="ow">not</span> <span class="n">parity</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">create_graph</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
@@ -294,8 +294,8 @@
                 <span class="n">dfs</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">b</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">vis</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
         <span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">V</span><span class="p">,</span> <span class="n">U</span>
-    <span class="k">return</span> <span class="n">G</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span>  <span class="c"># U is bigger</span>
-
+    <span class="k">return</span> <span class="n">G</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span>  <span class="c1"># U is bigger
+</span>
 
 <span class="k">def</span> <span class="nf">create_parchil</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
     <span class="n">par</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">)]</span>
@@ -304,12 +304,12 @@
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">b</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="n">c</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">b</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">par</span><span class="p">[</span><span class="n">num</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">n</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
-                    <span class="n">chil</span><span class="p">[</span><span class="n">num</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
+                    <span class="n">par</span><span class="p">[</span><span class="n">num</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">n</span><span class="p">)].</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
+                    <span class="n">chil</span><span class="p">[</span><span class="n">num</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">)].</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
 
                 <span class="k">if</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">b</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">par</span><span class="p">[</span><span class="n">num</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">n</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
-                    <span class="n">chil</span><span class="p">[</span><span class="n">num</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
+                    <span class="n">par</span><span class="p">[</span><span class="n">num</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">n</span><span class="p">)].</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
+                    <span class="n">chil</span><span class="p">[</span><span class="n">num</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">)].</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">par</span><span class="p">,</span> <span class="n">chil</span>
 
@@ -332,7 +332,7 @@
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">num</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">has_childless_child</span><span class="p">(</span><span class="n">chil</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-                <span class="n">must_takes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">must_takes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
                 <span class="n">bb</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="k">if</span> <span class="n">chil</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
                 <span class="n">bb</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
@@ -345,7 +345,7 @@
         <span class="n">res</span><span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">G</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">neigh</span> <span class="ow">in</span> <span class="n">G</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span>
-                <span class="n">res</span><span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">(</span><span class="n">neigh</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)].</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">(</span><span class="n">neigh</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
             <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -384,7 +384,7 @@
     <span class="n">n</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
     <span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="o">==</span> <span class="s">'O'</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">())))</span>
+        <span class="n">b</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="o">==</span> <span class="s">'O'</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">())))</span>
     <span class="n">par</span><span class="p">,</span> <span class="n">chil</span> <span class="o">=</span> <span class="n">create_parchil</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
     <span class="n">bb</span><span class="p">,</span> <span class="n">must_takes</span> <span class="o">=</span> <span class="n">create_bb</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">chil</span><span class="p">)</span>
     <span class="n">G</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">create_graph</span><span class="p">(</span><span class="n">bb</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>

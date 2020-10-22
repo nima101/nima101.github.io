@@ -133,7 +133,7 @@
 <div class="content">
   <div class="post"><h3 id="problem-adaroks2">Problem <a href="https://www.codechef.com/MAY19A/problems/ADAROKS2"><strong>ADAROKS2</strong></a></h3>
 
-<p>How many rooks can you place on a <code class="highlighter-rouge">N x N</code> chessboard such that no four of them form a rectangle? To be more precise, <code class="highlighter-rouge">100 &lt;= N &lt;= 1000</code> and we need to place <code class="highlighter-rouge">8 * N</code> rooks on the board. Below is an example of rooks forming a rectangle.</p>
+<p>How many rooks can you place on a <code class="language-plaintext highlighter-rouge">N x N</code> chessboard such that no four of them form a rectangle? To be more precise, <code class="language-plaintext highlighter-rouge">100 &lt;= N &lt;= 1000</code> and we need to place <code class="language-plaintext highlighter-rouge">8 * N</code> rooks on the board. Below is an example of rooks forming a rectangle.</p>
 
 <p><img src="http://localhost:4000/static/img/chess-rooks.png" alt="prev" height="30%" width="30%" class="center-image" /></p>
 
@@ -141,50 +141,50 @@
 
 <p><br /></p>
 <h4 id="step-1-pen--paper">Step 1: pen &amp; paper</h4>
-<p>I couldn’t come up with anything better than <code class="highlighter-rouge">3 * N</code> using the pattern below. Still far away from <code class="highlighter-rouge">8 * N</code>!</p>
+<p>I couldn’t come up with anything better than <code class="language-plaintext highlighter-rouge">3 * N</code> using the pattern below. Still far away from <code class="language-plaintext highlighter-rouge">8 * N</code>!</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">OOOOOOO</span><span class="o">.</span>
-<span class="n">O</span><span class="o">......</span><span class="n">O</span>
-<span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span>
-<span class="o">..</span><span class="n">O</span><span class="o">....</span><span class="n">O</span>
-<span class="o">...</span><span class="n">O</span><span class="o">...</span><span class="n">O</span>
-<span class="o">....</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
-<span class="o">.....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
-<span class="o">......</span><span class="n">OO</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">OOOOOOO</span><span class="p">.</span>
+<span class="n">O</span><span class="p">......</span><span class="n">O</span>
+<span class="p">.</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span>
+<span class="p">..</span><span class="n">O</span><span class="p">....</span><span class="n">O</span>
+<span class="p">...</span><span class="n">O</span><span class="p">...</span><span class="n">O</span>
+<span class="p">....</span><span class="n">O</span><span class="p">..</span><span class="n">O</span>
+<span class="p">.....</span><span class="n">O</span><span class="p">.</span><span class="n">O</span>
+<span class="p">......</span><span class="n">OO</span></code></pre></figure>
 
 <p><br /></p>
 <h4 id="step-2-brute-force">Step 2: brute force</h4>
-<p>Then I decided to write some brute-force solution to get the most optimal answer for small values of <code class="highlighter-rouge">N</code>. I was hoping I can see a pattern there. This is what I got (for more than 6, it would take a very long time):</p>
+<p>Then I decided to write some brute-force solution to get the most optimal answer for small values of <code class="language-plaintext highlighter-rouge">N</code>. I was hoping I can see a pattern there. This is what I got (for more than 6, it would take a very long time):</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="mi">2</span>
-<span class="o">.</span><span class="n">O</span>
+<span class="p">.</span><span class="n">O</span>
 <span class="n">OO</span>
 
 <span class="mi">3</span>
-<span class="o">.</span><span class="n">OO</span>
-<span class="n">O</span><span class="o">.</span><span class="n">O</span>
-<span class="n">OO</span><span class="o">.</span>
+<span class="p">.</span><span class="n">OO</span>
+<span class="n">O</span><span class="p">.</span><span class="n">O</span>
+<span class="n">OO</span><span class="p">.</span>
 
 <span class="mi">4</span>
-<span class="o">..</span><span class="n">OO</span>
-<span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
-<span class="n">O</span><span class="o">..</span><span class="n">O</span>
-<span class="n">OOO</span><span class="o">.</span>
+<span class="p">..</span><span class="n">OO</span>
+<span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span>
+<span class="n">O</span><span class="p">..</span><span class="n">O</span>
+<span class="n">OOO</span><span class="p">.</span>
 
 <span class="mi">5</span>
-<span class="o">...</span><span class="n">OO</span>
-<span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
-<span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
-<span class="n">O</span><span class="o">...</span><span class="n">O</span>
-<span class="n">OOOO</span><span class="o">.</span>
+<span class="p">...</span><span class="n">OO</span>
+<span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span>
+<span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">O</span>
+<span class="n">O</span><span class="p">...</span><span class="n">O</span>
+<span class="n">OOOO</span><span class="p">.</span>
 
 <span class="mi">6</span>
-<span class="o">....</span><span class="n">OO</span>
-<span class="o">..</span><span class="n">OO</span><span class="o">..</span>
-<span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
-<span class="o">.</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.</span>
-<span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.</span>
-<span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span></code></pre></figure>
+<span class="p">....</span><span class="n">OO</span>
+<span class="p">..</span><span class="n">OO</span><span class="p">..</span>
+<span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span>
+<span class="p">.</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">.</span>
+<span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">.</span>
+<span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">O</span></code></pre></figure>
 
 <p>Code:</p>
 
@@ -228,34 +228,34 @@
 
 <p><br /></p>
 <h4 id="step-4-divide--conquer">Step 4: Divide &amp; Conquer</h4>
-<p>What if we have a good solution for <code class="highlighter-rouge">N</code>, can we build a decent solution for <code class="highlighter-rouge">2*N</code>? For example, given the solution for <code class="highlighter-rouge">N = 5</code>, we can build the solution below for <code class="highlighter-rouge">N = 10</code>.</p>
+<p>What if we have a good solution for <code class="language-plaintext highlighter-rouge">N</code>, can we build a decent solution for <code class="language-plaintext highlighter-rouge">2*N</code>? For example, given the solution for <code class="language-plaintext highlighter-rouge">N = 5</code>, we can build the solution below for <code class="language-plaintext highlighter-rouge">N = 10</code>.</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">...</span><span class="n">OO</span><span class="o">.....</span>
-<span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span>
-<span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.....</span>
-<span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.....</span>
-<span class="n">OOOO</span><span class="o">......</span>
-<span class="o">........</span><span class="n">OO</span>
-<span class="o">.......</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
-<span class="o">......</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
-<span class="o">.....</span><span class="n">O</span><span class="o">...</span><span class="n">O</span>
-<span class="o">.....</span><span class="n">OOOO</span><span class="o">.</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">...</span><span class="n">OO</span><span class="p">.....</span>
+<span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.....</span>
+<span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">.....</span>
+<span class="n">O</span><span class="p">...</span><span class="n">O</span><span class="p">.....</span>
+<span class="n">OOOO</span><span class="p">......</span>
+<span class="p">........</span><span class="n">OO</span>
+<span class="p">.......</span><span class="n">O</span><span class="p">.</span><span class="n">O</span>
+<span class="p">......</span><span class="n">O</span><span class="p">..</span><span class="n">O</span>
+<span class="p">.....</span><span class="n">O</span><span class="p">...</span><span class="n">O</span>
+<span class="p">.....</span><span class="n">OOOO</span><span class="p">.</span></code></pre></figure>
 
-<p>This is actually great, because if we have a <code class="highlighter-rouge">8*N</code> solution for some <code class="highlighter-rouge">N</code>, this method gives us the solution for <code class="highlighter-rouge">N*2 x N*2</code> board!
+<p>This is actually great, because if we have a <code class="language-plaintext highlighter-rouge">8*N</code> solution for some <code class="language-plaintext highlighter-rouge">N</code>, this method gives us the solution for <code class="language-plaintext highlighter-rouge">N*2 x N*2</code> board!
 But can we do better? For example we can simply improve it by also filling one diagonal on one of the small squares:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">...</span><span class="n">OOO</span><span class="o">....</span>
-<span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...</span>
-<span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span>
-<span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.</span>
-<span class="n">OOOO</span><span class="o">.....</span><span class="n">O</span>
-<span class="o">........</span><span class="n">OO</span>
-<span class="o">.......</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
-<span class="o">......</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
-<span class="o">.....</span><span class="n">O</span><span class="o">...</span><span class="n">O</span>
-<span class="o">.....</span><span class="n">OOOO</span><span class="o">.</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">...</span><span class="n">OOO</span><span class="p">....</span>
+<span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">...</span>
+<span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span>
+<span class="n">O</span><span class="p">...</span><span class="n">O</span><span class="p">...</span><span class="n">O</span><span class="p">.</span>
+<span class="n">OOOO</span><span class="p">.....</span><span class="n">O</span>
+<span class="p">........</span><span class="n">OO</span>
+<span class="p">.......</span><span class="n">O</span><span class="p">.</span><span class="n">O</span>
+<span class="p">......</span><span class="n">O</span><span class="p">..</span><span class="n">O</span>
+<span class="p">.....</span><span class="n">O</span><span class="p">...</span><span class="n">O</span>
+<span class="p">.....</span><span class="n">OOOO</span><span class="p">.</span></code></pre></figure>
 
-<p>However, it is not good enough to achieve <code class="highlighter-rouge">8*N</code> for <code class="highlighter-rouge">N = 100</code>. Now, what if instead of filling the small diagonal, we let the greedy algorithm run on both small empty squares? However, filling greedy-ly using the code below, actually ends up filling the same diagonal, which is not great.</p>
+<p>However, it is not good enough to achieve <code class="language-plaintext highlighter-rouge">8*N</code> for <code class="language-plaintext highlighter-rouge">N = 100</code>. Now, what if instead of filling the small diagonal, we let the greedy algorithm run on both small empty squares? However, filling greedy-ly using the code below, actually ends up filling the same diagonal, which is not great.</p>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
     <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
@@ -287,81 +287,81 @@ But can we do better? For example we can simply improve it by also filling one d
     <span class="o">}</span>
 <span class="o">}</span></code></pre></figure>
 
-<p>With this simple change, for <code class="highlighter-rouge">N = 10</code>, we get this board:</p>
+<p>With this simple change, for <code class="language-plaintext highlighter-rouge">N = 10</code>, we get this board:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">...</span><span class="n">OO</span><span class="o">.....</span>
-<span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span>
-<span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span>
-<span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...</span>
-<span class="n">OOOO</span><span class="o">.</span><span class="n">O</span><span class="o">....</span>
-<span class="o">....</span><span class="n">O</span><span class="o">...</span><span class="n">OO</span>
-<span class="o">...</span><span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.</span><span class="n">O</span>
-<span class="o">..</span><span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">..</span><span class="n">O</span>
-<span class="o">.....</span><span class="n">O</span><span class="o">...</span><span class="n">O</span>
-<span class="o">.....</span><span class="n">OOOO</span><span class="o">.</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">...</span><span class="n">OO</span><span class="p">.....</span>
+<span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.....</span>
+<span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span>
+<span class="n">O</span><span class="p">...</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">...</span>
+<span class="n">OOOO</span><span class="p">.</span><span class="n">O</span><span class="p">....</span>
+<span class="p">....</span><span class="n">O</span><span class="p">...</span><span class="n">OO</span>
+<span class="p">...</span><span class="n">O</span><span class="p">...</span><span class="n">O</span><span class="p">.</span><span class="n">O</span>
+<span class="p">..</span><span class="n">O</span><span class="p">...</span><span class="n">O</span><span class="p">..</span><span class="n">O</span>
+<span class="p">.....</span><span class="n">O</span><span class="p">...</span><span class="n">O</span>
+<span class="p">.....</span><span class="n">OOOO</span><span class="p">.</span></code></pre></figure>
 
-<p>You may think just one more rook? But as <code class="highlighter-rouge">N</code> grows the difference becomes more significant. For example, for <code class="highlighter-rouge">N = 50</code>, we get this board:</p>
+<p>You may think just one more rook? But as <code class="language-plaintext highlighter-rouge">N</code> grows the difference becomes more significant. For example, for <code class="language-plaintext highlighter-rouge">N = 50</code>, we get this board:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">....</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">...................</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">...........</span>
-<span class="o">..</span><span class="n">OO</span><span class="o">.......</span><span class="n">O</span><span class="o">..............</span><span class="n">O</span><span class="o">.......................</span>
-<span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">............................</span><span class="n">O</span><span class="o">...</span>
-<span class="o">.</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">....................</span>
-<span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..................</span><span class="n">O</span><span class="o">..........</span>
-<span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">....................</span><span class="n">O</span><span class="o">.............</span>
-<span class="o">.....</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">...................</span><span class="n">O</span><span class="o">...............</span><span class="n">O</span><span class="o">..</span>
-<span class="o">.....</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.........</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">.....</span>
-<span class="o">....</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...............</span><span class="n">O</span><span class="o">......................</span>
-<span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..................</span><span class="n">O</span><span class="o">............</span>
-<span class="o">...</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">....................</span><span class="n">O</span><span class="o">....</span>
-<span class="o">.</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">...........................</span><span class="n">O</span>
-<span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">.......................</span><span class="n">O</span><span class="o">.</span>
-<span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.......</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">........</span>
-<span class="o">..........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.......</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">......</span>
-<span class="o">.....</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.....................</span>
-<span class="o">.........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">.........</span>
-<span class="o">..</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">...................</span><span class="n">O</span><span class="o">..........</span>
-<span class="o">.........</span><span class="n">O</span><span class="o">.......</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">.............</span><span class="n">O</span><span class="o">............</span>
-<span class="o">.......</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">...</span><span class="n">O</span><span class="o">.................</span>
-<span class="o">....</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">...</span>
-<span class="o">...........</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.......</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">......</span>
-<span class="o">...</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">....</span><span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">...........</span>
-<span class="o">.............</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">.....</span>
-<span class="o">.......</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">...............</span>
-<span class="o">.....</span><span class="n">O</span><span class="o">...............</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span><span class="o">............</span>
-<span class="o">.</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.......</span><span class="n">O</span><span class="o">.............</span>
-<span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">.......</span>
-<span class="o">..............</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.....</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span>
-<span class="o">...........</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">....</span>
-<span class="o">..</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">................</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">.........</span>
-<span class="o">.........</span><span class="n">O</span><span class="o">........</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">.............</span>
-<span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.........</span><span class="n">O</span><span class="o">.....</span>
-<span class="o">...</span><span class="n">O</span><span class="o">...................</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.............</span>
-<span class="o">........................</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">......</span>
-<span class="o">...............</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span>
-<span class="o">..........................</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.......</span><span class="n">O</span><span class="o">...</span>
-<span class="o">....................</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">..........</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">......</span><span class="n">O</span>
-<span class="o">......................</span><span class="n">O</span><span class="o">.............</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">.......</span><span class="n">O</span><span class="o">.</span>
-<span class="o">.................</span><span class="n">O</span><span class="o">.................</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.......</span>
-<span class="o">.</span><span class="n">O</span><span class="o">..............</span><span class="n">O</span><span class="o">.............</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">..</span>
-<span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">.....</span><span class="n">O</span><span class="o">..............</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span><span class="n">O</span><span class="o">....</span>
-<span class="o">...........................</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OOO</span><span class="o">.....</span>
-<span class="o">..</span><span class="n">O</span><span class="o">......</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">............</span><span class="n">O</span><span class="o">.......</span><span class="n">O</span><span class="o">....</span><span class="n">OO</span><span class="o">.</span>
-<span class="o">......................</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">...</span>
-<span class="o">............</span><span class="n">O</span><span class="o">................</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">.</span>
-<span class="o">....................................</span><span class="n">O</span><span class="o">.......</span><span class="n">OO</span><span class="o">.</span><span class="n">O</span><span class="o">..</span>
-<span class="o">......</span><span class="n">O</span><span class="o">.....................</span><span class="n">O</span><span class="o">...........</span><span class="n">O</span><span class="o">..</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span><span class="o">..</span>
-<span class="o">.......</span><span class="n">O</span><span class="o">...............</span><span class="n">O</span><span class="o">..............</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.</span><span class="n">O</span><span class="o">..</span><span class="n">OO</span>
-<span class="o">................................</span><span class="n">O</span><span class="o">....</span><span class="n">O</span><span class="o">.........</span><span class="n">O</span><span class="o">.</span><span class="n">O</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">....</span><span class="n">OO</span><span class="p">......</span><span class="n">O</span><span class="p">...................</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">...........</span>
+<span class="p">..</span><span class="n">OO</span><span class="p">.......</span><span class="n">O</span><span class="p">..............</span><span class="n">O</span><span class="p">.......................</span>
+<span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">............................</span><span class="n">O</span><span class="p">...</span>
+<span class="p">.</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">......</span><span class="n">O</span><span class="p">....................</span>
+<span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">...</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">..................</span><span class="n">O</span><span class="p">..........</span>
+<span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">OOO</span><span class="p">.......</span><span class="n">O</span><span class="p">....................</span><span class="n">O</span><span class="p">.............</span>
+<span class="p">.....</span><span class="n">O</span><span class="p">....</span><span class="n">OO</span><span class="p">...................</span><span class="n">O</span><span class="p">...............</span><span class="n">O</span><span class="p">..</span>
+<span class="p">.....</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">.........</span><span class="n">O</span><span class="p">......</span><span class="n">O</span><span class="p">.................</span><span class="n">O</span><span class="p">.....</span>
+<span class="p">....</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">...............</span><span class="n">O</span><span class="p">......................</span>
+<span class="p">.......</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..................</span><span class="n">O</span><span class="p">............</span>
+<span class="p">...</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">...</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">....................</span><span class="n">O</span><span class="p">....</span>
+<span class="p">.</span><span class="n">O</span><span class="p">....</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">OOO</span><span class="p">.......</span><span class="n">O</span><span class="p">...........................</span><span class="n">O</span>
+<span class="n">O</span><span class="p">..........</span><span class="n">O</span><span class="p">....</span><span class="n">OO</span><span class="p">......</span><span class="n">O</span><span class="p">.......................</span><span class="n">O</span><span class="p">.</span>
+<span class="p">...........</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">.......</span><span class="n">O</span><span class="p">.................</span><span class="n">O</span><span class="p">........</span>
+<span class="p">..........</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.......</span><span class="n">O</span><span class="p">.................</span><span class="n">O</span><span class="p">......</span>
+<span class="p">.....</span><span class="n">O</span><span class="p">.......</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">.....................</span>
+<span class="p">.........</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">...</span><span class="n">O</span><span class="p">............</span><span class="n">O</span><span class="p">......</span><span class="n">O</span><span class="p">.........</span>
+<span class="p">..</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">OOO</span><span class="p">...................</span><span class="n">O</span><span class="p">..........</span>
+<span class="p">.........</span><span class="n">O</span><span class="p">.......</span><span class="n">O</span><span class="p">....</span><span class="n">OO</span><span class="p">.............</span><span class="n">O</span><span class="p">............</span>
+<span class="p">.......</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">......</span><span class="n">O</span><span class="p">...</span><span class="n">O</span><span class="p">.................</span>
+<span class="p">....</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">..........</span><span class="n">O</span><span class="p">...</span>
+<span class="p">...........</span><span class="n">O</span><span class="p">.......</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">.......</span><span class="n">O</span><span class="p">............</span><span class="n">O</span><span class="p">......</span>
+<span class="p">...</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">....</span><span class="n">O</span><span class="p">..........</span><span class="n">O</span><span class="p">...........</span>
+<span class="p">.............</span><span class="n">O</span><span class="p">....</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">......</span><span class="n">O</span><span class="p">............</span><span class="n">O</span><span class="p">.....</span>
+<span class="p">.......</span><span class="n">O</span><span class="p">....</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">.</span><span class="n">OOO</span><span class="p">.......</span><span class="n">O</span><span class="p">...............</span>
+<span class="p">.....</span><span class="n">O</span><span class="p">...............</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">....</span><span class="n">OO</span><span class="p">......</span><span class="n">O</span><span class="p">............</span>
+<span class="p">.</span><span class="n">O</span><span class="p">.................</span><span class="n">O</span><span class="p">....</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">.......</span><span class="n">O</span><span class="p">.............</span>
+<span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">............</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">.......</span>
+<span class="p">..............</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">.....</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">..</span>
+<span class="p">...........</span><span class="n">O</span><span class="p">......</span><span class="n">O</span><span class="p">......</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">...</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">....</span>
+<span class="p">..</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">................</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">OOO</span><span class="p">.......</span><span class="n">O</span><span class="p">.........</span>
+<span class="p">.........</span><span class="n">O</span><span class="p">........</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">....</span><span class="n">OO</span><span class="p">.............</span>
+<span class="p">....</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..........</span><span class="n">O</span><span class="p">............</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">.........</span><span class="n">O</span><span class="p">.....</span>
+<span class="p">...</span><span class="n">O</span><span class="p">...................</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.............</span>
+<span class="p">........................</span><span class="n">O</span><span class="p">.......</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">......</span>
+<span class="p">...............</span><span class="n">O</span><span class="p">............</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">...</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span>
+<span class="p">..........................</span><span class="n">O</span><span class="p">....</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">OOO</span><span class="p">.......</span><span class="n">O</span><span class="p">...</span>
+<span class="p">....................</span><span class="n">O</span><span class="p">....</span><span class="n">O</span><span class="p">..........</span><span class="n">O</span><span class="p">....</span><span class="n">OO</span><span class="p">......</span><span class="n">O</span>
+<span class="p">......................</span><span class="n">O</span><span class="p">.............</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">.......</span><span class="n">O</span><span class="p">.</span>
+<span class="p">.................</span><span class="n">O</span><span class="p">.................</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.......</span>
+<span class="p">.</span><span class="n">O</span><span class="p">..............</span><span class="n">O</span><span class="p">.............</span><span class="n">O</span><span class="p">.......</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">..</span>
+<span class="n">O</span><span class="p">............</span><span class="n">O</span><span class="p">.....</span><span class="n">O</span><span class="p">..............</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">...</span><span class="n">O</span><span class="p">....</span>
+<span class="p">...........................</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">OOO</span><span class="p">.....</span>
+<span class="p">..</span><span class="n">O</span><span class="p">......</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">............</span><span class="n">O</span><span class="p">.......</span><span class="n">O</span><span class="p">....</span><span class="n">OO</span><span class="p">.</span>
+<span class="p">......................</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">...</span>
+<span class="p">............</span><span class="n">O</span><span class="p">................</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">.</span>
+<span class="p">....................................</span><span class="n">O</span><span class="p">.......</span><span class="n">OO</span><span class="p">.</span><span class="n">O</span><span class="p">..</span>
+<span class="p">......</span><span class="n">O</span><span class="p">.....................</span><span class="n">O</span><span class="p">...........</span><span class="n">O</span><span class="p">..</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span><span class="p">..</span>
+<span class="p">.......</span><span class="n">O</span><span class="p">...............</span><span class="n">O</span><span class="p">..............</span><span class="n">O</span><span class="p">....</span><span class="n">O</span><span class="p">.</span><span class="n">O</span><span class="p">..</span><span class="n">OO</span>
+<span class="p">................................</span><span class="n">O</span><span class="p">....</span><span class="n">O</span><span class="p">.........</span><span class="n">O</span><span class="p">.</span><span class="n">O</span></code></pre></figure>
 
 <p><br /></p>
 <h3 id="final-solution">Final Solution</h3>
-<p>Eventually, the divide &amp; conquer + guided greedy did a pretty good job and for up to ~200, runs pretty quickly. Beyond that, we can just do the trick from “Step 4” and achieve a quick <code class="highlighter-rouge">8*N</code> solution. Extra optimizations I did to make it work:</p>
+<p>Eventually, the divide &amp; conquer + guided greedy did a pretty good job and for up to ~200, runs pretty quickly. Beyond that, we can just do the trick from “Step 4” and achieve a quick <code class="language-plaintext highlighter-rouge">8*N</code> solution. Extra optimizations I did to make it work:</p>
 <ol>
-  <li>memoize the output for each <code class="highlighter-rouge">N &lt; 200</code></li>
-  <li>compress a pair of integers (each less than <code class="highlighter-rouge">1000</code>) into one integer and use a <code class="highlighter-rouge">Set&lt;Integer&gt;</code> to avoid creating pairs.</li>
+  <li>memoize the output for each <code class="language-plaintext highlighter-rouge">N &lt; 200</code></li>
+  <li>compress a pair of integers (each less than <code class="language-plaintext highlighter-rouge">1000</code>) into one integer and use a <code class="language-plaintext highlighter-rouge">Set&lt;Integer&gt;</code> to avoid creating pairs.</li>
 </ol>
 
-<p>Here is <a href="https://www.codechef.com/viewsolution/24224964">my code</a> that passed all the tests. The answer for <code class="highlighter-rouge">N = 200</code> looks like this:</p>
+<p>Here is <a href="https://www.codechef.com/viewsolution/24224964">my code</a> that passed all the tests. The answer for <code class="language-plaintext highlighter-rouge">N = 200</code> looks like this:</p>
 
 <p><img src="http://localhost:4000/static/img/rooks200.png" alt="N200" height="70%" width="70%" /></p>
 

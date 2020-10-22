@@ -134,7 +134,7 @@
   <div class="post"><h3 id="introduction">Introduction</h3>
 
 <p>Given a string, sort the suffixes of that string in ascending order. The resulting sorted list is called a <em>suffix array</em>.
-For example, for <code class="highlighter-rouge">s = "banana"</code> the suffixes are:</p>
+For example, for <code class="language-plaintext highlighter-rouge">s = "banana"</code> the suffixes are:</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="mf">0.</span> <span class="n">banana</span>
 <span class="mf">1.</span> <span class="n">anana</span>
@@ -152,36 +152,36 @@ For example, for <code class="highlighter-rouge">s = "banana"</code> the suffixe
 <span class="mf">4.</span> <span class="n">na</span>
 <span class="mf">2.</span> <span class="n">nana</span></code></pre></figure>
 
-<p>Therefore, <code class="highlighter-rouge">sa = [5, 3, 1, 0, 4, 2]</code> is the suffix array for <code class="highlighter-rouge">s</code>.</p>
+<p>Therefore, <code class="language-plaintext highlighter-rouge">sa = [5, 3, 1, 0, 4, 2]</code> is the suffix array for <code class="language-plaintext highlighter-rouge">s</code>.</p>
 
-<p>The naive solution would be to simply sort the strings using quick sort which takes <code class="highlighter-rouge">O(nlogn)</code>, and since each string comparison takes <code class="highlighter-rouge">O(n)</code>, overall the complexity would be <code>O(n<sup>2</sup>logn)</code>.</p>
+<p>The naive solution would be to simply sort the strings using quick sort which takes <code class="language-plaintext highlighter-rouge">O(nlogn)</code>, and since each string comparison takes <code class="language-plaintext highlighter-rouge">O(n)</code>, overall the complexity would be <code>O(n<sup>2</sup>logn)</code>.</p>
 
-<p>There are better algorithms to construct a suffix array and they typically run in <code class="highlighter-rouge">O(n)</code> or <code class="highlighter-rouge">O(nlogn)</code>. If you are interested in an <code class="highlighter-rouge">O(nlogn)</code> approach, read this post by <a href="https://cp-algorithms.com/string/suffix-array.html">cp-algorithms</a> or the paper by <a href="https://epubs.siam.org/doi/10.1137/0222058">Manber and Myers</a>. Also in theory, suffix sorting can be done using <a href="https://en.wikipedia.org/wiki/Suffix_tree">Suffix Trees</a> in <code class="highlighter-rouge">O(n)</code>. However, due to the large constant and high memory overhead, in practice suffix arrays are often preferred. In addition, suffix arrays can also be constructed in linear time (ex: <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.125.1794&amp;rep=rep1&amp;type=pdf">1</a> &amp; <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.83.9781&amp;rep=rep1&amp;type=pdf">2</a>). However, a good <code class="highlighter-rouge">O(nlogn)</code> implementation of suffix arrays such as <a href="http://www.larsson.dogma.net/qsufsort.c">qsufsort</a> is usually sufficient and in practice faster than most linear time implementations.</p>
+<p>There are better algorithms to construct a suffix array and they typically run in <code class="language-plaintext highlighter-rouge">O(n)</code> or <code class="language-plaintext highlighter-rouge">O(nlogn)</code>. If you are interested in an <code class="language-plaintext highlighter-rouge">O(nlogn)</code> approach, read this post by <a href="https://cp-algorithms.com/string/suffix-array.html">cp-algorithms</a> or the paper by <a href="https://epubs.siam.org/doi/10.1137/0222058">Manber and Myers</a>. Also in theory, suffix sorting can be done using <a href="https://en.wikipedia.org/wiki/Suffix_tree">Suffix Trees</a> in <code class="language-plaintext highlighter-rouge">O(n)</code>. However, due to the large constant and high memory overhead, in practice suffix arrays are often preferred. In addition, suffix arrays can also be constructed in linear time (ex: <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.125.1794&amp;rep=rep1&amp;type=pdf">1</a> &amp; <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.83.9781&amp;rep=rep1&amp;type=pdf">2</a>). However, a good <code class="language-plaintext highlighter-rouge">O(nlogn)</code> implementation of suffix arrays such as <a href="http://www.larsson.dogma.net/qsufsort.c">qsufsort</a> is usually sufficient and in practice faster than most linear time implementations.</p>
 
 <p>In the next section, we look at a relatively simple algorithm that creates the suffix array for a given string in <code>O(nlog<sup>2</sup>n)</code> using dynamic programming.</p>
 
 <p><br /></p>
 <h3 id="dynamic-programming">Dynamic Programming</h3>
-<p>The idea of this algorithm is based on efficient suffix comparisons. Suppose <code class="highlighter-rouge">cmp(i, j, k)</code> compares the suffixes starting at <code class="highlighter-rouge">i</code> and <code class="highlighter-rouge">j</code> using only the first <code class="highlighter-rouge">k</code> characters of them. Now, in order to calculate <code class="highlighter-rouge">cmp</code> we look at the comparison of the first half (using the first <code class="highlighter-rouge">k/2</code> characters). If they are different, we know the answer. If they are equal, then we look at the comparison of the second half. psudo-code:</p>
+<p>The idea of this algorithm is based on efficient suffix comparisons. Suppose <code class="language-plaintext highlighter-rouge">cmp(i, j, k)</code> compares the suffixes starting at <code class="language-plaintext highlighter-rouge">i</code> and <code class="language-plaintext highlighter-rouge">j</code> using only the first <code class="language-plaintext highlighter-rouge">k</code> characters of them. Now, in order to calculate <code class="language-plaintext highlighter-rouge">cmp</code> we look at the comparison of the first half (using the first <code class="language-plaintext highlighter-rouge">k/2</code> characters). If they are different, we know the answer. If they are equal, then we look at the comparison of the second half. psudo-code:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># k is either 1 or an even number</span>
-<span class="nb">cmp</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-  <span class="c"># base case: compare using the first characters</span>
-  <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># k is either 1 or an even number
+</span><span class="nb">cmp</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+  <span class="c1"># base case: compare using the first characters
+</span>  <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
 
-  <span class="c"># recursion formula</span>
-  <span class="n">first_half</span> <span class="o">=</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+  <span class="c1"># recursion formula
+</span>  <span class="n">first_half</span> <span class="o">=</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
   <span class="k">if</span> <span class="n">first_half</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">first_half</span>
   <span class="k">else</span><span class="p">:</span>
     <span class="k">return</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">k</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
 
-<p>One problem with this recursion formula is that we need to store the comparison between all possible pairs of suffixes at each (<code class="highlighter-rouge">k</code>) to use it in the next round (<code class="highlighter-rouge">2 * k</code>), which would make the algorithm slow. The trick to solve this efficiently is to sort them using the comparison function in <code class="highlighter-rouge">O(nlogn)</code>, and then for each <code class="highlighter-rouge">i &lt; j</code>, using the sorted array <code class="highlighter-rouge">sa</code>, we know the suffix starting at <code class="highlighter-rouge">sa[i]</code> is less than or equal to the suffix starting at <code class="highlighter-rouge">sa[j]</code>. In order to distinguish between <code class="highlighter-rouge">&lt;</code> and <code class="highlighter-rouge">=</code>, we run a bucketization that simply walks over the sorted array and finds chunks of equal suffixes. Later, we use the bucket array to compute <code class="highlighter-rouge">cmp(i, j, k / 2) = bucket[i] - bucket[j]</code>.</p>
+<p>One problem with this recursion formula is that we need to store the comparison between all possible pairs of suffixes at each (<code class="language-plaintext highlighter-rouge">k</code>) to use it in the next round (<code class="language-plaintext highlighter-rouge">2 * k</code>), which would make the algorithm slow. The trick to solve this efficiently is to sort them using the comparison function in <code class="language-plaintext highlighter-rouge">O(nlogn)</code>, and then for each <code class="language-plaintext highlighter-rouge">i &lt; j</code>, using the sorted array <code class="language-plaintext highlighter-rouge">sa</code>, we know the suffix starting at <code class="language-plaintext highlighter-rouge">sa[i]</code> is less than or equal to the suffix starting at <code class="language-plaintext highlighter-rouge">sa[j]</code>. In order to distinguish between <code class="language-plaintext highlighter-rouge">&lt;</code> and <code class="language-plaintext highlighter-rouge">=</code>, we run a bucketization that simply walks over the sorted array and finds chunks of equal suffixes. Later, we use the bucket array to compute <code class="language-plaintext highlighter-rouge">cmp(i, j, k / 2) = bucket[i] - bucket[j]</code>.</p>
 
-<p>For example, far <code class="highlighter-rouge">s = "banana"</code> and <code class="highlighter-rouge">k = 2</code>, sorting all suffixes using only their first 2 letters would be:</p>
+<p>For example, far <code class="language-plaintext highlighter-rouge">s = "banana"</code> and <code class="language-plaintext highlighter-rouge">k = 2</code>, sorting all suffixes using only their first 2 letters would be:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[a-]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[a-]
 [an] ana
 [an] a
 [ba] nana
@@ -189,20 +189,20 @@ For example, for <code class="highlighter-rouge">s = "banana"</code> the suffixe
 [na]
 </code></pre></div></div>
 
-<p>So, since <code class="highlighter-rouge">a- &lt; an = an &lt; ba &lt; na = na</code>, the bucket array would be <code class="highlighter-rouge">[0, 1, 1, 2, 3, 3]</code>, and to compare two suffixes we can simply subtract their buckets!</p>
+<p>So, since <code class="language-plaintext highlighter-rouge">a- &lt; an = an &lt; ba &lt; na = na</code>, the bucket array would be <code class="language-plaintext highlighter-rouge">[0, 1, 1, 2, 3, 3]</code>, and to compare two suffixes we can simply subtract their buckets!</p>
 
 <p><br /></p>
 <h3 id="implementation">Implementation</h3>
 
 <p>Here is my implementation of the <code>O(nlog<sup>2</sup>n)</code> algorithm in python:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># compare suffixes starting at idx1 and idx2, using only the first k characters</span>
-<span class="k">def</span> <span class="nf">compare_suffixes</span><span class="p">(</span><span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># compare suffixes starting at idx1 and idx2, using only the first k characters
+</span><span class="k">def</span> <span class="nf">compare_suffixes</span><span class="p">(</span><span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">idx1</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">idx2</span><span class="p">])</span>
     
-    <span class="k">if</span> <span class="n">b</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">b</span><span class="p">[</span><span class="n">idx2</span><span class="p">]:</span> <span class="c"># first half</span>
-        <span class="k">return</span> <span class="n">b</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">-</span> <span class="n">b</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">b</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">b</span><span class="p">[</span><span class="n">idx2</span><span class="p">]:</span> <span class="c1"># first half
+</span>        <span class="k">return</span> <span class="n">b</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">-</span> <span class="n">b</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">k2</span> <span class="o">=</span> <span class="n">k</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">b1</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">idx1</span> <span class="o">+</span> <span class="n">k2</span><span class="p">]</span> <span class="k">if</span> <span class="n">idx1</span> <span class="o">+</span> <span class="n">k2</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
@@ -226,7 +226,7 @@ For example, for <code class="highlighter-rouge">s = "banana"</code> the suffixe
     <span class="n">buckets</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">:</span>
-        <span class="n">sa</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="nb">cmp</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="n">compare_suffixes</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">buckets</span><span class="p">))</span>
+        <span class="n">sa</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="nb">cmp</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="n">compare_suffixes</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">buckets</span><span class="p">))</span>
         <span class="n">buckets</span> <span class="o">=</span> <span class="n">bucketize</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">buckets</span><span class="p">)</span>
         <span class="n">k</span> <span class="o">*=</span> <span class="mi">2</span>
     <span class="k">return</span> <span class="n">sa</span></code></pre></figure>

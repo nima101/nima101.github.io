@@ -133,30 +133,30 @@
 <div class="content">
   <div class="post"><h3 id="problem-trvlchef">Problem <a href="https://www.codechef.com/LTIME70A/problems/TRVLCHEF"><strong>TRVLCHEF</strong></a></h3>
 
-<p>There are <code class="highlighter-rouge">n</code> cities and each city <code class="highlighter-rouge">i</code> has temperature <code class="highlighter-rouge">c[i]</code>. You can travel from each city <code class="highlighter-rouge">i</code> to another city <code class="highlighter-rouge">j</code> if <code class="highlighter-rouge">|c[i] - c[j]| &lt; d</code>, where <code class="highlighter-rouge">d</code> is your temperature change tolerance (which is given). However, you can visit each city <strong>only once</strong>. Starting at city <code class="highlighter-rouge">1</code>, is it possible to visit all cities (Yes/No)? <sup><strong>1</strong></sup></p>
+<p>There are <code class="language-plaintext highlighter-rouge">n</code> cities and each city <code class="language-plaintext highlighter-rouge">i</code> has temperature <code class="language-plaintext highlighter-rouge">c[i]</code>. You can travel from each city <code class="language-plaintext highlighter-rouge">i</code> to another city <code class="language-plaintext highlighter-rouge">j</code> if <code class="language-plaintext highlighter-rouge">|c[i] - c[j]| &lt; d</code>, where <code class="language-plaintext highlighter-rouge">d</code> is your temperature change tolerance (which is given). However, you can visit each city <strong>only once</strong>. Starting at city <code class="language-plaintext highlighter-rouge">1</code>, is it possible to visit all cities (Yes/No)? <sup><strong>1</strong></sup></p>
 
-<p>An example with <code class="highlighter-rouge">d=2</code> and <code class="highlighter-rouge">n=8</code>:</p>
+<p>An example with <code class="language-plaintext highlighter-rouge">d=2</code> and <code class="language-plaintext highlighter-rouge">n=8</code>:</p>
 
 <p><img src="http://localhost:4000/static/img/cities-tsp.png" alt="prev" height="40%" width="40%" /></p>
 
-<p><sup><strong>1</strong></sup> <code class="highlighter-rouge">n &lt; 10^5</code> and there are <code class="highlighter-rouge">1000</code> test cases. basically, we can’t do worse than <code class="highlighter-rouge">O(nlog(n))</code> per test case.</p>
+<p><sup><strong>1</strong></sup> <code class="language-plaintext highlighter-rouge">n &lt; 10^5</code> and there are <code class="language-plaintext highlighter-rouge">1000</code> test cases. basically, we can’t do worse than <code class="language-plaintext highlighter-rouge">O(nlog(n))</code> per test case.</p>
 
 <p><br /></p>
 <h3 id="observations">Observations</h3>
 <p>Generally, solving Hamiltonian Path is NP-Complete but in this problem we have a very special graph, where only the temperatures matter.</p>
 
 <ol>
-  <li>There is only one parameter associated with each city (temperature). So, it seems natural to sort them on a line based on their <code class="highlighter-rouge">c</code> value.</li>
-  <li>If <code class="highlighter-rouge">c[i + 1] - c[i] &gt; d</code> for any <code class="highlighter-rouge">i</code>, the graph would be disconnected and we can’t solve it</li>
+  <li>There is only one parameter associated with each city (temperature). So, it seems natural to sort them on a line based on their <code class="language-plaintext highlighter-rouge">c</code> value.</li>
+  <li>If <code class="language-plaintext highlighter-rouge">c[i + 1] - c[i] &gt; d</code> for any <code class="language-plaintext highlighter-rouge">i</code>, the graph would be disconnected and we can’t solve it</li>
   <li>Given <strong>2.</strong> is satisfied,
     <ul>
-      <li>if city <code class="highlighter-rouge">1</code> is the first or the last city in the sorted list, the answer is <strong>Yes</strong>.</li>
-      <li>if city <code class="highlighter-rouge">1</code> is somewhere in the middle, an answer is <strong>Yes</strong>, <strong>if and only if</strong> we can solve it <em>right-left</em> or <em>left-right</em>. (we define it below)</li>
+      <li>if city <code class="language-plaintext highlighter-rouge">1</code> is the first or the last city in the sorted list, the answer is <strong>Yes</strong>.</li>
+      <li>if city <code class="language-plaintext highlighter-rouge">1</code> is somewhere in the middle, an answer is <strong>Yes</strong>, <strong>if and only if</strong> we can solve it <em>right-left</em> or <em>left-right</em>. (we define it below)</li>
     </ul>
   </li>
 </ol>
 
-<p>In order to solve <em>right-left</em>, we make jumps of 2 towards right all the way to the end, then jumps of 2 coming back and going past the <code class="highlighter-rouge">start</code> city and then we just visit the rest of the cities one by one. (<em>left-right</em> is defined similarly). The image below shows a <em>right-left</em> solution for the previous graph)</p>
+<p>In order to solve <em>right-left</em>, we make jumps of 2 towards right all the way to the end, then jumps of 2 coming back and going past the <code class="language-plaintext highlighter-rouge">start</code> city and then we just visit the rest of the cities one by one. (<em>left-right</em> is defined similarly). The image below shows a <em>right-left</em> solution for the previous graph)</p>
 
 <p><img src="http://localhost:4000/static/img/cities-tsp-sorted.png" alt="prev" height="70%" width="70%" /></p>
 
@@ -165,7 +165,7 @@
 
 <p>In order to see why this <strong>if and only if</strong> holds, first it is trivial that if such a path exists, we have a solution. Now, we need to prove that if the problem has a solution, either a <em>left-right</em> or a <em>right-left</em> solution exists. Let’s prove by contradiction.</p>
 
-<p>Suppose the problem has a solution but neither <em>left-right</em> nor <em>right-left</em> solutions would work. First let’s look at the right-left path. Since a solution exists, we know that after sorting cities by temperature, <code class="highlighter-rouge">c[i] - c[i - 1] &lt;= d</code> for every <code class="highlighter-rouge">i</code>. So, if the right-left path doesn’t work, somewhere to the right of the <code class="highlighter-rouge">start</code> city, for some <code class="highlighter-rouge">i</code> we have <code class="highlighter-rouge">c[i] - c[i - 2] &gt; d</code>. That means, the only way to reach <code class="highlighter-rouge">c[i]</code> from <code class="highlighter-rouge">c[i - 2]</code> is going through <code class="highlighter-rouge">c[i - 1]</code>. This means once we go from <code class="highlighter-rouge">c[i - 2]</code> to <code class="highlighter-rouge">c[i]</code>, we can’t come back. Because of that if we begin at <code class="highlighter-rouge">start</code> and go to right once we visit the last city on the right, we can never come back to visit cities to the left of <code class="highlighter-rouge">start</code>. Similarly we can prove the same for the leftmost city using the fact that <em>left-right</em> solution doesn’t work. So, starting from <code class="highlighter-rouge">start</code> it is not possible to cover the leftmost city as well as the rightmost city. hence the supposition is false and the statement is true.</p>
+<p>Suppose the problem has a solution but neither <em>left-right</em> nor <em>right-left</em> solutions would work. First let’s look at the right-left path. Since a solution exists, we know that after sorting cities by temperature, <code class="language-plaintext highlighter-rouge">c[i] - c[i - 1] &lt;= d</code> for every <code class="language-plaintext highlighter-rouge">i</code>. So, if the right-left path doesn’t work, somewhere to the right of the <code class="language-plaintext highlighter-rouge">start</code> city, for some <code class="language-plaintext highlighter-rouge">i</code> we have <code class="language-plaintext highlighter-rouge">c[i] - c[i - 2] &gt; d</code>. That means, the only way to reach <code class="language-plaintext highlighter-rouge">c[i]</code> from <code class="language-plaintext highlighter-rouge">c[i - 2]</code> is going through <code class="language-plaintext highlighter-rouge">c[i - 1]</code>. This means once we go from <code class="language-plaintext highlighter-rouge">c[i - 2]</code> to <code class="language-plaintext highlighter-rouge">c[i]</code>, we can’t come back. Because of that if we begin at <code class="language-plaintext highlighter-rouge">start</code> and go to right once we visit the last city on the right, we can never come back to visit cities to the left of <code class="language-plaintext highlighter-rouge">start</code>. Similarly we can prove the same for the leftmost city using the fact that <em>left-right</em> solution doesn’t work. So, starting from <code class="language-plaintext highlighter-rouge">start</code> it is not possible to cover the leftmost city as well as the rightmost city. hence the supposition is false and the statement is true.</p>
 
 <p><br /></p>
 <h3 id="solution">Solution</h3>
@@ -173,12 +173,12 @@
 <p>In order to implement the solution, we can check if the <em>right-left</em> solution <strong>or</strong> the <em>left-right</em> solution would work. In order to check that, all we need to do is:</p>
 <ol>
   <li>sort cities by their temperature</li>
-  <li>make sure <code class="highlighter-rouge">c[i] - c[i - 1] &lt;= d</code> for each <code class="highlighter-rouge">i &gt; 0</code></li>
-  <li>if <code class="highlighter-rouge">start_city</code> is the first or the last city in the sorted list, the answer is <code class="highlighter-rouge">Yes</code></li>
-  <li>if <code class="highlighter-rouge">start_city</code> is somewhere in the middle, check that for all nodes to the right of it <code class="highlighter-rouge">c[i] - c[i - 2] &lt;= d</code> and for all nodes to the left of it <code class="highlighter-rouge">c[i + 2] - c[i] &lt;= d</code>.</li>
+  <li>make sure <code class="language-plaintext highlighter-rouge">c[i] - c[i - 1] &lt;= d</code> for each <code class="language-plaintext highlighter-rouge">i &gt; 0</code></li>
+  <li>if <code class="language-plaintext highlighter-rouge">start_city</code> is the first or the last city in the sorted list, the answer is <code class="language-plaintext highlighter-rouge">Yes</code></li>
+  <li>if <code class="language-plaintext highlighter-rouge">start_city</code> is somewhere in the middle, check that for all nodes to the right of it <code class="language-plaintext highlighter-rouge">c[i] - c[i - 2] &lt;= d</code> and for all nodes to the left of it <code class="language-plaintext highlighter-rouge">c[i + 2] - c[i] &lt;= d</code>.</li>
 </ol>
 
-<p>This solution takes <code class="highlighter-rouge">O(nlogn)</code> to sort cities, and <code class="highlighter-rouge">O(n)</code> to solve. Note that if the <code class="highlighter-rouge">max(|c[i] - c[j]|) ~ O(n)</code>, we can use counting sort and bring down the total time to <code class="highlighter-rouge">O(n)</code>. Also, if <code class="highlighter-rouge">d</code> is small we can sort in <code class="highlighter-rouge">O(n * d)</code> since if any city’s temperature is more than <code class="highlighter-rouge">n * d</code> away from the start city, the answer is <code class="highlighter-rouge">No</code>, so we could use counting sort in range <code class="highlighter-rouge">(startIdx -/+ n * d)</code>.</p>
+<p>This solution takes <code class="language-plaintext highlighter-rouge">O(nlogn)</code> to sort cities, and <code class="language-plaintext highlighter-rouge">O(n)</code> to solve. Note that if the <code class="language-plaintext highlighter-rouge">max(|c[i] - c[j]|) ~ O(n)</code>, we can use counting sort and bring down the total time to <code class="language-plaintext highlighter-rouge">O(n)</code>. Also, if <code class="language-plaintext highlighter-rouge">d</code> is small we can sort in <code class="language-plaintext highlighter-rouge">O(n * d)</code> since if any city’s temperature is more than <code class="language-plaintext highlighter-rouge">n * d</code> away from the start city, the answer is <code class="language-plaintext highlighter-rouge">No</code>, so we could use counting sort in range <code class="language-plaintext highlighter-rouge">(startIdx -/+ n * d)</code>.</p>
 
 <p><br /></p>
 <h4 id="code">Code</h4>
@@ -186,7 +186,7 @@
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">solve</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">startValue</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
-        <span class="n">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
 
         <span class="kt">int</span> <span class="n">startIdx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
         <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
