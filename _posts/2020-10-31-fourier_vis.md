@@ -67,19 +67,19 @@ gif(anim, "complex.gif", fps = 15)
 
 Now, how would you combine these exponential terms to draw a given shape such as a bird, heart, handwriting, etc.? Also, is it always feasible to do so? Basically, given a function `f(t)` can you always represent it in terms of a summation of these exponential terms with some complex coefficients?
 
-![form1]{:height="80%" width="80%"}
+![form1]{:height="90%" width="90%"}
 
-[Joseph Fourier][jbf] in 1800s [proved][fit] that it's always possible (under some basic conditions <sup>1</sup>). Let's look at a brief overview of how to do it. Suppose the transform exists and let's try to extract the coefficients `c_i`. Take an integral from 0 to 1 on both sides. Note that for any exponential term, if the power is a multiple of `2πt` and non-zero, as `t` varies from 0 to 1, it loops around a circle once, twice, thrice, or more. but it is important that it does full loops. so, the average of all these points (aka the integral from 0 to 1) will be zero. The only term that remains non-zero is `c_0`.
+[Joseph Fourier][jbf] in the 1800s [proved][fit] that it's always possible (under some basic conditions <sup>1</sup>). Let's look at a brief overview of how to do it. Suppose the transform exists and let's try to extract the coefficients `c_i`. Take an integral from 0 to 1 on both sides. Note that for any exponential term, if the power is a multiple of `2πt` and non-zero, as `t` varies from 0 to 1, it loops around a circle once, twice, thrice, or more. but it is important that it does full loops. so, the average of all these points (aka the integral from 0 to 1) will be zero. The only term that remains non-zero is `c_0`.
 
-![form2]{:height="100%" width="100%"}
+![form2]
 
 This is nice because it allows us to calculate `c_0` by integrating over `f(t)` from 0 to 1. Now, we can use a clever trick to calculate any `c_i` in the series. For example to calculate `c_2`, multiply both sides by `e ^ (-2 * 2πit)` and then take the integral. This time, all terms become zero except `c_2`.
 
-![form3]{:height="100%" width="100%"}
+![form3]
 
 So we can calculate each `c_n` using:
 
-![form4]{:height="30%" width="30%" .center-image}
+![form4]{:height="40%" width="40%" .center-image}
 
 Which can be done using numerical integration:
 
@@ -172,15 +172,15 @@ y = 19.5 * cos(2π * t) - 7.5 * cos(2 * 2π * t) - 3 * cos(3 * 2π * t) - 1.5 * 
 
 Here are the Fourier representations with [6, 20, 100] vectors:
 
-![h6]{:height="32%" width="32%"}
-![h20]{:height="32%" width="32%"}
-![h100]{:height="32%" width="32%"}
+![h6]{:height="49%" width="49%"}
+![h20]{:height="49%" width="49%"}
+![h100]{:height="49%" width="49%" .center-image}
 
 <br/>
 
 #### Sigma
 
-I wrote a quick nodejs app where you can draw a shape, and it gives you an array of points. (connecting each point to the next point results in the shape we want to draw). An example drawing:
+I wrote a quick NodeJS app where you can draw a shape, and it gives you an array of points. (connecting each point to the next point results in the shape we want to draw). An example drawing:
 
 ![sigma-nodejs]{:height="90%" width="90%"}
 
@@ -207,24 +207,26 @@ end
 
 Finally, here are the Fourier transforms with 10, 100, and 1000 vectors:
 
-![s10]{:height="60%" width="60%"}
-![s100]{:height="60%" width="60%"}
-![s1000]{:height="60%" width="60%"}
+![s10]{:height="49%" width="49%"}
+![s100]{:height="49%" width="49%"}
+![s1000]{:height="49%" width="49%" .center-image}
 
 <br/>
 
 #### Quaver
 
-Unsatisfied with the difficulty of drawing using a mouse, I used my [Moleskine Notebook][moleskine] to draw the shape of a musical note (a quaver), exported it as "svg" (vector graphics) and wrote a small script to convert the svg to a parametric curve.
+Unsatisfied with the difficulty of drawing using a mouse, I used my [Moleskine Notebook][moleskine] to draw the shape of a musical note (a quaver), exported it as "svg" (vector graphics) and wrote a small script to convert the svg to a parametric curve. Here is the shape I drew:
+
+![qsvg]{:width="20%" .center-image}
 
 Here are the Fourier transforms with 6, 10, 20, 100, 400 and 1000 vectors:
 
-![n6]{:height="33%" width="33%"}
-![n10]{:height="33%" width="33%"}
-![n20]{:height="33%" width="33%"}
-![n100]{:height="33%" width="33%"}
-![n400]{:height="33%" width="33%"}
-![n1000]{:height="33%" width="33%"}
+![n6]{:height="49%" width="49%"}
+![n10]{:height="49%" width="49%"}
+![n20]{:height="49%" width="49%"}
+![n100]{:height="49%" width="49%"}
+![n400]{:height="49%" width="49%"}
+![n1000]{:height="49%" width="49%"}
 
 <br />
 

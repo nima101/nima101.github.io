@@ -191,19 +191,19 @@
 
 <p>Now, how would you combine these exponential terms to draw a given shape such as a bird, heart, handwriting, etc.? Also, is it always feasible to do so? Basically, given a function <code class="language-plaintext highlighter-rouge">f(t)</code> can you always represent it in terms of a summation of these exponential terms with some complex coefficients?</p>
 
-<p><img src="http://localhost:4000/static/img/fourier/formula1.png" alt="form1" height="80%" width="80%" /></p>
+<p><img src="http://localhost:4000/static/img/fourier/formula1.png" alt="form1" height="90%" width="90%" /></p>
 
-<p><a href="https://en.wikipedia.org/wiki/Joseph_Fourier">Joseph Fourier</a> in 1800s <a href="https://en.wikipedia.org/wiki/Fourier_inversion_theorem">proved</a> that it’s always possible (under some basic conditions <sup>1</sup>). Let’s look at a brief overview of how to do it. Suppose the transform exists and let’s try to extract the coefficients <code class="language-plaintext highlighter-rouge">c_i</code>. Take an integral from 0 to 1 on both sides. Note that for any exponential term, if the power is a multiple of <code class="language-plaintext highlighter-rouge">2πt</code> and non-zero, as <code class="language-plaintext highlighter-rouge">t</code> varies from 0 to 1, it loops around a circle once, twice, thrice, or more. but it is important that it does full loops. so, the average of all these points (aka the integral from 0 to 1) will be zero. The only term that remains non-zero is <code class="language-plaintext highlighter-rouge">c_0</code>.</p>
+<p><a href="https://en.wikipedia.org/wiki/Joseph_Fourier">Joseph Fourier</a> in the 1800s <a href="https://en.wikipedia.org/wiki/Fourier_inversion_theorem">proved</a> that it’s always possible (under some basic conditions <sup>1</sup>). Let’s look at a brief overview of how to do it. Suppose the transform exists and let’s try to extract the coefficients <code class="language-plaintext highlighter-rouge">c_i</code>. Take an integral from 0 to 1 on both sides. Note that for any exponential term, if the power is a multiple of <code class="language-plaintext highlighter-rouge">2πt</code> and non-zero, as <code class="language-plaintext highlighter-rouge">t</code> varies from 0 to 1, it loops around a circle once, twice, thrice, or more. but it is important that it does full loops. so, the average of all these points (aka the integral from 0 to 1) will be zero. The only term that remains non-zero is <code class="language-plaintext highlighter-rouge">c_0</code>.</p>
 
-<p><img src="http://localhost:4000/static/img/fourier/formula2.png" alt="form2" height="100%" width="100%" /></p>
+<p><img src="http://localhost:4000/static/img/fourier/formula2.png" alt="form2" /></p>
 
 <p>This is nice because it allows us to calculate <code class="language-plaintext highlighter-rouge">c_0</code> by integrating over <code class="language-plaintext highlighter-rouge">f(t)</code> from 0 to 1. Now, we can use a clever trick to calculate any <code class="language-plaintext highlighter-rouge">c_i</code> in the series. For example to calculate <code class="language-plaintext highlighter-rouge">c_2</code>, multiply both sides by <code class="language-plaintext highlighter-rouge">e ^ (-2 * 2πit)</code> and then take the integral. This time, all terms become zero except <code class="language-plaintext highlighter-rouge">c_2</code>.</p>
 
-<p><img src="http://localhost:4000/static/img/fourier/formula3.png" alt="form3" height="100%" width="100%" /></p>
+<p><img src="http://localhost:4000/static/img/fourier/formula3.png" alt="form3" /></p>
 
 <p>So we can calculate each <code class="language-plaintext highlighter-rouge">c_n</code> using:</p>
 
-<p><img src="http://localhost:4000/static/img/fourier/formula4.png" alt="form4" height="30%" width="30%" class="center-image" /></p>
+<p><img src="http://localhost:4000/static/img/fourier/formula4.png" alt="form4" height="40%" width="40%" class="center-image" /></p>
 
 <p>Which can be done using numerical integration:</p>
 
@@ -291,15 +291,15 @@
 
 <p>Here are the Fourier representations with [6, 20, 100] vectors:</p>
 
-<p><img src="http://localhost:4000/static/img/fourier/heart6.gif" alt="h6" height="32%" width="32%" />
-<img src="http://localhost:4000/static/img/fourier/heart20.gif" alt="h20" height="32%" width="32%" />
-<img src="http://localhost:4000/static/img/fourier/heart100.gif" alt="h100" height="32%" width="32%" /></p>
+<p><img src="http://localhost:4000/static/img/fourier/heart6.gif" alt="h6" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/heart20.gif" alt="h20" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/heart100.gif" alt="h100" height="49%" width="49%" class="center-image" /></p>
 
 <p><br /></p>
 
 <h4 id="sigma">Sigma</h4>
 
-<p>I wrote a quick nodejs app where you can draw a shape, and it gives you an array of points. (connecting each point to the next point results in the shape we want to draw). An example drawing:</p>
+<p>I wrote a quick NodeJS app where you can draw a shape, and it gives you an array of points. (connecting each point to the next point results in the shape we want to draw). An example drawing:</p>
 
 <p><img src="http://localhost:4000/static/img/fourier/sigma-nodejs.jpg" alt="sigma-nodejs" height="90%" width="90%" /></p>
 
@@ -324,24 +324,26 @@
 
 <p>Finally, here are the Fourier transforms with 10, 100, and 1000 vectors:</p>
 
-<p><img src="http://localhost:4000/static/img/fourier/sigma_10.gif" alt="s10" height="60%" width="60%" />
-<img src="http://localhost:4000/static/img/fourier/sigma_100.gif" alt="s100" height="60%" width="60%" />
-<img src="http://localhost:4000/static/img/fourier/sigma_1000.gif" alt="s1000" height="60%" width="60%" /></p>
+<p><img src="http://localhost:4000/static/img/fourier/sigma_10.gif" alt="s10" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/sigma_100.gif" alt="s100" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/sigma_1000.gif" alt="s1000" height="49%" width="49%" class="center-image" /></p>
 
 <p><br /></p>
 
 <h4 id="quaver">Quaver</h4>
 
-<p>Unsatisfied with the difficulty of drawing using a mouse, I used my <a href="https://moleskine.com">Moleskine Notebook</a> to draw the shape of a musical note (a quaver), exported it as “svg” (vector graphics) and wrote a small script to convert the svg to a parametric curve.</p>
+<p>Unsatisfied with the difficulty of drawing using a mouse, I used my <a href="https://moleskine.com">Moleskine Notebook</a> to draw the shape of a musical note (a quaver), exported it as “svg” (vector graphics) and wrote a small script to convert the svg to a parametric curve. Here is the shape I drew:</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/quaver-svg.png" alt="qsvg" width="20%" class="center-image" /></p>
 
 <p>Here are the Fourier transforms with 6, 10, 20, 100, 400 and 1000 vectors:</p>
 
-<p><img src="http://localhost:4000/static/img/fourier/note_6.gif" alt="n6" height="33%" width="33%" />
-<img src="http://localhost:4000/static/img/fourier/note_10.gif" alt="n10" height="33%" width="33%" />
-<img src="http://localhost:4000/static/img/fourier/note_20.gif" alt="n20" height="33%" width="33%" />
-<img src="http://localhost:4000/static/img/fourier/note_100.gif" alt="n100" height="33%" width="33%" />
-<img src="http://localhost:4000/static/img/fourier/note_400.gif" alt="n400" height="33%" width="33%" />
-<img src="http://localhost:4000/static/img/fourier/note_1000.gif" alt="n1000" height="33%" width="33%" /></p>
+<p><img src="http://localhost:4000/static/img/fourier/note_6.gif" alt="n6" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/note_10.gif" alt="n10" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/note_20.gif" alt="n20" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/note_100.gif" alt="n100" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/note_400.gif" alt="n400" height="49%" width="49%" />
+<img src="http://localhost:4000/static/img/fourier/note_1000.gif" alt="n1000" height="49%" width="49%" /></p>
 
 <p><br /></p>
 
