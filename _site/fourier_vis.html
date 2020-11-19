@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>Complex Fourier Visualization - Problems and Algorithms</title>
+    <meta name="author" content="Nima Aghdaii" />
+    <meta name="description" content="Complex Fourier Visualization" />
+    <meta name="keywords" content="Complex Fourier Visualization, Problems and Algorithms, fourier, math, julia" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="Problems and Algorithms" property="og:site_name">
+
+    
+
+    
+      <meta content="Complex Fourier Visualization" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="Problems and Algorithms" property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/fourier_vis" property="og:url">
+    
+
+    
+      <meta content="2020-10-31T03:53:34-07:00" property="article:published_time">
+      <meta content="http://localhost:4000/about/" property="article:author">
+    
+
+    
+      <meta content="http://localhost:4000/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="fourier" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="Complex Fourier Visualization">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/fourier_vis">
+    
+
+    
+      <meta name="twitter:description" content="Problems and Algorithms">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="75px" width="75px" /></a>
+          <h1 class="author-name">Nima Aghdaii</h1>
+          
+            <div class="profile-about">
+              I like algorithms and problem solving.
+            </div>
+          
+          <div class="social">
+            <ul>
+              
+                <li><a href="https://www.linkedin.com/in/nima-aghdaii-074b7536/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+              
+                <li><a href="https://github.com/nima101" target="_blank"><i class="fa fa-github"></i></a></li>
+              
+            </ul>
+          </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="(sitemap)~$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+              <li><a class="about" href="/feed.xml">XML Feed</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">Complex Fourier Visualization</h1>
+</header>
+
+<span class="time">31 Oct 2020</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/fourier">fourier</a>, <a href="/category/math">math</a>, <a href="/category/julia">julia</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><h3 id="motivation">Motivation</h3>
+
+<p>This post is motivated by <a href="https://www.youtube.com/watch?v=r6sGWTCMz2k">a fantastic video</a> (by <a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw">3blue1brown</a>) regarding complex Fourier series. Here I want to give a brief overview of how to do the Fourier transform for a complex function and also how to implement it in Julia with few lines of code. Furthermore, a few different ways to generate a parametric curve to use as an input for our program.</p>
+
+<p>Before we dive in, I want to emphasize how interesting the outcome of this work is. Basically, given any 2D shape, we want to find <code class="language-plaintext highlighter-rouge">n</code> fixed length vectors, each rotating at a constant speed such that if we add them together, they draw the input shape. This is an example with 600 vectors, drawing the word <code class="language-plaintext highlighter-rouge">"hello"</code>:</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/hello_600.gif" alt="hello_600" height="70%" width="70%" /></p>
+
+<p><br /></p>
+
+<h3 id="complex-functions">Complex Functions</h3>
+
+<p>Let’s think of a complex function <code class="language-plaintext highlighter-rouge">f(t)</code> which takes an input between 0 and 1 and outputs a complex number. We can visualize the output of this function on a 2D plane with x-axis being the real component and the y-axis being the imaginary component.</p>
+
+<p>Complex numbers provide an elegant way to store the 2D coordinates with the additional benefit that <code class="language-plaintext highlighter-rouge">e ^ (i * t)</code> walks around a circle with a constant speed of one unit per second. For convenience, we can work with <code class="language-plaintext highlighter-rouge">e ^ (i * 2π * t)</code> instead, which loops exactly once around the circle as <code class="language-plaintext highlighter-rouge">t</code> goes from 0 to 1, as shown below.</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/simple1.gif" alt="simple1" height="60%" width="60%" /></p>
+
+<p>Note that <code class="language-plaintext highlighter-rouge">e ^ (2 * i * 2π * t)</code> goes twice as fast and <code class="language-plaintext highlighter-rouge">2 * e ^ (i * 2π * t)</code> walks around a circle twice bigger. Now, by combining different terms you can create interesting shapes, such as below.</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/simple2.gif" alt="simple2" height="60%" width="60%" /></p>
+
+<p>Here is the code in Julia to generate this animation:</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="k">using</span> <span class="n">Plots</span>
+<span class="k">using</span> <span class="n">Interact</span>
+<span class="k">using</span> <span class="n">JSON</span>
+<span class="n">gr</span><span class="x">()</span>
+
+<span class="n">pw</span> <span class="o">=</span> <span class="x">(</span><span class="n">t</span><span class="x">,</span> <span class="n">x</span><span class="x">)</span> <span class="o">-&gt;</span> <span class="nb">ℯ</span> <span class="o">^</span> <span class="x">(</span><span class="n">x</span> <span class="o">*</span> <span class="nb">im</span> <span class="o">*</span> <span class="mi">2</span><span class="nb">π</span> <span class="o">*</span> <span class="n">t</span><span class="x">)</span>
+<span class="n">func</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-&gt;</span> <span class="x">(</span><span class="mf">0.1</span> <span class="o">-</span> <span class="mf">0.5</span><span class="nb">im</span><span class="x">)</span> <span class="o">*</span> <span class="n">pw</span><span class="x">(</span><span class="o">+</span><span class="mi">1</span><span class="x">,</span> <span class="n">t</span><span class="x">)</span> <span class="o">+</span>
+            <span class="x">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.5</span><span class="nb">im</span><span class="x">)</span> <span class="o">*</span> <span class="n">pw</span><span class="x">(</span><span class="o">-</span><span class="mi">1</span><span class="x">,</span> <span class="n">t</span><span class="x">)</span> <span class="o">+</span>
+            <span class="x">(</span><span class="mf">0.0</span> <span class="o">+</span> <span class="mf">0.5</span><span class="nb">im</span><span class="x">)</span> <span class="o">*</span> <span class="n">pw</span><span class="x">(</span><span class="o">+</span><span class="mi">2</span><span class="x">,</span> <span class="n">t</span><span class="x">)</span> <span class="o">+</span>
+            <span class="x">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="mf">1.0</span><span class="nb">im</span><span class="x">)</span> <span class="o">*</span> <span class="n">pw</span><span class="x">(</span><span class="o">-</span><span class="mi">2</span><span class="x">,</span> <span class="n">t</span><span class="x">)</span> <span class="o">+</span>
+            <span class="x">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">0.5</span><span class="nb">im</span><span class="x">)</span> <span class="o">*</span> <span class="n">pw</span><span class="x">(</span><span class="o">+</span><span class="mi">3</span><span class="x">,</span> <span class="n">t</span><span class="x">)</span> <span class="o">+</span>
+            <span class="x">(</span><span class="mf">0.3</span> <span class="o">+</span> <span class="mf">0.5</span><span class="nb">im</span><span class="x">)</span> <span class="o">*</span> <span class="n">pw</span><span class="x">(</span><span class="o">-</span><span class="mi">3</span><span class="x">,</span> <span class="n">t</span><span class="x">)</span>
+
+<span class="n">anim</span> <span class="o">=</span> <span class="n">Animation</span><span class="x">()</span>
+<span class="n">xs</span><span class="x">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="x">[],</span> <span class="x">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="mf">0.01</span><span class="o">:</span><span class="mi">1</span>
+    <span class="n">plot</span><span class="x">([],</span> <span class="x">[],</span> <span class="n">legend</span><span class="o">=</span><span class="nb">nothing</span><span class="x">,</span> <span class="n">aspect_ratio</span><span class="o">=:</span><span class="n">equal</span><span class="x">,</span> <span class="n">xlim</span><span class="o">=</span><span class="x">[</span><span class="o">-</span><span class="mi">5</span><span class="x">,</span> <span class="mi">5</span><span class="x">],</span> <span class="n">ylim</span><span class="o">=</span><span class="x">[</span><span class="o">-</span><span class="mi">5</span><span class="x">,</span> <span class="mi">5</span><span class="x">],</span> <span class="n">widen</span><span class="o">=</span><span class="nb">true</span><span class="x">,</span> <span class="n">framestyle</span> <span class="o">=</span> <span class="o">:</span><span class="n">origin</span><span class="x">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">real</span><span class="x">(</span><span class="n">func</span><span class="x">(</span><span class="n">i</span><span class="x">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">imag</span><span class="x">(</span><span class="n">func</span><span class="x">(</span><span class="n">i</span><span class="x">))</span>
+    <span class="n">annotate!</span><span class="x">(</span><span class="n">x</span> <span class="o">*</span> <span class="mf">1.2</span><span class="x">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mf">1.2</span><span class="x">,</span> <span class="n">text</span><span class="x">(</span><span class="s">"</span><span class="si">$</span><span class="s">i"</span><span class="x">,</span> <span class="o">:</span><span class="n">center</span><span class="x">,</span> <span class="mi">10</span><span class="x">))</span>
+    <span class="n">append!</span><span class="x">(</span><span class="n">xs</span><span class="x">,</span> <span class="n">x</span><span class="x">)</span>
+    <span class="n">append!</span><span class="x">(</span><span class="n">ys</span><span class="x">,</span> <span class="n">y</span><span class="x">)</span>
+    <span class="n">plot!</span><span class="x">(</span><span class="n">xs</span><span class="x">,</span> <span class="n">ys</span><span class="x">)</span>
+    <span class="n">quiver!</span><span class="x">([</span><span class="mi">0</span><span class="x">],</span> <span class="x">[</span><span class="mi">0</span><span class="x">],</span> <span class="n">quiver</span> <span class="o">=</span> <span class="x">([</span><span class="n">x</span><span class="x">],</span> <span class="x">[</span><span class="n">y</span><span class="x">]))</span>
+    <span class="n">frame</span><span class="x">(</span><span class="n">anim</span><span class="x">)</span>
+<span class="k">end</span>
+
+<span class="n">gif</span><span class="x">(</span><span class="n">anim</span><span class="x">,</span> <span class="s">"complex.gif"</span><span class="x">,</span> <span class="n">fps</span> <span class="o">=</span> <span class="mi">15</span><span class="x">)</span></code></pre></figure>
+
+<p><br /></p>
+
+<h3 id="complex-fourier-transform">Complex Fourier Transform</h3>
+
+<p>Now, how would you combine these exponential terms to draw a given shape such as a bird, heart, handwriting, etc.? Also, is it always feasible to do so? Basically, given a function <code class="language-plaintext highlighter-rouge">f(t)</code> can you always represent it in terms of a summation of these exponential terms with some complex coefficients?</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/formula1.png" alt="form1" height="80%" width="80%" /></p>
+
+<p><a href="https://en.wikipedia.org/wiki/Joseph_Fourier">Joseph Fourier</a> in 1800s <a href="https://en.wikipedia.org/wiki/Fourier_inversion_theorem">proved</a> that it’s always possible (under some basic conditions <sup>1</sup>). Let’s look at a brief overview of how to do it. Suppose the transform exists and let’s try to extract the coefficients <code class="language-plaintext highlighter-rouge">c_i</code>. Take an integral from 0 to 1 on both sides. Note that for any exponential term, if the power is a multiple of <code class="language-plaintext highlighter-rouge">2πt</code> and non-zero, as <code class="language-plaintext highlighter-rouge">t</code> varies from 0 to 1, it loops around a circle once, twice, thrice, or more. but it is important that it does full loops. so, the average of all these points (aka the integral from 0 to 1) will be zero. The only term that remains non-zero is <code class="language-plaintext highlighter-rouge">c_0</code>.</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/formula2.png" alt="form2" height="100%" width="100%" /></p>
+
+<p>This is nice because it allows us to calculate <code class="language-plaintext highlighter-rouge">c_0</code> by integrating over <code class="language-plaintext highlighter-rouge">f(t)</code> from 0 to 1. Now, we can use a clever trick to calculate any <code class="language-plaintext highlighter-rouge">c_i</code> in the series. For example to calculate <code class="language-plaintext highlighter-rouge">c_2</code>, multiply both sides by <code class="language-plaintext highlighter-rouge">e ^ (-2 * 2πit)</code> and then take the integral. This time, all terms become zero except <code class="language-plaintext highlighter-rouge">c_2</code>.</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/formula3.png" alt="form3" height="100%" width="100%" /></p>
+
+<p>So we can calculate each <code class="language-plaintext highlighter-rouge">c_n</code> using:</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/formula4.png" alt="form4" height="30%" width="30%" class="center-image" /></p>
+
+<p>Which can be done using numerical integration:</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="c"># numerial integration</span>
+<span class="k">function</span><span class="nf"> c_n</span><span class="x">(</span><span class="n">f</span><span class="x">,</span> <span class="n">n</span><span class="x">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mf">1e-5</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="x">(</span><span class="n">f</span><span class="x">(</span><span class="n">t</span><span class="x">)</span> <span class="o">*</span> <span class="nb">ℯ</span> <span class="o">^</span> <span class="x">(</span><span class="o">-</span><span class="n">n</span> <span class="o">*</span> <span class="mi">2</span><span class="nb">π</span> <span class="o">*</span> <span class="nb">im</span> <span class="o">*</span> <span class="n">t</span><span class="x">)</span> <span class="o">*</span> <span class="n">dt</span> <span class="k">for</span> <span class="n">t</span> <span class="n">∈</span> <span class="mi">0</span><span class="o">:</span><span class="n">dt</span><span class="o">:</span><span class="mi">1</span><span class="x">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Once we calculate all <code class="language-plaintext highlighter-rouge">c_n</code> terms for a given range of <code class="language-plaintext highlighter-rouge">n</code> (say from -10 to +10), we have our fourier transform. Here is the full code (~50 lines):</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="k">using</span> <span class="n">Plots</span><span class="x">;</span> <span class="n">gr</span><span class="x">()</span>
+<span class="k">using</span> <span class="n">Interact</span>
+
+<span class="c"># heart shape</span>
+<span class="n">func</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-&gt;</span> <span class="mi">20</span><span class="n">sin</span><span class="o">.</span><span class="x">(</span><span class="mi">2</span><span class="nb">π</span><span class="o">*</span><span class="n">t</span><span class="x">)</span><span class="o">.^</span><span class="mi">3</span> <span class="o">+</span> <span class="x">(</span><span class="mi">20</span><span class="n">cos</span><span class="x">(</span><span class="mi">2</span><span class="nb">π</span><span class="o">*</span><span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="mi">7</span><span class="n">cos</span><span class="x">(</span><span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="nb">π</span><span class="o">*</span><span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="mi">2</span><span class="n">cos</span><span class="x">(</span><span class="mi">3</span><span class="o">*</span><span class="mi">2</span><span class="nb">π</span><span class="o">*</span><span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="n">cos</span><span class="x">(</span><span class="mi">4</span><span class="o">*</span><span class="mi">2</span><span class="nb">π</span><span class="o">*</span><span class="n">t</span><span class="x">))</span> <span class="o">*</span> <span class="nb">im</span>
+
+<span class="c"># numerial integration</span>
+<span class="k">function</span><span class="nf"> c_n</span><span class="x">(</span><span class="n">f</span><span class="x">,</span> <span class="n">n</span><span class="x">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mf">1e-5</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="x">([</span><span class="n">f</span><span class="x">(</span><span class="n">t</span><span class="x">)</span> <span class="o">*</span> <span class="nb">ℯ</span> <span class="o">^</span> <span class="x">(</span><span class="o">-</span><span class="n">n</span><span class="o">*</span><span class="mi">2</span><span class="nb">π</span><span class="o">*</span><span class="nb">im</span><span class="o">*</span><span class="n">t</span><span class="x">)</span> <span class="o">*</span> <span class="n">dt</span> <span class="k">for</span> <span class="n">t</span> <span class="n">∈</span> <span class="mi">0</span><span class="o">:</span><span class="n">dt</span><span class="o">:</span><span class="mi">1</span><span class="x">])</span>
+<span class="k">end</span>
+
+<span class="k">function</span><span class="nf"> eval_term</span><span class="x">(</span><span class="n">c</span><span class="x">,</span> <span class="n">x</span><span class="x">,</span> <span class="n">i</span><span class="x">)</span>
+    <span class="k">return</span> <span class="n">c</span><span class="x">[</span><span class="n">i</span><span class="x">]</span> <span class="o">*</span> <span class="nb">ℯ</span> <span class="o">^</span> <span class="x">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="nb">π</span> <span class="o">*</span> <span class="nb">im</span> <span class="o">*</span> <span class="n">x</span><span class="x">)</span>
+<span class="k">end</span>
+
+<span class="k">function</span><span class="nf"> sum_terms</span><span class="x">(</span><span class="n">c</span><span class="x">,</span> <span class="n">x</span><span class="x">)</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="x">(</span><span class="n">eval_term</span><span class="x">(</span><span class="n">c</span><span class="x">,</span> <span class="n">x</span><span class="x">,</span> <span class="n">i</span><span class="x">)</span> <span class="k">for</span> <span class="n">i</span> <span class="n">∈</span> <span class="n">c_range</span><span class="x">)</span>
+<span class="k">end</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">c_range</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="o">:</span><span class="mi">5</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">range</span><span class="x">(</span><span class="mi">0</span><span class="x">,</span> <span class="mi">1</span><span class="x">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">n</span><span class="x">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="kt">Dict</span><span class="x">([</span> <span class="x">(</span><span class="n">i</span><span class="x">,</span> <span class="n">c_n</span><span class="x">(</span><span class="n">func</span><span class="x">,</span> <span class="n">i</span><span class="x">))</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="n">c_range</span> <span class="x">])</span>
+
+<span class="n">comb</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">sum_terms</span><span class="x">(</span><span class="n">c</span><span class="x">,</span> <span class="n">x</span><span class="x">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">comb</span><span class="o">.</span><span class="x">(</span><span class="n">t</span><span class="x">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">real</span><span class="o">.</span><span class="x">(</span><span class="n">z</span><span class="x">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">imag</span><span class="o">.</span><span class="x">(</span><span class="n">z</span><span class="x">)</span>
+
+<span class="n">anim</span> <span class="o">=</span> <span class="n">Animation</span><span class="x">()</span>
+<span class="n">xs</span><span class="x">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="x">[],</span> <span class="x">[]</span>
+
+<span class="n">idx</span> <span class="o">=</span> <span class="n">sort</span><span class="x">(</span><span class="n">collect</span><span class="x">(</span><span class="n">c_range</span><span class="x">),</span> <span class="n">lt</span><span class="o">=</span><span class="x">(</span><span class="n">x</span><span class="x">,</span><span class="n">y</span><span class="x">)</span> <span class="o">-&gt;</span> <span class="n">abs</span><span class="x">(</span><span class="n">x</span><span class="x">)</span> <span class="o">&lt;</span> <span class="n">abs</span><span class="x">(</span><span class="n">y</span><span class="x">))</span>
+<span class="n">evs</span> <span class="o">=</span> <span class="x">[(</span><span class="n">i</span> <span class="o">-&gt;</span> <span class="n">eval_term</span><span class="x">(</span><span class="n">c</span><span class="x">,</span> <span class="n">t</span><span class="x">[</span><span class="n">i</span><span class="x">],</span> <span class="n">j</span><span class="x">))</span> <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="n">idx</span><span class="x">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">:</span><span class="n">n</span>
+    <span class="c"># draw shape</span>
+    <span class="n">plot</span><span class="x">(</span><span class="n">xs</span><span class="x">,</span> <span class="n">ys</span><span class="x">,</span> <span class="n">legend</span><span class="o">=</span><span class="nb">nothing</span><span class="x">,</span> <span class="n">aspect_ratio</span><span class="o">=:</span><span class="n">equal</span><span class="x">,</span> <span class="n">widen</span><span class="o">=</span><span class="nb">true</span><span class="x">,</span> <span class="n">framestyle</span> <span class="o">=</span> <span class="o">:</span><span class="n">origin</span><span class="x">,</span> <span class="n">xlim</span><span class="o">=</span><span class="x">[</span><span class="o">-</span><span class="mi">25</span><span class="x">,</span> <span class="mi">25</span><span class="x">],</span> <span class="n">ylim</span><span class="o">=</span><span class="x">[</span><span class="o">-</span><span class="mi">30</span><span class="x">,</span> <span class="mi">25</span><span class="x">])</span>
+    <span class="n">append!</span><span class="x">(</span><span class="n">xs</span><span class="x">,</span> <span class="n">x</span><span class="x">[</span><span class="n">i</span><span class="x">])</span>
+    <span class="n">append!</span><span class="x">(</span><span class="n">ys</span><span class="x">,</span> <span class="n">y</span><span class="x">[</span><span class="n">i</span><span class="x">])</span>
+
+    <span class="c"># draw vectors</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="x">[</span><span class="n">real</span><span class="x">(</span><span class="n">a</span><span class="x">(</span><span class="n">i</span><span class="x">))</span> <span class="k">for</span> <span class="n">a</span> <span class="k">in</span> <span class="n">evs</span><span class="x">]</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="x">[</span><span class="n">imag</span><span class="x">(</span><span class="n">a</span><span class="x">(</span><span class="n">i</span><span class="x">))</span> <span class="k">for</span> <span class="n">a</span> <span class="k">in</span> <span class="n">evs</span><span class="x">]</span>
+    <span class="n">xx</span><span class="x">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="x">[</span><span class="mf">0.0</span><span class="x">],</span> <span class="x">[</span><span class="mf">0.0</span><span class="x">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="n">∈</span> <span class="mi">1</span><span class="o">:</span><span class="n">length</span><span class="x">(</span><span class="n">evs</span><span class="x">)</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">append!</span><span class="x">(</span><span class="n">xx</span><span class="x">,</span> <span class="n">xx</span><span class="x">[</span><span class="n">i</span><span class="x">]</span> <span class="o">+</span> <span class="n">u</span><span class="x">[</span><span class="n">i</span><span class="x">])</span>
+        <span class="n">append!</span><span class="x">(</span><span class="n">yy</span><span class="x">,</span> <span class="n">yy</span><span class="x">[</span><span class="n">i</span><span class="x">]</span> <span class="o">+</span> <span class="n">v</span><span class="x">[</span><span class="n">i</span><span class="x">])</span>
+    <span class="k">end</span>
+    <span class="n">quiver!</span><span class="x">(</span><span class="n">xx</span><span class="x">,</span> <span class="n">yy</span><span class="x">,</span> <span class="n">quiver</span><span class="o">=</span><span class="x">(</span><span class="n">u</span><span class="x">,</span> <span class="n">v</span><span class="x">))</span>
+    <span class="n">frame</span><span class="x">(</span><span class="n">anim</span><span class="x">)</span>
+<span class="k">end</span>
+<span class="n">gif</span><span class="x">(</span><span class="n">anim</span><span class="x">,</span> <span class="s">"test.gif"</span><span class="x">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">15</span><span class="x">)</span></code></pre></figure>
+
+<hr />
+
+<p><sup>1</sup> <sub>It is always possible if both <code class="language-plaintext highlighter-rouge">f</code> and its Fourier transform are absolutely integrable and <code class="language-plaintext highlighter-rouge">f</code> is continuous. (<a href="https://en.wikipedia.org/wiki/Fourier_inversion_theorem">more details</a>)</sub></p>
+
+<p><br /></p>
+
+<h3 id="input">Input</h3>
+
+<p>In order to test our code, we need the mathematical representation of a 2D shape as a parametric curve. Below are a few different ways I achieved the parametric curve.</p>
+
+<p><br /></p>
+
+<h4 id="heart">Heart</h4>
+
+<p>I found this parametric representation of a heart shape on the internet.</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="n">x</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">*</span> <span class="n">sin</span><span class="x">(</span><span class="mi">2</span><span class="nb">π</span> <span class="o">*</span> <span class="n">t</span><span class="x">)</span><span class="o">^</span><span class="mi">3</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">19.5</span> <span class="o">*</span> <span class="n">cos</span><span class="x">(</span><span class="mi">2</span><span class="nb">π</span> <span class="o">*</span> <span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="mf">7.5</span> <span class="o">*</span> <span class="n">cos</span><span class="x">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">2</span><span class="nb">π</span> <span class="o">*</span> <span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">cos</span><span class="x">(</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span><span class="nb">π</span> <span class="o">*</span> <span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">cos</span><span class="x">(</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">2</span><span class="nb">π</span> <span class="o">*</span> <span class="n">t</span><span class="x">)</span></code></pre></figure>
+
+<p>Here are the Fourier representations with [6, 20, 100] vectors:</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/heart6.gif" alt="h6" height="32%" width="32%" />
+<img src="http://localhost:4000/static/img/fourier/heart20.gif" alt="h20" height="32%" width="32%" />
+<img src="http://localhost:4000/static/img/fourier/heart100.gif" alt="h100" height="32%" width="32%" /></p>
+
+<p><br /></p>
+
+<h4 id="sigma">Sigma</h4>
+
+<p>I wrote a quick nodejs app where you can draw a shape, and it gives you an array of points. (connecting each point to the next point results in the shape we want to draw). An example drawing:</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/sigma-nodejs.jpg" alt="sigma-nodejs" height="90%" width="90%" /></p>
+
+<p>Then we need to convert the list of points to a parametric curve. This can be done fairly easily as well:</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="k">function</span><span class="nf"> interpol</span><span class="x">(</span><span class="n">p1</span><span class="x">,</span> <span class="n">p2</span><span class="x">,</span> <span class="n">t</span><span class="x">)</span>
+    <span class="k">return</span> <span class="x">(</span><span class="n">p2</span> <span class="o">-</span> <span class="n">p1</span><span class="x">)</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">p1</span>
+<span class="k">end</span>
+
+<span class="k">function</span><span class="nf"> param_curve</span><span class="x">(</span><span class="n">points</span><span class="x">,</span> <span class="n">x</span><span class="x">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">length</span><span class="x">(</span><span class="n">points</span><span class="x">)</span>
+    <span class="k">if</span> <span class="x">(</span><span class="n">x</span> <span class="o">==</span> <span class="mf">1.0</span><span class="x">)</span>
+        <span class="k">return</span> <span class="n">points</span><span class="x">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="x">]</span>
+    <span class="k">end</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">trunc</span><span class="x">(</span><span class="kt">Int</span><span class="x">,</span> <span class="n">x</span> <span class="o">*</span> <span class="x">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="x">))</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="x">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="x">)</span> <span class="o">-</span> <span class="x">(</span><span class="n">s</span> <span class="o">-</span> <span class="mi">1</span><span class="x">)</span>
+    <span class="k">return</span> <span class="n">interpol</span><span class="x">(</span><span class="n">points</span><span class="x">[</span><span class="n">s</span><span class="x">],</span> <span class="n">points</span><span class="x">[</span><span class="n">e</span><span class="x">],</span> <span class="n">t</span><span class="x">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>Finally, here are the Fourier transforms with 10, 100, and 1000 vectors:</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/sigma_10.gif" alt="s10" height="60%" width="60%" />
+<img src="http://localhost:4000/static/img/fourier/sigma_100.gif" alt="s100" height="60%" width="60%" />
+<img src="http://localhost:4000/static/img/fourier/sigma_1000.gif" alt="s1000" height="60%" width="60%" /></p>
+
+<p><br /></p>
+
+<h4 id="quaver">Quaver</h4>
+
+<p>Unsatisfied with the difficulty of drawing using a mouse, I used my <a href="https://moleskine.com">Moleskine Notebook</a> to draw the shape of a musical note (a quaver), exported it as “svg” (vector graphics) and wrote a small script to convert the svg to a parametric curve.</p>
+
+<p>Here are the Fourier transforms with 6, 10, 20, 100, 400 and 1000 vectors:</p>
+
+<p><img src="http://localhost:4000/static/img/fourier/note_6.gif" alt="n6" height="33%" width="33%" />
+<img src="http://localhost:4000/static/img/fourier/note_10.gif" alt="n10" height="33%" width="33%" />
+<img src="http://localhost:4000/static/img/fourier/note_20.gif" alt="n20" height="33%" width="33%" />
+<img src="http://localhost:4000/static/img/fourier/note_100.gif" alt="n100" height="33%" width="33%" />
+<img src="http://localhost:4000/static/img/fourier/note_400.gif" alt="n400" height="33%" width="33%" />
+<img src="http://localhost:4000/static/img/fourier/note_1000.gif" alt="n1000" height="33%" width="33%" /></p>
+
+<p><br /></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p><a href="https://julialang.org/">Julia</a> makes it easy to work with complex numbers as it allows you to simply write code like <code class="language-plaintext highlighter-rouge">ℯ ^ (2π * im)</code>. It is also easy to create animations and generate gifs.</p>
+
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="http://localhost:4000/fourier_vis" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/combination_parity">C(n, k) mod 2</a>
+                  
+                    (Categories: <a href="/category/math">math</a>, <a href="/category/bits">bits</a>, <a href="/category/fractal">fractal</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/tetration_fractal">Tetration Fractal</a>
+                  
+                    (Categories: <a href="/category/fractal">fractal</a>, <a href="/category/math">math</a>, <a href="/category/julia">julia</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/combination_parity">&laquo; C(n, k) mod 2</a>
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "nima101algoblog";
+    var disqus_identifier = "http://localhost:4000_Complex Fourier Visualization";
+    var disqus_title = "Complex Fourier Visualization";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; Nima Aghdaii
+          
+            - <a href="https://github.com/nima101">https://github.com/nima101</a> - Powered by Jekyll.
+          
+          <div class="btn-github" style="float:right;">
+            <iframe src="https://ghbtns.com/github-btn.html?user=nima101&repo=nima101.github.io&type=star&count=true" frameborder="0" scrolling="0" width="85" height="20px"></iframe>
+            <iframe src="https://ghbtns.com/github-btn.html?user=nima101&repo=nima101.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="85" height="20px"></iframe>
+          </div>
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+

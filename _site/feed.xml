@@ -5,9 +5,48 @@
     <description>Problems and Algorithms</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 24 Oct 2020 23:02:04 -0700</pubDate>
-    <lastBuildDate>Sat, 24 Oct 2020 23:02:04 -0700</lastBuildDate>
+    <pubDate>Tue, 03 Nov 2020 08:39:40 -0800</pubDate>
+    <lastBuildDate>Tue, 03 Nov 2020 08:39:40 -0800</lastBuildDate>
     <generator>Jekyll v3.9.0</generator>
+    
+      <item>
+        <title>Fourier Visualization</title>
+        <description>&lt;h3 id=&quot;motivation&quot;&gt;Motivation&lt;/h3&gt;
+
+&lt;p&gt;This post is motivated by this fantastic [video][video]. Here we visualize what’s discussed in that video.&lt;/p&gt;
+
+&lt;h3 id=&quot;results&quot;&gt;Results&lt;/h3&gt;
+
+&lt;h4 id=&quot;heart&quot;&gt;Heart&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-julia&quot; data-lang=&quot;julia&quot;&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;π&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;19.5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;π&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;7.5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;π&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;π&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cos&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;π&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;6 terms:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/static/img/fourier/heart6.gif&quot; alt=&quot;h6&quot; height=&quot;80%&quot; width=&quot;80%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;20 terms:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/static/img/fourier/heart20.gif&quot; alt=&quot;h20&quot; height=&quot;80%&quot; width=&quot;80%&quot; /&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 31 Oct 2020 03:53:34 -0700</pubDate>
+        <link>http://localhost:4000/fourier_vis</link>
+        <guid isPermaLink="true">http://localhost:4000/fourier_vis</guid>
+        
+        
+        <category>fourier</category>
+        
+        <category>math</category>
+        
+        <category>julia</category>
+        
+      </item>
     
       <item>
         <title>C(n, k) mod 2</title>
@@ -1646,146 +1685,6 @@ Running it:&lt;/p&gt;
         <category>algorithm</category>
         
         <category>data-structure</category>
-        
-      </item>
-    
-      <item>
-        <title>Find all prime numbers up to N</title>
-        <description>&lt;h3 id=&quot;problem&quot;&gt;Problem&lt;/h3&gt;
-
-&lt;p&gt;Given &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt;, find all prime numbers less than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h3 id=&quot;approaches&quot;&gt;Approaches&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;We can simply iterate over numbers and test if they are prime. A simple primality test would run in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(sqrt(n))&lt;/code&gt; and the fastest primality test algorithms run slower than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(log(n))&lt;/code&gt; &lt;sup&gt;1&lt;/sup&gt;. This approach at best would result in an overall &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(nlog(n))&lt;/code&gt; runtime complexity.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;We can use the famous &lt;a href=&quot;https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes&quot;&gt;Sieve of Eratosthenes&lt;/a&gt; and using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n)&lt;/code&gt; memory, we can find all prime numbers in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(nlog(log(n)))&lt;/code&gt;. (the image is taken from Wikipedia)&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;div&gt;
-&lt;div style=&quot;float:left; float:top; width: 45%; margin-left:5%; margin-right:5%&quot;&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;prime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;/div&gt;
-&lt;div style=&quot;&quot;&gt;
-&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/commons/b/b9/Sieve_of_Eratosthenes_animation.gif&quot; style=&quot;width: 40%; height: 40%&quot; /&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;sup&gt;1&lt;/sup&gt; &lt;sub&gt;For example, &lt;a href=&quot;https://en.wikipedia.org/wiki/AKS_primality_test&quot;&gt;AKS Primality Test&lt;/a&gt; or &lt;a href=&quot;https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test&quot;&gt;Miller-Rabin Primality Test&lt;/a&gt; both run in &lt;code&gt;O(log&lt;sup&gt;O(1)&lt;/sup&gt;(N))&lt;/code&gt;.&lt;/sub&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h3 id=&quot;why-is-sieve-of-eratosthenes-slow&quot;&gt;Why is “Sieve of Eratosthenes” slow?&lt;/h3&gt;
-
-&lt;p&gt;The main issue with Sieve of Eratosthenes is that it marks each composite number from all of its prime factors. For example, number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;60&lt;/code&gt; is marked from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;60 = 2*2*3*5&lt;/code&gt;), while it would have been enough to just mark it from one of the prime factors, say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;If we find a way to mark each composite number only from one of its prime factors, we will have a linear time solution.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h3 id=&quot;linear-time-solution&quot;&gt;Linear-time solution&lt;/h3&gt;
-
-&lt;p&gt;In order to find all prime numbers up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt;, we keep track of two arrays:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;primes&lt;/code&gt;: list of all prime numbers we have found so far.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[x]&lt;/code&gt;: the smallest prime factor for integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Now, imagine a composite number such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3 * 5 * 7&lt;/code&gt;. We need to mark such a number from its lowest prime factor &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt; by setting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[3 * 5 * 7] = 3&lt;/code&gt;. However, instead of marking it from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt;, we mark it from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5 * 7&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;In order to do so, when we are at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i = 5 * 7&lt;/code&gt;, for each prime &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p &amp;lt;= 5&lt;/code&gt;, we mark &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p * i&lt;/code&gt;. Basically, we do:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[2 * 5*7] = 2&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[3 * 5*7] = 3&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[5 * 5*7] = 5&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;More formally, for each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;, we look at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[i]&lt;/code&gt; and for all primes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt; less than or equal to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[i]&lt;/code&gt;, we set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[p * i] = p&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;So, we start with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp&lt;/code&gt; initialized with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;. We iterate over all numbers from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt;. If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[i] == 0&lt;/code&gt;, it means &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; is prime, so we set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[i] = i&lt;/code&gt;. Otherwise, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; is a composite number and we have already stored its smallest prime factor in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[i]&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now, using all prime numbers less than or equal to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[i]&lt;/code&gt; we set some future composite numbers. (note that we do this where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; is prime or composite)&lt;/p&gt;
-
-&lt;h4 id=&quot;implementation&quot;&gt;Implementation&lt;/h4&gt;
-
-&lt;p&gt;The code would look something like this:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;lp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;primes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;lp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;primes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;primes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;primes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;primes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;lp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;primes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;primes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;correctness&quot;&gt;Correctness&lt;/h4&gt;
-
-&lt;p&gt;Suppose we arrive at a composite number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt; is the smallest prime factor in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C&lt;/code&gt; is uniquely represented as: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C = p * X&lt;/code&gt; for some number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X &amp;gt; 1&lt;/code&gt;. Since &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt; is the smallest prime factor in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt; is also smaller or equal to the smallest prime factor in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;. This means we should have marked &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C&lt;/code&gt; when we arrived at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt; **&lt;sup&gt;&lt;strong&gt;1&lt;/strong&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;sup&gt;&lt;strong&gt;1&lt;/strong&gt;&lt;/sup&gt; Remember that for each number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt; we mark all composites &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p * X&lt;/code&gt; for primes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt; smaller than or equal to the smallest prime factor in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;complexity&quot;&gt;Complexity&lt;/h4&gt;
-
-&lt;p&gt;Every composite number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; is uniquely represented as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x = lp[x] * y&lt;/code&gt;. So, it will be visited from only one number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;y&lt;/code&gt;. And prime numbers will not be visited from any other number. So, in total we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|composites|&lt;/code&gt; visits + &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; for iterating over all numbers. In total: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Base Case:&lt;/strong&gt; For &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i = 2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[i]&lt;/code&gt; is zero, so we figure &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt; is a prime and we set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[2] = 2&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Invariant:&lt;/strong&gt; For all numbers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;k&lt;/code&gt;,&lt;/p&gt;
-
-&lt;h4 id=&quot;correctness-old&quot;&gt;Correctness (OLD&lt;/h4&gt;
-
-&lt;p&gt;We can use proof by contradiction to prove we will always mark a composite number before arriving at it.&lt;/p&gt;
-
-&lt;p&gt;Suppose not. Assume a &lt;strong&gt;composite&lt;/strong&gt; number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C&lt;/code&gt; is not marked when we arrive at it. we know that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C = lp[C] * X&lt;/code&gt; for some &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 &amp;lt; X &amp;lt; C&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[C]&lt;/code&gt; is always prime. We also know that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[C]&lt;/code&gt; is the smallest prime factor in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C&lt;/code&gt;, so we know as well: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[C] &amp;lt;= lp[X]&lt;/code&gt;. But this contradicts with the assumption of our algorithm since when we visited &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;, we should have marked &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[C] * X&lt;/code&gt; since &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp[C]&lt;/code&gt; is a prime number less than or equal to the smallest prime factor of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;prime-factorization&quot;&gt;Prime factorization&lt;/h4&gt;
-
-&lt;p&gt;This linear-time algorithm not only gives us all the prime numbers up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; but also gives us the &lt;strong&gt;prime factorization&lt;/strong&gt; for all numbers up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt;! Using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lp&lt;/code&gt;, we can recursively extract the lowest prime until no more primes left.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;prime_factors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;source&quot;&gt;Source&lt;/h3&gt;
-
-&lt;p&gt;I read about this on &lt;a href=&quot;https://cp-algorithms.com/algebra/prime-sieve-linear.html&quot;&gt;cp-algorithms&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-</description>
-        <pubDate>Wed, 27 Mar 2019 08:15:02 -0700</pubDate>
-        <link>http://localhost:4000/find-prime-numbers</link>
-        <guid isPermaLink="true">http://localhost:4000/find-prime-numbers</guid>
-        
-        
-        <category>prime</category>
-        
-        <category>algorithm</category>
         
       </item>
     
