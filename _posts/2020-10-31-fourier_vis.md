@@ -9,7 +9,7 @@ categories: [fourier, math, julia]
 
 This post is motivated by [a fantastic video][video] (by [3blue1brown][3b1b]) regarding complex Fourier series. Here I want to give a brief overview of how to do the Fourier transform for a complex function and also how to implement it in Julia with few lines of code. Furthermore, a few different ways to generate a parametric curve to use as an input for our program.
 
-Before we dive in, I want to emphasize how interesting the outcome of this work is. Basically, given any 2D shape, we want to find `n` fixed length vectors, each rotating at a constant speed such that if we add them together, they draw the input shape. This is an example with 600 vectors, drawing the word `"hello"`:
+Before we dive in, I want to emphasize how interesting the outcome of this work is. Basically, given any 2D shape, we want to find $$n$$ fixed length vectors, each rotating at a constant speed such that if we add them together, they draw the input shape. This is an example with 600 vectors, drawing the word "hello":
 
 ![hello_600]{:height="70%" width="70%"}
 
@@ -17,13 +17,13 @@ Before we dive in, I want to emphasize how interesting the outcome of this work 
 
 ### Complex Functions
 
-Let's think of a complex function `f(t)` which takes an input between 0 and 1 and outputs a complex number. We can visualize the output of this function on a 2D plane with x-axis being the real component and the y-axis being the imaginary component.
+Let's think of a complex function $$ \, f(t) $$ which takes an input between 0 and 1 and outputs a complex number. We can visualize the output of this function on a 2D plane with x-axis being the real component and the y-axis being the imaginary component.
 
-Complex numbers provide an elegant way to store the 2D coordinates with the additional benefit that `e ^ (i * t)` walks around a circle with a constant speed of one unit per second. For convenience, we can work with `e ^ (i * 2π * t)` instead, which loops exactly once around the circle as `t` goes from 0 to 1, as shown below.
+Complex numbers provide an elegant way to store the 2D coordinates with the additional benefit that $$e ^ {it}$$ walks around a circle with a constant speed of one unit per second. For convenience, we can work with $$e ^ {2 \pi it}$$ instead, which loops exactly once around the circle as $$ t $$ goes from $$0$$ to $$1$$, as shown below.
 
 ![simple1]{:height="60%" width="60%"}
 
-Note that `e ^ (2 * i * 2π * t)` goes twice as fast and `2 * e ^ (i * 2π * t)` walks around a circle twice bigger. Now, by combining different terms you can create interesting shapes, such as below.
+Note that $$e ^ {2 * 2 \pi it}$$ goes twice as fast and $$2 e ^ {2 \pi it}$$ walks around a circle twice larger. Now, by combining different terms you can create interesting shapes. For example:
 
 ![simple2]{:height="60%" width="60%"}
 
@@ -65,21 +65,51 @@ gif(anim, "complex.gif", fps = 15)
 
 ### Complex Fourier Transform
 
-Now, how would you combine these exponential terms to draw a given shape such as a bird, heart, handwriting, etc.? Also, is it always feasible to do so? Basically, given a function `f(t)` can you always represent it in terms of a summation of these exponential terms with some complex coefficients?
+Now, how would you combine these exponential terms to draw a given shape such as a bird, heart, handwriting, etc.? Also, is it always feasible to do so? Basically, given a function  $$ \, f(t) $$  can you always represent it in terms of a summation of these exponential terms with some complex coefficients?
 
-![form1]{:height="90%" width="90%"}
+$$
+\begin{equation}
+\begin{aligned}
+f(t) &= \cdots + \, c_{\color{magenta}{-2}} \, e^{\color{magenta}{-2} \, 2\pi i t} + \, c_{\color{magenta}{-1}} \, e^{\color{magenta}{-1} \, 2\pi i t} + \, c_{\color{magenta}{0}} \, e^{\color{magenta}{0} \, 2\pi i t} + \, c_{\color{magenta}{1}} \, e^{\color{magenta}{1} \, 2\pi i t} + \, c_{\color{magenta}{2}} \, e^{\color{magenta}{2} \, 2\pi i t} + \cdots \\
+\end{aligned}
+\end{equation}
+$$
 
-[Joseph Fourier][jbf] in the 1800s [proved][fit] that it's always possible (under some basic conditions <sup>1</sup>). Let's look at a brief overview of how to do it. Suppose the transform exists and let's try to extract the coefficients `c_i`. Take an integral from 0 to 1 on both sides. Note that for any exponential term, if the power is a multiple of `2πt` and non-zero, as `t` varies from 0 to 1, it loops around a circle once, twice, thrice, or more. but it is important that it does full loops. so, the average of all these points (aka the integral from 0 to 1) will be zero. The only term that remains non-zero is `c_0`.
+[Joseph Fourier][jbf] in the 1800s [proved][fit] that it's always possible (under some basic conditions <sup>1</sup>). Let's look at a brief overview of how to do it. Suppose the transform exists and let's try to extract the coefficients $$ c_i $$. Take an integral from $$0$$ to $$1$$ on both sides. Note that for any exponential term, if the power is a multiple of $$2 \pi t$$ and non-zero, as $$ t $$ varies from $$0$$ to $$1$$, it loops around a circle once, twice, thrice, or more. but it is important that it does full loops. so, the average of all these points (aka the integral from $$0$$ to $$1$$) will be zero. The only term that remains non-zero is $$ c_0 $$.
 
-![form2]
+$$
+\begin{equation}
+\begin{aligned}
+\int_{0}^{1} f(t)\,dt & = \int_{0}^{1} \left[ \, \cdots + \, c_{\color{magenta}{-2}} \, e^{\color{magenta}{-2} \, 2\pi i t} + \, c_{\color{magenta}{-1}} \, e^{\color{magenta}{-1} \, 2\pi i t} + \, c_{\color{magenta}{0}} \, e^{\color{magenta}{0} \, 2\pi i t} + \, c_{\color{magenta}{1}} \, e^{\color{magenta}{1} \, 2\pi i t} + \, c_{\color{magenta}{2}} \, e^{\color{magenta}{2} \, 2\pi i t} + \cdots \right] \,dt \\
+& = \, \, \cdots \, + \, \int_{0}^{1} c_{\color{magenta}{-2}} \, e^{\color{magenta}{-2} \, 2\pi i t} dt + \, \int_{0}^{1} c_{\color{magenta}{-1}} \, e^{\color{magenta}{-1} \, 2\pi i t} dt + \, \int_{0}^{1} c_{\color{magenta}{0}} \, e^{\color{magenta}{0} \, 2\pi i t} dt + \, \int_{0}^{1} c_{\color{magenta}{1}} \, e^{\color{magenta}{1} \, 2\pi i t} dt + \, \int_{0}^{1} c_{\color{magenta}{2}} \, e^{\color{magenta}{2} \, 2\pi i t} dt \, + \, \cdots \\
+& = \, \, \cdots \, + \, 0 + 0 + c_{\color{magenta}{0}} + 0 + 0 \, + \cdots \\
+& = c_{\color{magenta}{0}}
+\end{aligned}
+\end{equation}
+$$
 
-This is nice because it allows us to calculate `c_0` by integrating over `f(t)` from 0 to 1. Now, we can use a clever trick to calculate any `c_i` in the series. For example to calculate `c_2`, multiply both sides by `e ^ (-2 * 2πit)` and then take the integral. This time, all terms become zero except `c_2`.
+This is nice because it allows us to calculate $$c_0$$ by integrating over $$ \, f(t) $$ from $$0$$ to $$1$$. Now, we can use a clever trick to calculate any $$ c_i $$ in the series. For example to calculate $$c_2$$, multiply both sides by $$e ^ {-2 * 2πit}$$ and then take the integral. This time, all terms become zero except $$c_2$$.
 
-![form3]
+$$
+\begin{equation}
+\begin{aligned}
+\int_{0}^{1} (e^{\color{magenta}{-2} \, 2\pi i t}) \, f(t) \,dt & = \int_{0}^{1} \left[ \, \cdots + \, c_{\color{magenta}{-2}} \, e^{\color{magenta}{-4} \, 2\pi i t} + \, c_{\color{magenta}{-1}} \, e^{\color{magenta}{-3} \, 2\pi i t} + \, c_{\color{magenta}{0}} \, e^{\color{magenta}{-2} \, 2\pi i t} + \, c_{\color{magenta}{1}} \, e^{\color{magenta}{-1} \, 2\pi i t} + \, c_{\color{magenta}{2}} \, e^{\color{magenta}{0} \, 2\pi i t} + \cdots \right] \,dt \\
+& = \, \, \cdots \, + \, \int_{0}^{1} c_{\color{magenta}{-2}} \, e^{\color{magenta}{-4} \, 2\pi i t} dt + \, \int_{0}^{1} c_{\color{magenta}{-1}} \, e^{\color{magenta}{-3} \, 2\pi i t} dt + \, \int_{0}^{1} c_{\color{magenta}{0}} \, e^{\color{magenta}{-2} \, 2\pi i t} dt + \, \int_{0}^{1} c_{\color{magenta}{1}} \, e^{\color{magenta}{-1} \, 2\pi i t} dt + \, \int_{0}^{1} c_{\color{magenta}{2}} \, e^{\color{magenta}{0} \, 2\pi i t} dt \, + \, \cdots \\
+& = \, \, \cdots \, + \, 0 + 0 + 0 + 0 + c_{\color{magenta}{2}} \, + \cdots \\
+& = c_{\color{magenta}{2}}
+\end{aligned}
+\end{equation}
+$$
 
-So we can calculate each `c_n` using:
+So we can calculate each $$c_n$$ using:
 
-![form4]{:height="40%" width="40%" .center-image}
+$$
+\begin{equation}
+\begin{aligned}
+c_{\color{magenta}{n}} &= \int_{0}^{1} e^{\color{magenta}{-n} \, 2\pi i t} \, f(t) \,dt
+\end{aligned}
+\end{equation}
+$$
 
 Which can be done using numerical integration:
 
@@ -91,7 +121,7 @@ function c_n(f, n)
 end
 {% endhighlight %}
 
-Once we calculate all `c_n` terms for a given range of `n` (say from -10 to +10), we have our fourier transform. Here is the full code (~50 lines):
+Once we calculate all $$c_n$$ terms for a given range of $$n$$ (say from $$-10$$ to $$+10$$), we have our fourier transform. Here is the full code (~50 lines):
 
 {% highlight julia %}
 using Plots; gr()
@@ -151,7 +181,7 @@ gif(anim, "test.gif", fps=15)
 {% endhighlight %}
 
 <hr/>
-<sup>1</sup> <sub>It is always possible if both `f` and its Fourier transform are absolutely integrable and `f` is continuous. ([more details][fit])</sub> 
+<sup>1</sup> <sub>It is always possible if both $$f$$ and its Fourier transform are absolutely integrable and $$f$$ is continuous. ([more details][fit])</sub> 
 
 <br/>
 
@@ -229,10 +259,6 @@ Here are the Fourier transforms with 6, 10, 20, 100, 400 and 1000 vectors:
 ![n1000]{:height="49%" width="49%"}
 
 <br />
-
-### Conclusion
-
-[Julia][julia] makes it easy to work with complex numbers as it allows you to simply write code like `ℯ ^ (2π * im)`. It is also easy to create animations and generate gifs.
 
 
 [simple1]: {{ site.url }}/static/img/fourier/simple1.gif
