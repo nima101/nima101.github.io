@@ -8,7 +8,9 @@ layout: default
 
   <ol class="posts">
     {% for post in paginator.posts %}
+    {% if post.hidden != true %}
       <li><a href="{{ post.url }}">{{ post.title }}</a> &raquo; <i><span>{{ post.date | date_to_string }}</span></i></li>
+    {% endif %}
     {% endfor %}
   </ol>
 
