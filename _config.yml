@@ -2,7 +2,8 @@ title: Problems and Algorithms
 description: Problems and Algorithms
 author: Nima Aghdaii
 github: https://github.com/nima101
-about: I like algorithms and problem solving.
+# about: I like algorithms and problem solving.
+navbar: false
 disqus_shortname: nima101algoblog
 
 google_analytics: UA-49182060-2
