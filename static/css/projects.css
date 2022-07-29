@@ -83,6 +83,11 @@ a.project-detail:hover h3 {
 
 .center-image
 {
-    margin: 0 auto;
-    display: block;
+  margin: 0 auto;
+  display: block;
+}
+
+.jsfiddle iframe {
+  height: 380px;
+  width: 320px;
 }
