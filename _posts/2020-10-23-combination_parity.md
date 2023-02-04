@@ -26,7 +26,7 @@ for i in range(maxn):
 <br/>
 
 ### O(n)
-Since we only want the answer mod 2. we just need to find how many `2`s there are in the numerator vs. denominator of `n! / (k! (n-k)!)`. In order to do that we just need to find the number of `2`s in `x!`.
+Since we only want the answer mod 2. we just need to find how many `2`s there are in the numerator vs. denominator of `n! / (k! (n-k)!)`. To do that we just need to find the number of `2`s in `x!`.
 
 {% highlight python %}
 # count 2s in n!
@@ -47,7 +47,7 @@ def c(n, k):
 <br/>
 
 ### O(log(n))
-In order to improve the linear solution, let's look at `twos` function. instead of iterating over each number in `n!` (1, 2, 3, ..., n) let's count how many `2`s we have, then how many `4`s we have, then `8`s and so on (until `log2(n)`). This leads to a `O(log(n))` solution:
+To improve the linear solution, let's look at `twos` function. instead of iterating over each number in `n!` (1, 2, 3, ..., n) let's count how many `2`s we have, then how many `4`s we have, then `8`s and so on (until `log2(n)`). This leads to a `O(log(n))` solution:
 
 {% highlight python %}
 # count 2s in n!
@@ -115,7 +115,7 @@ def c(n, k):
 
 ### Proof
 
-Let's take a closer look and actually prove why this simple solution works. To solve `c(m, n) % 2` Let's use [**Lucas's theorem**][lucas-theorem]. It states that we can compute `c(m, n)` by breaking down `n` and `k` into their digits in base `p` (`p` needs to be prime):
+Let's take a closer look and actually prove why this simple solution works. To solve `c(n, k) % 2` Let's use [**Lucas's theorem**][lucas-theorem]. It states that we can compute `c(n, k)` by breaking down `n` and `k` into their digits in base `p` (`p` needs to be prime):
 
 ![lucas]({{ site.url }}/static/img/lucas.png){:height="60%" width="60%" .center-image}
 

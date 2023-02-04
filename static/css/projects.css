@@ -91,3 +91,8 @@ a.project-detail:hover h3 {
   height: 380px;
   width: 320px;
 }
+
+.jsfiddle-sierpinski iframe {
+  height: 650px;
+  width: 650px;
+}
