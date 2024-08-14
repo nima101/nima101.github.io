@@ -26,12 +26,12 @@ permalink: /:title
 #     permalink: /project/:path/
 
 social:
-    - icon: fa-linkedin
-      link: "https://www.linkedin.com/in/nima-aghdaii-074b7536/"
+#    - icon: fa-linkedin
+#      link: "https://www.linkedin.com/in/nima-aghdaii-074b7536/"
     - icon: fa-github
       link: "https://github.com/nima101"
-    - icon: fa-user
-      link: "/static/files/NimaAghdaiiResume2022.pdf"
+#    - icon: fa-user
+#      link: "/static/files/NimaAghdaiiResume2022.pdf"
 
 # share:
 #   twitter_username: github.io

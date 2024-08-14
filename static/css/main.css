@@ -19,14 +19,27 @@ span.time, span.categories {
   font-size: 11px;
 }
 h1, h2, h3 {
-  color: #696969;
   font-weight: normal;
 }
 h1 {
+  color: rgb(0, 98, 69);
   margin-bottom: 10px;
   font-size: 25px;
 }
-h2, h3 {
+h2 {
+  color: rgb(155, 215, 50);
+  margin-bottom: 5px;
+}
+h3 {
+  color: rgb(63, 159, 176);
+  margin-bottom: 5px;
+}
+h4 {
+  color: rgb(232, 117, 39);
+  margin-bottom: 5px;
+}
+h5 {
+  color: #696969;
   margin-bottom: 5px;
 }
 a, a:link, a:active {
@@ -36,6 +49,10 @@ a, a:link, a:active {
 a:hover {
   color: #B3B3B3;
   text-decoration: underline;
+}
+table {
+    margin-left:auto;
+    margin-right:auto;
 }
 
 /* Layout */
