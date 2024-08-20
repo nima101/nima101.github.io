@@ -180,7 +180,6 @@ optimum, which allows for the use of gradient ascent to solve it, regardless of 
 ## Auction and Pacing
 It's now time to solve the dual of the Lagrange:
 
-
 $$ 
 \begin{equation}
 \begin{aligned}
@@ -348,11 +347,14 @@ opportunities it considers (via a higher horizontal line).
 <br/>
 
 ## Conclusion
+
 In this post, we explored how to determine the optimal allocation of $$ M $$ ad opportunities across $$ N $$ ads, each 
 with different budgets and max bids. In practice, additional constraints like targeting and frequency capping come 
 into play as well. We delved into the theory behind this constrained optimization problem, which results in a max/min 
 optimization. The inner optimization corresponds to the auction, while the outer optimization becomes pacing. The 
 outer optimization is guaranteed to be concave, allowing for a straightforward solution using gradient ascent.
+
+![]({{site.url}}/static/img/optalloc/auction_pacing.png){:height="50%" width="50%" .center-image}
 
 While the auction simply picks the highest bidding ad in the auction, the pacing algorithm in reality is more 
 involved as we don't have access to the opportunities in the future, so we need to predict them by predicting the 
@@ -370,6 +372,7 @@ Interesting takeaways:
   the user. Pacing is really setting the baseline for the bid, choosing which opportunities to select for this ad.
 - The goal of budget pacing is way more than spending the budget smoothly. Notice that while probabilistic pacing 
   would result in a smooth spend curve, it provides little to no benefits when it comes to ads performance.
+
 
 <br/>
 <br/>
