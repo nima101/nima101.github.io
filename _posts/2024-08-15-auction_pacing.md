@@ -225,6 +225,12 @@ Where:
 - $$ V_i $$ is the intrinsic value of a conversion to the advertiser
 - $$ p_{ij} $$ is the probability of conversion happening if we show the ad to this user
 
+Note: The auction we designed here is not incentive compatible as it encourages advertisers to lower their $$ V_i $$ 
+input in the system. In order to make the auction incentive compatible, we need to address pricing differently but 
+we won't cover that in this post. The beauty of having an incentive compatible system is that advertiser's incentive 
+(higher ROI) becomes aligned with our incentive (knowing the true value of $$ V_i $$) and it helps with our 
+assumption on $$V_i$$ representing the intrinsic value of each conversion to the advertiser.
+
 <br/>
 <br/>
 
