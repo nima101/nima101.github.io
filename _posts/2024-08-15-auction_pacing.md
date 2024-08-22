@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Theory behind Auction and Pacing"
+title: "The Theory Behind Auction and Pacing"
 date:  2024-08-19 23:31:11 +0700
 categories: [ads, optimization, auction, pacing, learning, math]
 ---
