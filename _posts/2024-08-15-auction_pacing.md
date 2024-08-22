@@ -127,7 +127,7 @@ $$
 Let's see what happens if we try to maximize the Lagrange function:
 
 $$
-max_{\lambda_i \geq 1} \mathcal{L(x, \lambda)} =
+\max_{\lambda_i \geq 1} \mathcal{L(x, \lambda)} =
 \left\{
 \begin{array}{ll}
 f(x) & \text{if } \, \, \forall i \, g_i(x) \leq 0, \\
