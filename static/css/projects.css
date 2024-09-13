@@ -98,6 +98,6 @@ a.project-detail:hover h3 {
 }
 
 .jsfiddle-twosat iframe {
-  height: 620px;
-  width: 600px;
+  height: 480px;
+  width: 100%;
 }
