@@ -2,7 +2,7 @@
 layout: post
 title: "C(n, k) mod 2"
 date:  2020-10-23 18:45:28 +0700
-categories: [math, bits, fractal]
+categories: [math, bits, fractal, algorithm, problems]
 ---
 
 ### Problem
