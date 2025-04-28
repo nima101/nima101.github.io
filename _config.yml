@@ -47,8 +47,8 @@ urls:
 
 url: "https://nima101.github.io"
 baseurl: ""
-paginate: 20
-per_page: 20
+paginate: 40
+per_page: 40
 paginate_path: "/page/:num/"
 
 markdown: kramdown
