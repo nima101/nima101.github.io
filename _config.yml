@@ -2,11 +2,10 @@ title: Problems and Algorithms
 description: Problems and Algorithms
 author: Nima Aghdaii
 github: https://github.com/nima101
-about:
-  I’ve worked on ads at Meta, Snap, and Nextdoor. I also consult companies on building ads. If you are building your ad stack, feel free to reach out — let’s chat!
+about: I’ve worked on ads at Meta, Snap, Nextdoor, and Discord. I also consult companies on building ads. If you are building your ad stack, feel free to reach out.
 navbar: false
 
-disqus_shortname: nima101algoblog
+#disqus_shortname: nima101algoblog
 
 google_analytics: UA-49182060-2
 
@@ -40,10 +39,10 @@ social:
 #   fb_appid: 1749788565247320
 
 urls:
-    - text: About Me
-      url: /about/
-    - text: XML Feed
-      url: /feed.xml
+  - text: About Me
+    url: /about/
+  - text: XML Feed
+    url: /feed.xml
 
 url: "https://nima101.github.io"
 baseurl: ""
@@ -63,4 +62,4 @@ compress_html:
   comments: ["<!-- ", " -->"]
   endings: all
   ignore:
-    envs: ['development']
+    envs: ["development"]
