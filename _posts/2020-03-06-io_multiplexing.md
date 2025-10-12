@@ -8,7 +8,7 @@ categories: [C, select, poll, kqueue, network, learning, linux, kernel]
 > I/O multiplexing refers to the concept of processing multiple input/output events from a single event loop, with system calls like poll and select (Unix). --[Wikipedia][wiki-io]
 
 ### Introduction
-[kqueue][kqueue](on MacOS) and [epoll][epoll](on Linux) are kernel system calls for scalable I/O event notification mechanisms in an efficient manner. In simple words, you subscribe to certain kernel events and you get notified when any of those events occur. These system calls are desigend for scalable situations such as a webserver where `10,000` concurrent connections are being handled by one server.
+[kqueue][kqueue] (on macOS) and [epoll][epoll] (on Linux) are kernel system calls for scalable I/O event notification mechanisms in an efficient manner. In simple words, you subscribe to certain kernel events, and you get notified when any of those events occur. These system calls are designed for scalable situations such as a webserver where `10,000` concurrent connections are being handled by one server.
 
 epoll/kqueue are replacements for their deprecated counterparts [poll][poll] and [select][select]. Let's take a look at those two and see why they are not suitable for today's use cases.
 
@@ -24,7 +24,7 @@ FD_SET(777, &fds);
 select(778, &fds, NULL, NULL, NULL);
 {% endhighlight %}
 
-When you call `select`, you pass `nfds = 778` which is the "number of file descriptors". What `select` does under the hood is, it simply loops through all the file descriptors from `0` to `nfds - 1`. It checks if you have set them and if the desired event occured. So, the runtime is `O(n)` where `n` is the largest file descriptor you're watching!
+When you call `select`, you pass `nfds = 778` which is the "number of file descriptors". What `select` does under the hood is, it simply loops through all the file descriptors from `0` to `nfds - 1`. It checks if you have set them and if the desired event occurred. So, the runtime is `O(n)` where `n` is the largest file descriptor you're watching!
 
 This line of the man page, explains it well:
 > The first nfds descriptors are checked in each set; i.e., the descriptors from 0 through nfds-1 in the descriptor sets are examined. (Example: If you have set two file descriptors "4" and "17", nfds should not be "2", but rather "17 + 1" or "18".)
