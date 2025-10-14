@@ -20,12 +20,12 @@ An example with `d=2` and `n=8`:
 Generally, solving Hamiltonian Path is NP-Complete but in this problem we have a very special graph, where only the temperatures matter.
 
 1. There is only one parameter associated with each city (temperature). So, it seems natural to sort them on a line based on their `c` value.
-2. If `c[i + 1] - c[i] > d` for any `i`, the graph would be disconnected and we can't solve it
+2. If `c[i + 1] - c[i] > d` for any `i`, the graph would be disconnected, and we can't solve it
 3. Given **2.** is satisfied, 
   * if city `1` is the first or the last city in the sorted list, the answer is **Yes**.
   * if city `1` is somewhere in the middle, an answer is **Yes**, **if and only if** we can solve it *right-left* or *left-right*. (we define it below)
 
-In order to solve *right-left*, we make jumps of 2 towards right all the way to the end, then jumps of 2 coming back and going past the `start` city and then we just visit the rest of the cities one by one. (*left-right* is defined similarly). The image below shows a *right-left* solution for the previous graph)
+In order to solve *right-left*, we make jumps of 2 towards right all the way to the end, then jumps of 2 coming back and going past the `start` city, and then we just visit the rest of the cities one by one. (*left-right* is defined similarly). The image below shows a *right-left* solution for the previous graph.
 
 ![prev]({{ site.url }}/static/img/cities-tsp-sorted.png){:height="70%" width="70%"}
 
@@ -34,7 +34,7 @@ In order to solve *right-left*, we make jumps of 2 towards right all the way to 
 
 In order to see why this **if and only if** holds, first it is trivial that if such a path exists, we have a solution. Now, we need to prove that if the problem has a solution, either a *left-right* or a *right-left* solution exists. Let's prove by contradiction. 
 
-Suppose the problem has a solution but neither *left-right* nor *right-left* solutions would work. First let's look at the right-left path. Since a solution exists, we know that after sorting cities by temperature, `c[i] - c[i - 1] <= d` for every `i`. So, if the right-left path doesn't work, somewhere to the right of the `start` city, for some `i` we have `c[i] - c[i - 2] > d`. That means, the only way to reach `c[i]` from `c[i - 2]` is going through `c[i - 1]`. This means once we go from `c[i - 2]` to `c[i]`, we can't come back. Because of that if we begin at `start` and go to right once we visit the last city on the right, we can never come back to visit cities to the left of `start`. Similarly we can prove the same for the leftmost city using the fact that *left-right* solution doesn't work. So, starting from `start` it is not possible to cover the leftmost city as well as the rightmost city. hence the supposition is false and the statement is true. 
+Suppose the problem has a solution but neither *left-right* nor *right-left* solutions would work. First let's look at the right-left path. Since a solution exists, we know that after sorting cities by temperature, `c[i] - c[i - 1] <= d` for every `i`. So, if the right-left path doesn't work, somewhere to the right of the `start` city, for some `i` we have `c[i] - c[i - 2] > d`. That means, the only way to reach `c[i]` from `c[i - 2]` is going through `c[i - 1]`. This means once we go from `c[i - 2]` to `c[i]`, we can't come back. Because of that if we begin at `start` and go to right once we visit the last city on the right, we can never come back to visit cities to the left of `start`. Similarly, we can prove the same for the leftmost city using the fact that *left-right* solution doesn't work. So, starting from `start` it is not possible to cover the leftmost city as well as the rightmost city. hence the supposition is false and the statement is true. 
 
 <br/>
 ### Solution

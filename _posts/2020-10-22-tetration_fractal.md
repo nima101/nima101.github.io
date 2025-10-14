@@ -41,7 +41,7 @@ end
 
 Now, what if we plug in a complex number? In other words, for what values of `c` would `c ↑↑ ∞` converge? In order to understand what it means to raise a complex number to the power of another complex number, you can read [this article][comp-pow]. However, in [Julia][julia] you can just write `c ^ x` and not worry about the implementation!
 
-So, considering x-axis the real component and y-axis the imaginary part, we can try a lot of complex numbers and see how many iterations does it take for a given complex number to explode. We assign a color to each pixel based on the number of iterations it takes to go beyond a certain large number. Finally, we plot it and we get a fractal known as the "Tetration Fractal". (screenshots at the bottom of this page)
+So, considering x-axis the real component and y-axis the imaginary part, we can try a lot of complex numbers and see how many iterations does it take for a given complex number to explode. We assign a color to each pixel based on the number of iterations it takes to go beyond a certain large number. Finally, we plot it, and we get a fractal known as the "Tetration Fractal". (screenshots at the bottom of this page)
 
 <br/>
 

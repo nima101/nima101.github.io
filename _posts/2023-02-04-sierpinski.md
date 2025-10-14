@@ -57,7 +57,7 @@ The simulation below slowly varies `w` from `0` to `0.5`.
 
 ### Theoretical Guarantee
 
-Theoretically, it is not guaranteed that this process would result in the Sierpinski triangle and it is easy to observe that. Imagine if we start from the center of the triangle and always pick the same corner. Even if we repeat this process forever, we will never pick any point on the Sierpinski triangle. However, you can prove that in practice it will converge to the Sierpinski triangle.
+Theoretically, it is not guaranteed that this process would result in the Sierpinski triangle, and it is easy to observe that. Imagine if we start from the center of the triangle and always pick the same corner. Even if we repeat this process forever, we will never pick any point on the Sierpinski triangle. However, you can prove that in practice it will converge to the Sierpinski triangle.
 
 ### Proof of convergence
 

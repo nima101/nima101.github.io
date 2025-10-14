@@ -92,7 +92,7 @@ In order to understand how to use kqueue, let's look at a few concepts.
 #### kevent structure
 A **kevent** is identified by an `<ident, filter>` pair, where **ident** can be a file/socket descriptor and **filter** is the kernel filter used to process the respective event. There are some pre-defined system filters, such as `EVFILT_READ` or `EVFILT_WRITE`, that are triggered when data exists for read or write.
 
-For exmaple, if we want to be notified when there is data available for reading in a socket, we need to specify a kevent in the form of `<sckfd, EVFILT_READ>`.
+For example, if we want to be notified when there is data available for reading in a socket, we need to specify a kevent in the form of `<sckfd, EVFILT_READ>`.
 
 {% highlight C %}
 kevent ev;

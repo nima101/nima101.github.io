@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
 }
 {% endhighlight %}
 
-Then we enter the event loop where we handle incomming connections and send/receive messages.
+Then we enter the event loop where we handle incoming connections and send/receive messages.
 
 <br/>
 
@@ -87,7 +87,7 @@ struct client_data {
 Operations:
 1. **Lookup:** Given a fd, we can find the corresponding `client_data` by simply iterating over the array
 2. **Add:** For new connections, we find the first free item (`fd = 0`) in the array to store the client's fd
-3. **Delete:** When the connection is lost, we free that item in the array by setting it's fd to `0`
+3. **Delete:** When the connection is lost, we free that item in the array by setting its fd to `0`
 
 Below is the code for these three operations:
 

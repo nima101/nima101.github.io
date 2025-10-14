@@ -165,10 +165,10 @@ dual problem provides a lower bound on the primal and the difference between the
 
 The real power of the Dual of Lagrange is (from [Convex Optimization by Boyd](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf)):
 
-<p style="text-align: center; font-size: 16px;"><b><i>Since the dual function is the pointwise infimum of a family 
+<p style="text-align: center; font-size: 16px;"><b><i>Since the dual function is the point-wise infimum of a family 
 of affine functions of (λ, ν), it is concave, even when the problem (5.1) is not convex.</i></b></p>
 
-Since the dual function is the pointwise infimum of a family of affine functions of (λ, ν), 
+Since the dual function is the point-wise infimum of a family of affine functions of (λ, ν), 
 it is concave, even when the problem (5.1) is not convex.
 
 This is very important because the dual form of the Lagrange problem is always concave, ensuring a unique global 

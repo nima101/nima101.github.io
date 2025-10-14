@@ -67,7 +67,7 @@ A graph is bi-partite if it doesn't have any cycles or all cycles are of even le
 
 <br/>
 #### Handling Final Pawns
-Notice that for even a simple case where there are two pawns and `p1` is threatening `p2`, you can either eliminate `p1` or `p2` to eliminate the threat. However, since the problem asks for a "pawn capture", `p2` can't capture any pawn and we can only eliminate `p1`. So, a simple bipartite vertex cover problem wouldn't be enough since it may pick `p2` as the pawn to be removed. In order to cover these cases, imagine a pawn `c` that doesn't threaten any other pawn but is threatened by pawns `p1`, `p2`, `p3`. Since `c` cannot be eliminated, in order to remove the threat, we have to eliminate all `p1`, `p2` and `p3`. So, we can remove these pawns and all the edges connected to them, to find the vertex cover on the remaining graph. At the end we can add the removed pawns to the final solution.
+Notice that for even a simple case where there are two pawns and `p1` is threatening `p2`, you can either eliminate `p1` or `p2` to eliminate the threat. However, since the problem asks for a "pawn capture", `p2` can't capture any pawn, and we can only eliminate `p1`. So, a simple bipartite vertex cover problem wouldn't be enough since it may pick `p2` as the pawn to be removed. In order to cover these cases, imagine a pawn `c` that doesn't threaten any other pawn but is threatened by pawns `p1`, `p2`, `p3`. Since `c` cannot be eliminated, in order to remove the threat, we have to eliminate all `p1`, `p2` and `p3`. So, we can remove these pawns and all the edges connected to them, to find the vertex cover on the remaining graph. At the end we can add the removed pawns to the final solution.
 
 <br/>
 #### Solution Overview

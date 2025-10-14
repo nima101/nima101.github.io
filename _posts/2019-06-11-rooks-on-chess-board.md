@@ -103,7 +103,7 @@ private static boolean good(int i, int j) {
 
 <br/>
 #### Step 3: greedy
-Unfortunately doing greedy performs really poorly since it will fill up the first row and then you can't place more than one rook on any other row, otherwise they'll create a rectangle. However, it seems like if we can somehow fill some of the board more intelligently and then fill the rest using greedy, it would not be too bad.
+Unfortunately doing greedy performs really poorly since it will fill up the first row, and then you can't place more than one rook on any other row, otherwise they'll create a rectangle. However, it seems like if we can somehow fill some of the board more intelligently and then fill the rest using greedy, it would not be too bad.
 
 <br/>
 #### Step 4: Divide & Conquer
@@ -123,7 +123,7 @@ OOOO......
 {% endhighlight %}
 
 This is actually great, because if we have a `8*N` solution for some `N`, this method gives us the solution for `N*2 x N*2` board!
-But can we do better? For example we can simply improve it by also filling one diagonal on one of the small squares:
+But can we do better? For example, we can simply improve it by also filling one diagonal on one of the small squares:
 
 {% highlight python %}
 ...OOO....
@@ -255,7 +255,7 @@ Here is [my code][my-solution] that passed all the tests. The answer for `N = 20
 
 <br/>
 ### Learning
-Greedy solutions are often not ideal since they fall into a very simple local minima. However, combining with divide and conquer can sometimes avoid falling into those local minimas. The key point here is the hierarchical structure in which the greedy approach is applied. Also, in certain cases like this case, it makes more sense to fill greedily from denser areas first.
+Greedy solutions are often not ideal since they fall into a very simple local minima. However, combining with divide and conquer can sometimes avoid falling into those local minima's. The key point here is the hierarchical structure in which the greedy approach is applied. Also, in certain cases like this case, it makes more sense to fill greedily from denser areas first.
 
 [problem-link]: https://www.codechef.com/MAY19A/problems/ADAROKS2
 [my-solution]: https://www.codechef.com/viewsolution/24224964
