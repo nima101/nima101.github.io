@@ -101,3 +101,8 @@ a.project-detail:hover h3 {
   height: 480px;
   width: 100%;
 }
+
+.jsfiddle-dyn-state iframe {
+  height: 430px;
+  width: 100%;
+}
